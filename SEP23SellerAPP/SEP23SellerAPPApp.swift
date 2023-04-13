@@ -11,7 +11,7 @@ import SwiftUI
 struct SEP23SellerAPPApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            QRCodeScannerView()
         }
     }
 }
