@@ -93,7 +93,7 @@ struct FirstStepView: View {
     }
     func setOrderAddress(repAddress: recipientAddress, handInfo: String, packageSize: Int, numberPackages: Int, employeSign: String) -> Order{
         
-        let newOrder = Order(token: "", timestamp: getCurrentDateTime(), employeName: employeSign, firstName: repAddress.surName, lastName: repAddress.name, street: repAddress.street, houseNumber: repAddress.streetNr, zip: repAddress.plz, city: "Lingen", numberPackage: "\(numberPackages)", packageSize: packageSizes[packageSize], handlingInfo: handInfo, deliveryDate: "")
+        let newOrder = Order(token: "", timestamp: getCurrentDateTime(), employeName: employeSign, firstName: repAddress.surName, lastName: repAddress.name, street: repAddress.street, houseNumber: repAddress.streetNr, zip: repAddress.zip, city: "Lingen", numberPackage: "\(numberPackages)", packageSize: packageSizes[packageSize], handlingInfo: handInfo, deliveryDate: "")
         
         return newOrder
     }
@@ -109,7 +109,7 @@ struct FirstStepView: View {
 
 struct FirstStepView_Previews: PreviewProvider {
     static var previews: some View {
-        let repAdress = recipientAddress(name: "Dettler", surName: "Jan", street: "Kaiserstraße", streetNr: "12", plz: "49809")
+        let repAdress = recipientAddress(name: "Dettler", surName: "Jan", street: "Kaiserstraße", streetNr: "12", zip: "49809")
         
         FirstStepView(repAddress: repAdress)
     }

@@ -13,7 +13,7 @@ struct recipientAddress: Identifiable {
     var surName: String
     var street: String
     var streetNr: String
-    var plz: String
+    var zip: String
     var label: String?
     
     func toString() -> String {
@@ -37,7 +37,7 @@ struct AddressEncoder: View {
     func encodeQRCode(qrCodeString: String)-> recipientAddress{
         
         let array = qrCodeString.components(separatedBy: "&")
-        let newAddress = recipientAddress(name: array[1], surName: array[0], street: array[2], streetNr: array[3], plz: array[4])
+        let newAddress = recipientAddress(name: array[1], surName: array[0], street: array[2], streetNr: array[3], zip: array[4])
         
         return newAddress
     }

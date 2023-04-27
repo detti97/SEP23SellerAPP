@@ -66,7 +66,7 @@ struct QRCodeScannerView: View {
                                               surName: details[0],
                                               street: details[2],
                                               streetNr: details[3],
-                                              plz: details[4])
+                                              zip: details[4])
             print(repAddress.toString())
             //AddressControllView(currentRecipientAddress: repAddress)
             //NavigationLink("",destination: FirstStepView(repAddress: repAddress))

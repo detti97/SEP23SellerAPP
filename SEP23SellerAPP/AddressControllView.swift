@@ -32,7 +32,7 @@ struct AddressControllView: View {
                         Text(currentRecipientAddress.streetNr)
                     }
                     HStack{
-                        Text(currentRecipientAddress.plz)
+                        Text(currentRecipientAddress.zip)
                         Text("Lingen")
                     }
                 }
@@ -44,7 +44,7 @@ struct AddressControllView: View {
 struct AddressControllView_Previews: PreviewProvider {
     static var previews: some View {
         
-        let currentAddress = recipientAddress(name: "dettler", surName: "jan", street: "Musterstraße", streetNr: "49", plz: "49809")
+        let currentAddress = recipientAddress(name: "dettler", surName: "jan", street: "Musterstraße", streetNr: "49", zip: "49809")
         
         AddressControllView(currentRecipientAddress: currentAddress)
     }
