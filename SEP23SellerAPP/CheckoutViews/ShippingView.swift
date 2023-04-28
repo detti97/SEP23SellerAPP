@@ -177,11 +177,11 @@ struct ShippingpView: View {
                         NavigationLink("Lieferung beauftragen", destination: DeliveryControllView(order: setOrder(repAddress: repAddress, handInfo: handInfoToString(), packageSize: choosenPackage ?? 1, numberPackages: packetCount, employeSign: employeSign, deliveryDate: selectedDateString)))
                             .disabled(choosenPackage == nil || selectedDateString == "")
                             .foregroundColor(.blue)
+                        
                     }
                 }
                 
             }
-            
             
         }
         
@@ -194,7 +194,7 @@ struct ShippingpView: View {
     }
     func setOrder(repAddress: recipientAddress, handInfo: String, packageSize: Int, numberPackages: Int, employeSign: String, deliveryDate: String) -> Order{
         
-        let newOrder = Order(token: "", timestamp: getCurrentDateTime(), employeName: employeSign, firstName: repAddress.surName, lastName: repAddress.name, street: repAddress.street, houseNumber: repAddress.streetNr, zip: repAddress.zip, city: "Lingen", numberPackage: "\(numberPackages)", packageSize: packageSizes[packageSize], handlingInfo: handInfo, deliveryDate: "")
+        let newOrder = Order(token: "", timestamp: getCurrentDateTime(), employeName: employeSign, firstName: repAddress.surName, lastName: repAddress.name, street: repAddress.street, houseNumber: repAddress.streetNr, zip: repAddress.zip, city: "Lingen", numberPackage: "\(numberPackages)", packageSize: packageSizes[packageSize], handlingInfo: handInfo, deliveryDate: deliveryDate)
         
         return newOrder
     }

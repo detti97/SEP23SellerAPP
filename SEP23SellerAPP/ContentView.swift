@@ -7,15 +7,19 @@
 
 import SwiftUI
 
+struct Person {
+    var name: String
+    var age: Int
+}
+
 struct ContentView: View {
+    
+    let person1 = Person(name: "Jan", age: 26)
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
-        }
-        .padding()
+        
+        Text("Hello " + person1.name)
+
     }
 }
 
