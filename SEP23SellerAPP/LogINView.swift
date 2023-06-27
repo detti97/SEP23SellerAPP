@@ -34,6 +34,8 @@ struct LogINView: View {
 	@State private var extractedExpr: Color = .blue
 	@State private var responseToken = ""
 
+	@Binding var signInSuccess: Bool
+
 	var body: some View {
 
 
@@ -65,6 +67,14 @@ struct LogINView: View {
 						}
 
 						Button(action: {
+
+							if (self.username == "User1" && self.password == "password1"){
+
+								self.signInSuccess = true
+								print("erfolg ")
+
+							}
+
 							let test = LogInData(username: username, password: password)
 							guard let data = try? JSONEncoder().encode(test) else {
 								print("Fehler beim JSON-erstellen")
@@ -169,7 +179,7 @@ struct LogINView: View {
 
 struct LogINView_Previews: PreviewProvider {
 	static var previews: some View {
-		LogINView()
+		LogINView(signInSuccess: .constant(false))
 	}
 }
 

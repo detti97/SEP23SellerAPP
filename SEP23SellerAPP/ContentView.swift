@@ -13,19 +13,18 @@ struct Person {
 }
 
 struct ContentView: View {
-    
-	var body: some View {
-		TabView { //
-			QRCodeScannerView()
-				.tabItem {
-					Label("Lingen Code", systemImage: "qrcode")
-				}
 
-			LogINView()
-				.tabItem {
-					Label("Erkunden", systemImage: "location")
-				}
+	@State var signInSuccess = false
+
+	var body: some View {
+		Group{
+			if signInSuccess {
+				QRCodeScannerView()
+			}else{
+				LogINView(signInSuccess: $signInSuccess)
+		 }
 		}
+
 
 	}
 }
