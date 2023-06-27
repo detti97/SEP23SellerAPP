@@ -17,7 +17,8 @@ struct ResponseToken: Codable {
 	let token: String
 }
 
-struct SellerPrototypView: View {
+struct LogINView: View {
+
 	let validCredentials = [
 		"User1": "password1",
 		"user2": "password2",
@@ -166,9 +167,9 @@ struct SellerPrototypView: View {
 	}
 }
 
-struct SellerPrototypView_Previews: PreviewProvider {
+struct LogINView_Previews: PreviewProvider {
 	static var previews: some View {
-		SellerPrototypView()
+		LogINView()
 	}
 }
 

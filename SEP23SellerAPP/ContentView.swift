@@ -14,13 +14,20 @@ struct Person {
 
 struct ContentView: View {
     
-    let person1 = Person(name: "Jan", age: 26)
-    
-    var body: some View {
-        
-        Text("Hello " + person1.name)
+	var body: some View {
+		TabView { //
+			QRCodeScannerView()
+				.tabItem {
+					Label("Lingen Code", systemImage: "qrcode")
+				}
 
-    }
+			LogINView()
+				.tabItem {
+					Label("Erkunden", systemImage: "location")
+				}
+		}
+
+	}
 }
 
 struct ContentView_Previews: PreviewProvider {
