@@ -3,7 +3,7 @@
 //  SEP23SellerAPP
 //
 //  Created by Jan Dettler on 07.04.23.
-//
+// Test
 
 import SwiftUI
 import CodeScanner
@@ -24,7 +24,7 @@ struct QRCodeScannerView: View {
                 }
                 
                 Button{
-                    print("hello")
+                    print("hello1")
                     isShowingScanner = true
                 }label: {
                     

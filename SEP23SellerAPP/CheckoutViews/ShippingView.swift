@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/*
+/**
  This code is written in Swift and is a view for a seller app that allows the seller to create a shipping order. The view is composed of three main sections:
 
  Handling Info: allows the seller to mark any special handling information for the package(s) such as "fragile," "glass," "liquids," or "heavy." The seller can mark multiple options.
@@ -23,14 +23,14 @@ import SwiftUI
  */
 struct ShippingpView: View {
     
-    let packageSizes = ["S", "M", "L", "XL" ] // available package sizes
-    @State private var packetCount = 1 // package Count miniumun is one
-    @State private var employeSign = "" // the employee who takes the order can write thier sing here
-    @State private var choosenPackage: Int? = nil // variable for the number of choosen packages from the stepper
+    let packageSizes = ["S", "M", "L", "XL" ] /// available package sizes
+    @State private var packetCount = 1 /// package Count miniumun is one
+    @State private var employeSign = "" /// the employee who takes the order can write thier sing here
+    @State private var choosenPackage: Int? = nil /// variable for the number of choosen packages from the stepper
     @State var repAddress: recipientAddress
     @State private var handInfo = [ HandlingInfo(name: "Gebrechlich", isMarked: false), HandlingInfo(name: "Glas", isMarked: false), HandlingInfo(name: "Flüßigkeiten", isMarked: false), HandlingInfo(name: "Schwer", isMarked: false)] // array filled with HandlingInfo objects
     
-    // isActive... variables are used for switching the view
+    /// isActive... variables are used for switching the view
     @State private var isActiveHandling = true
     @State private var isActiveEmpPackage = false
     @State private var isActivePackageSize = false
@@ -61,7 +61,7 @@ struct ShippingpView: View {
                                     Spacer()
                                     Image(systemName: HandlingInfo.isMarked ? "checkmark.square": "square")
                                         .font(.system(size: 30))
-                                        .onTapGesture {
+                                        .onTapGesture { 
                                             HandlingInfo.isMarked.toggle()
                                         }
                                 }
