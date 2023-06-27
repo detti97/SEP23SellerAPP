@@ -75,39 +75,42 @@ struct LogINView: View {
 
 							}
 
-							let test = LogInData(username: username, password: password)
-							guard let data = try? JSONEncoder().encode(test) else {
-								print("Fehler beim JSON-erstellen")
-								return
-							}
-							print(test)
-							guard let url = URL(string: "http://131.173.65.77:3000/login") else {
-								return
-							}
-							var request = URLRequest(url: url)
-							request.httpMethod = "POST"
-							request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-							request.httpBody = data
-							let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-								guard let data = data else {
-									print("Keine Daten vom Server erhalten.")
-									extractedExpr = .red
+								let test = LogInData(username: username, password: password)
+								guard let data = try? JSONEncoder().encode(test) else {
+									print("Fehler beim JSON-erstellen")
 									return
 								}
-								do {
-									let responseData = try JSONDecoder().decode(ResponseToken.self, from: data)
-									let jwtToken = responseData.token
-									print(jwtToken)
-									decodeToken(test: jwtToken)
-									extractedExpr = .green
-
-								} catch let error {
-									extractedExpr = .red
-									responseToken = ""
-									print("Fehler beim Parsen des JSON: \(error.localizedDescription)")
+								print(test)
+								guard let url = URL(string: "http://131.173.65.77:3000/login") else {
+									return
 								}
-							}
-							task.resume()
+								var request = URLRequest(url: url)
+								request.httpMethod = "POST"
+								request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+								request.httpBody = data
+								let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+									guard let data = data else {
+										print("Keine Daten vom Server erhalten.")
+										extractedExpr = .red
+										return
+									}
+									do {
+										let responseData = try JSONDecoder().decode(ResponseToken.self, from: data)
+										let jwtToken = responseData.token
+										print(jwtToken)
+										decodeToken(test: jwtToken)
+										extractedExpr = .green
+
+										self.signInSuccess = true
+										print("erfolg ")
+
+									} catch let error {
+										extractedExpr = .red
+										responseToken = ""
+										print("Fehler beim Parsen des JSON: \(error.localizedDescription)")
+									}
+								}
+								task.resume()
 
 						}){
 							Text("Log in - Server")
