@@ -11,7 +11,7 @@ struct SettingView: View {
     @State private var openingHours = ""
     @State private var phoneNumber = ""
 
-    @Binding var signInSuccess: Bool // Hinzugefügtes Binding-Attribut für den Anmeldestatus
+    @Binding var signInSuccess: Bool
 
     var body: some View {
         Form {
@@ -63,11 +63,12 @@ struct SettingView: View {
         .navigationBarTitle("Einstellungen")
     }
 
+    //bedarffff
+    
     private func signOut() {
-        // Implementiere hier die Logik für das Abmelden
-        // ...
+       
 
-        signInSuccess = false // Setze den Anmeldestatus auf false
+        signInSuccess = false
     }
 }
 
