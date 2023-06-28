@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 struct SettingView: View {
     @AppStorage("isDarkMode") private var isDarkMode = false
     @State private var showEditAddress = false
@@ -15,7 +16,7 @@ struct SettingView: View {
 
     var body: some View {
         Form {
-            Section(header: Text("Ladeninformationen")) {
+            Section(header: Text("Laden-informationen-Bearbeiten")) {
                 Button(action: {
                     showEditAddress = true
                 }) {
@@ -71,11 +72,11 @@ struct SettingView: View {
         signInSuccess = false
     }
 }
-
 struct EditAddressView: View {
     @Binding var address: String
     @Binding var homeNumber: String
     @Binding var zipCode: String
+    @Environment(\.presentationMode) private var presentationMode
 
     var body: some View {
         NavigationView {
@@ -85,7 +86,7 @@ struct EditAddressView: View {
                 TextField("PLZ", text: $zipCode)
             }
             .navigationBarTitle("Adresse bearbeiten")
-            .navigationBarItems(trailing: saveButton)
+            .navigationBarItems(leading: cancelButton, trailing: saveButton)
         }
     }
 
@@ -93,14 +94,28 @@ struct EditAddressView: View {
         Button(action: {
             // Speichere die geänderten Daten
             // ...
+
+            // Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+            presentationMode.wrappedValue.dismiss()
         }) {
             Text("Speichern")
         }
     }
+    
+    private var cancelButton: some View {
+        Button(action: {
+            // Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Text("Zurück")
+        }
+    }
 }
+
 
 struct EditOpeningHoursView: View {
     @Binding var openingHours: String
+    @Environment(\.presentationMode) private var presentationMode
 
     var body: some View {
         NavigationView {
@@ -108,7 +123,7 @@ struct EditOpeningHoursView: View {
                 TextField("Öffnungszeiten", text: $openingHours)
             }
             .navigationBarTitle("Öffnungszeiten bearbeiten")
-            .navigationBarItems(trailing: saveButton)
+            .navigationBarItems(leading: cancelButton, trailing: saveButton)
         }
     }
 
@@ -116,14 +131,27 @@ struct EditOpeningHoursView: View {
         Button(action: {
             // Speichere die geänderten Daten
             // ...
+
+            // Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+            presentationMode.wrappedValue.dismiss()
         }) {
             Text("Speichern")
+        }
+    }
+    
+    private var cancelButton: some View {
+        Button(action: {
+            // Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Text("Zurück")
         }
     }
 }
 
 struct EditPhoneNumberView: View {
     @Binding var phoneNumber: String
+    @Environment(\.presentationMode) private var presentationMode
 
     var body: some View {
         NavigationView {
@@ -131,7 +159,7 @@ struct EditPhoneNumberView: View {
                 TextField("Telefonnummer", text: $phoneNumber)
             }
             .navigationBarTitle("Telefonnummer bearbeiten")
-            .navigationBarItems(trailing: saveButton)
+            .navigationBarItems(leading: cancelButton, trailing: saveButton)
         }
     }
 
@@ -139,8 +167,20 @@ struct EditPhoneNumberView: View {
         Button(action: {
             // Speichere die geänderten Daten
             // ...
+
+            // Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+            presentationMode.wrappedValue.dismiss()
         }) {
             Text("Speichern")
+        }
+    }
+    
+    private var cancelButton: some View {
+        Button(action: {
+            // Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Text("Zurück")
         }
     }
 }
