@@ -62,19 +62,18 @@ struct LogINView: View {
 							.cornerRadius(10)
 
 						if loginFailed {
-							Text("Ungültige Anmeldedaten.")
+							Text("Ungültige Anmeldedaten")
 								.foregroundColor(.red)
 						}
 
 						Button(action: {
 
-							if (self.username == "User1" && self.password == "password1"){
+							if (self.username == "User1" && self.password == "pass1"){
 
 								self.signInSuccess = true
-								print("erfolg ")
+								print("Login erfolgreich")
 
-							}
-
+                            }
 								let test = LogInData(username: username, password: password)
 								guard let data = try? JSONEncoder().encode(test) else {
 									print("Fehler beim JSON-erstellen")

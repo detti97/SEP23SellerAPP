@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		526962BB2A4CBA1400835E8B /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526962BA2A4CBA1400835E8B /* SettingView.swift */; };
 		603CC74F2A4B0DE000C3D3E3 /* LogINView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603CC74E2A4B0DE000C3D3E3 /* LogINView.swift */; };
 		604287A729E08062009798B5 /* SEP23SellerAPPApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604287A629E08062009798B5 /* SEP23SellerAPPApp.swift */; };
 		604287A929E08062009798B5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604287A829E08062009798B5 /* ContentView.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		526962BA2A4CBA1400835E8B /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		603CC74E2A4B0DE000C3D3E3 /* LogINView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogINView.swift; sourceTree = "<group>"; };
 		604287A329E08062009798B5 /* SEP23SellerAPP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SEP23SellerAPP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		604287A629E08062009798B5 /* SEP23SellerAPPApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SEP23SellerAPPApp.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 				604287BB29E0B242009798B5 /* AddressControllView.swift */,
 				604287B929E0A189009798B5 /* QRCodeScannerView.swift */,
 				603CC74E2A4B0DE000C3D3E3 /* LogINView.swift */,
+				526962BA2A4CBA1400835E8B /* SettingView.swift */,
 				604287C429E21733009798B5 /* CheckoutViews */,
 				604287AA29E08063009798B5 /* Assets.xcassets */,
 				604287AC29E08063009798B5 /* Preview Content */,
@@ -197,6 +200,7 @@
 				604287C629E21769009798B5 /* FirstStepView.swift in Sources */,
 				604287BC29E0B242009798B5 /* AddressControllView.swift in Sources */,
 				604287C829E21B3C009798B5 /* HandlingInfo.swift in Sources */,
+				526962BB2A4CBA1400835E8B /* SettingView.swift in Sources */,
 				604287CE29E4A3D8009798B5 /* ShippingView.swift in Sources */,
 				604287A729E08062009798B5 /* SEP23SellerAPPApp.swift in Sources */,
 			);

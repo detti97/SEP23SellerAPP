@@ -19,13 +19,20 @@ struct ContentView: View {
 	var body: some View {
 		Group{
 			if signInSuccess {
-				QRCodeScannerView()
+                TabView{
+    
+                    QRCodeScannerView().tabItem{
+                        Label("Qr-code", systemImage: "qrcode")
+                    }
+                    SettingView().tabItem{
+                        Label("Setting", systemImage: "gear")
+                    }
+                }
+				
 			}else{
 				LogINView(signInSuccess: $signInSuccess)
 		 }
 		}
-
-
 	}
 }
 
