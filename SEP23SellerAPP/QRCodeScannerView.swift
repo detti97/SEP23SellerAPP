@@ -7,12 +7,15 @@ import CodeScanner
 
 struct QRCodeScannerView: View {
     
+    
+    
     @State private var isShowingScanner = false
     @State private var repAddress: recipientAddress? = nil
     
     var body: some View {
         
         NavigationView{
+            
             
             VStack{
                 
@@ -49,9 +52,12 @@ struct QRCodeScannerView: View {
                 
                 .navigationTitle("Qr-Code Scanner")
                 
+                
             }
         }
+        
     }
+    
     func handleScan(result: Result<ScanResult, ScanError>) {
         isShowingScanner = false
         switch result{

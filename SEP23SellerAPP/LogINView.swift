@@ -112,12 +112,12 @@ struct LogINView: View {
 								task.resume()
 
 						}){
-							Text("Log in - Server")
+							Text("Anmelden")
 						}
-						.padding()
+						.padding(20)
 						.background(Color.blue)
 						.foregroundColor(.white)
-						.cornerRadius(10)
+						.cornerRadius(40)
 
 						Text(responseToken)
 					}
