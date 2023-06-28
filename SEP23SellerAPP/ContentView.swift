@@ -1,4 +1,3 @@
-//
 //  ContentView.swift
 //  SEP23SellerAPP
 //
@@ -14,26 +13,24 @@ struct Person {
 
 struct ContentView: View {
 
-	@State var signInSuccess = false
+    @State private var signInSuccess = false
 
-	var body: some View {
-		Group{
-			if signInSuccess {
+    var body: some View {
+        Group{
+            if signInSuccess {
                 TabView{
-    
                     QRCodeScannerView().tabItem{
                         Label("Qr-code", systemImage: "qrcode")
                     }
-                    SettingView().tabItem{
+                    SettingView(signInSuccess: $signInSuccess).tabItem{
                         Label("Setting", systemImage: "gear")
                     }
                 }
-				
-			}else{
-				LogINView(signInSuccess: $signInSuccess)
-		 }
-		}
-	}
+            }else{
+                LogINView(signInSuccess: $signInSuccess)
+            }
+        }
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
