@@ -9,7 +9,7 @@ struct SettingView: View {
     @State private var zipCode = ""
     @State private var homeNumber = ""
     @State private var address = ""
-    @State private var openingHours = ""
+	@State private var openingHours: [String: (Date, Date)] = [:]
     @State private var phoneNumber = ""
     @State private var Email = ""
     @State private var Owner = ""
@@ -134,12 +134,6 @@ struct EditEmailView: View {
     }
 }
 
-
-
-
-
-
-
 struct EditOwnerView: View {
     @Binding var Owner: String
     @Environment(\.presentationMode) private var presentationMode
@@ -218,39 +212,63 @@ struct EditAddressView: View {
 
 
 struct EditOpeningHoursView: View {
-    @Binding var openingHours: String
-    @Environment(\.presentationMode) private var presentationMode
+	@Binding var openingHours: [String: (Date, Date)]
+	@Environment(\.presentationMode) private var presentationMode
 
-    var body: some View {
-        NavigationView {
-            Form {
-                TextField("Öffnungszeiten", text: $openingHours)
-            }
-            .navigationBarTitle("Öffnungszeiten bearbeiten")
-            .navigationBarItems(leading: cancelButton, trailing: saveButton)
-        }
-    }
+	var weekdays: [String] = [
+		"Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"
+	]
 
-    private var saveButton: some View {
-        Button(action: {
-            // Speichere die geänderten Daten
-            // ...
+	var body: some View {
+		NavigationView {
+			Form {
+				ForEach(weekdays, id: \.self) { weekday in
+					Section(header: Text(weekday)) {
+						DatePicker("Öffnen", selection: binding(for: weekday, isOpeningTime: true), displayedComponents: .hourAndMinute)
+						DatePicker("Schließen", selection: binding(for: weekday, isOpeningTime: false), displayedComponents: .hourAndMinute)
+					}
+				}
+			}
+			.navigationBarTitle("Öffnungszeiten bearbeiten")
+			.navigationBarItems(leading: cancelButton, trailing: saveButton)
+		}
+	}
 
-            // Schließe die Ansicht und kehre zum Einstellungsmenü zurück
-            presentationMode.wrappedValue.dismiss()
-        }) {
-            Text("Speichern")
-        }
-    }
-    
-    private var cancelButton: some View {
-        Button(action: {
-            // Schließe die Ansicht und kehre zum Einstellungsmenü zurück
-            presentationMode.wrappedValue.dismiss()
-        }) {
-            Text("Zurück")
-        }
-    }
+	private func binding(for weekday: String, isOpeningTime: Bool) -> Binding<Date> {
+		let key = isOpeningTime ? "Open" : "Close"
+		return Binding<Date>(
+			get: {
+				return openingHours[weekday]?.0 ?? Date()
+			},
+			set: { newValue in
+				if openingHours[weekday] == nil {
+					openingHours[weekday] = (Date(), Date())
+				}
+				openingHours[weekday]?.0 = newValue
+			}
+		)
+	}
+
+	private var saveButton: some View {
+		Button(action: {
+			// Speichere die geänderten Daten
+			// ...
+
+			// Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+			presentationMode.wrappedValue.dismiss()
+		}) {
+			Text("Speichern")
+		}
+	}
+
+	private var cancelButton: some View {
+		Button(action: {
+			// Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+			presentationMode.wrappedValue.dismiss()
+		}) {
+			Text("Zurück")
+		}
+	}
 }
 
 struct EditPhoneNumberView: View {
