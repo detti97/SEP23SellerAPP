@@ -101,7 +101,7 @@ struct LogINView: View {
 										extractedExpr = .green
 
 										self.signInSuccess = true
-										print("erfolg ")
+										print("erfolg")
 
 									} catch let error {
 										extractedExpr = .red

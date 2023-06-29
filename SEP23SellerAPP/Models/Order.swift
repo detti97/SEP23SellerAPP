@@ -28,7 +28,6 @@ struct Order: Identifiable{
     func toString() -> String {
             let string = """
                 Bestellung
-                Token: \(token)
                 Zeitstempel: \(timestamp)
                 Mitarbeiter-ID: \(employeName)
                 Vorname: \(firstName)

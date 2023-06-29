@@ -11,12 +11,16 @@ struct SettingView: View {
     @State private var address = ""
     @State private var openingHours = ""
     @State private var phoneNumber = ""
+    @State private var Email = ""
+    @State private var Owner = ""
+    @State private var showEditEmail = false
+    @State private var showEditOwner = false
 
     @Binding var signInSuccess: Bool
 
     var body: some View {
         Form {
-            Section(header: Text("Laden-informationen-Bearbeiten")) {
+            Section(header: Text("Geschäftsinformationen-Bearbeiten")) {
                 Button(action: {
                     showEditAddress = true
                 }) {
@@ -25,6 +29,7 @@ struct SettingView: View {
                 .sheet(isPresented: $showEditAddress) {
                     EditAddressView(address: $address, homeNumber: $homeNumber, zipCode: $zipCode)
                 }
+
 
                 Button(action: {
                     showEditOpeningHours = true
@@ -42,6 +47,25 @@ struct SettingView: View {
                 }
                 .sheet(isPresented: $showEditPhoneNumber) {
                     EditPhoneNumberView(phoneNumber: $phoneNumber)
+                }
+                
+                Button(action: {
+                    showEditEmail = true
+                }) {
+                    Text("Geschäfts-E-mail bearbeiten")
+                }
+                .sheet(isPresented: $showEditEmail) {
+                    EditEmailView(Email: $Email)
+                    
+                
+                }
+                Button(action: {
+                    showEditOwner = true
+                }) {
+                    Text("Verantwortliche fürs Geschäfts bearbeiten")
+                }
+                .sheet(isPresented: $showEditOwner) {
+                    EditOwnerView(Owner: $Owner)
                 }
             }
 
@@ -64,7 +88,6 @@ struct SettingView: View {
         .navigationBarTitle("Einstellungen")
     }
 
-    //bedarffff
     
     private func signOut() {
        
@@ -72,6 +95,104 @@ struct SettingView: View {
         signInSuccess = false
     }
 }
+
+
+
+
+
+
+
+
+
+struct EditEmailView: View {
+    @Binding var Email: String
+    @Environment(\.presentationMode) private var presentationMode
+
+    var body: some View {
+        NavigationView {
+            Form {
+                TextField("Email", text: $Email)
+            }
+            .navigationBarTitle("Email bearbeiten")
+            .navigationBarItems(leading: cancelButton, trailing: saveButton)
+        }
+    }
+
+    private var saveButton: some View {
+        Button(action: {
+            // Speichere die geänderten Daten
+            // ...
+
+            // Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Text("Speichern")
+        }
+    }
+    
+    private var cancelButton: some View {
+        Button(action: {
+            // Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Text("Zurück")
+        }
+    }
+}
+
+
+
+
+
+
+
+struct EditOwnerView: View {
+    @Binding var Owner: String
+    @Environment(\.presentationMode) private var presentationMode
+
+    var body: some View {
+        NavigationView {
+            Form {
+                TextField("Verantwortliche", text: $Owner)
+            }
+            .navigationBarTitle("Verantwortliche bearbeiten")
+            .navigationBarItems(leading: cancelButton, trailing: saveButton)
+        }
+    }
+
+    private var saveButton: some View {
+        Button(action: {
+            // Speichere die geänderten Daten
+            // ...
+
+            // Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Text("Speichern")
+        }
+    }
+    
+    private var cancelButton: some View {
+        Button(action: {
+            // Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Text("Zurück")
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 struct EditAddressView: View {
     @Binding var address: String
     @Binding var homeNumber: String

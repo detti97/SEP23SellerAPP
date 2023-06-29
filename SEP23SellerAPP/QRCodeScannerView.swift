@@ -24,7 +24,7 @@ struct QRCodeScannerView: View {
                 }
                 
                 Button{
-                    print("hello1")
+                    print("hello")
                     isShowingScanner = true
                 }label: {
                     
@@ -47,7 +47,7 @@ struct QRCodeScannerView: View {
                 }
                 .foregroundColor(.black)
                 .sheet(isPresented: $isShowingScanner) {
-                    CodeScannerView(codeTypes: [.qr], showViewfinder: true, simulatedData: "Jan&De&Ba&12&49809", completion: handleScan)
+                    CodeScannerView(codeTypes: [.qr], showViewfinder: true, simulatedData: "Test&Test&Test&Testnum.&49808", completion: handleScan)
                 }
                 
                 .navigationTitle("Qr-Code Scanner")
