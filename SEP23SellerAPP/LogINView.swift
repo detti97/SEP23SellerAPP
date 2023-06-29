@@ -32,6 +32,7 @@ struct LogINView: View {
 	@State private var isActiveCheckout = true
 	@State private var selectedDate = Date()
 	@State private var extractedExpr: Color = .blue
+
 	@State private var responseToken = ""
 
 	@Binding var signInSuccess: Bool
@@ -96,12 +97,15 @@ struct LogINView: View {
 									do {
 										let responseData = try JSONDecoder().decode(ResponseToken.self, from: data)
 										let jwtToken = responseData.token
-										print(jwtToken)
+										//print(jwtToken)
 										decodeToken(test: jwtToken)
 										extractedExpr = .green
 
 										self.signInSuccess = true
-										print("erfolg")
+										//print("erfolg")
+										saveToken(jwtToken)
+
+										print("new token: " + getSavedToken()!)
 
 									} catch let error {
 										extractedExpr = .red
@@ -122,6 +126,9 @@ struct LogINView: View {
 						Text(responseToken)
 					}
 					.padding()
+					.onAppear {
+									responseToken = getSavedToken() ?? ""
+								}
 				}
 			}
 			if isActiveCheckout{
@@ -176,6 +183,14 @@ struct LogINView: View {
 		task.resume()
 
 
+	}
+
+	func saveToken(_ token: String) {
+		UserDefaults.standard.set(token, forKey: "AuthToken")
+	}
+
+	func getSavedToken() -> String? {
+		return UserDefaults.standard.string(forKey: "AuthToken")
 	}
 }
 

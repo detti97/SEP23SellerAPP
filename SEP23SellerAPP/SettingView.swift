@@ -93,15 +93,9 @@ struct SettingView: View {
     private func signOut() {
 
         signInSuccess = false
+		UserDefaults.standard.removeObject(forKey: "AuthToken")
     }
 }
-
-
-
-
-
-
-
 
 
 struct EditEmailView: View {
@@ -181,17 +175,6 @@ struct EditOwnerView: View {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 struct EditAddressView: View {
     @Binding var address: String
@@ -304,6 +287,7 @@ struct EditPhoneNumberView: View {
             Text("Zurück")
         }
     }
+
 }
 
 struct SettingView_Previews: PreviewProvider {

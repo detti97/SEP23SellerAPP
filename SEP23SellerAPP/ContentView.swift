@@ -16,8 +16,10 @@ struct ContentView: View {
     @State private var signInSuccess = false
 
     var body: some View {
+
+
         Group{
-            if signInSuccess {
+            if hasSavedToken() || signInSuccess {
                 TabView{
                     QRCodeScannerView().tabItem{
                         Label("Qr-code", systemImage: "qrcode")
@@ -31,6 +33,13 @@ struct ContentView: View {
             }
         }
     }
+	func getSavedToken() -> String? {
+		return UserDefaults.standard.string(forKey: "AuthToken")
+	}
+
+	func hasSavedToken() -> Bool {
+		   return getSavedToken() != nil
+	   }
 }
 
 struct ContentView_Previews: PreviewProvider {
