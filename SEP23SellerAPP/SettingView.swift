@@ -12,6 +12,7 @@ struct SettingView: View {
     @State private var openingHours = ""
     @State private var phoneNumber = ""
 
+
     @Binding var signInSuccess: Bool
 
     var body: some View {
@@ -67,7 +68,6 @@ struct SettingView: View {
     //bedarffff
     
     private func signOut() {
-       
 
         signInSuccess = false
     }
@@ -183,4 +183,10 @@ struct EditPhoneNumberView: View {
             Text("Zurück")
         }
     }
+}
+
+struct SettingView_Previews: PreviewProvider {
+	static var previews: some View {
+		SettingView(signInSuccess: .constant(true))
+	}
 }
