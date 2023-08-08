@@ -8,19 +8,18 @@
 import SwiftUI
 import Foundation
 
-struct Order: Identifiable{
+struct Order: Encodable{
     
-    var id = UUID()
-    var token : String
+    //var id = UUID()
+	var token: String
     var timestamp: String
-    var employeName: String
+    var employeeName: String
     var firstName: String
     var lastName: String
     var street: String
     var houseNumber: String
     var zip: String
     var city: String
-    var numberPackage: String?
     var packageSize: String
     var handlingInfo: String
     var deliveryDate: String
@@ -29,14 +28,13 @@ struct Order: Identifiable{
             let string = """
                 Bestellung
                 Zeitstempel: \(timestamp)
-                Mitarbeiter-ID: \(employeName)
+                Mitarbeiter-ID: \(employeeName)
                 Vorname: \(firstName)
                 Nachname: \(lastName)
                 Straße: \(street)
                 Hausnummer: \(houseNumber)
                 PLZ: \(zip)
                 Stadt: \(city)
-                Anzahl Pakete: \(numberPackage ?? "S")
                 Paket Größe: \(packageSize)
                 Handhabungsinformationen: \(handlingInfo)
                 """

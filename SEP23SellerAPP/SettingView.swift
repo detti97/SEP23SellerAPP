@@ -235,7 +235,7 @@ struct EditOpeningHoursView: View {
 	}
 
 	private func binding(for weekday: String, isOpeningTime: Bool) -> Binding<Date> {
-		let key = isOpeningTime ? "Open" : "Close"
+		_ = isOpeningTime ? "Open" : "Close"
 		return Binding<Date>(
 			get: {
 				return openingHours[weekday]?.0 ?? Date()

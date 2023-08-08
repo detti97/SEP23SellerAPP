@@ -10,34 +10,30 @@ struct QRCodeScannerView: View {
     
     
     @State private var isShowingScanner = false
-    @State private var repAddress: recipientAddress? = nil
+	@Binding var showShippingView: Bool
+	@Binding var repAddress: recipientAddress
     
     var body: some View {
         
         NavigationView{
             
-            
             VStack{
-                
-                if let address = repAddress {
-                    NavigationLink("Next Page", destination: ShippingpView(repAddress: address), isActive: .constant(true)).hidden()
-                }
-                
+
                 Button{
-                    print("hello")
+                    print("hello there")
                     isShowingScanner = true
                 }label: {
                     
                     ZStack{
                         Capsule()
-                            .fill(.red)
+                            .fill(.blue)
                             .frame(width: 330, height: 130)
                             .shadow(radius: 11)
                         
                         HStack{
                             
                             Image(systemName: "qrcode.viewfinder")
-                                .foregroundColor(.yellow)
+                                .foregroundColor(.white)
                                 .font(.system(size: 80))
                             
                             Text("Scanner starten")
@@ -45,12 +41,13 @@ struct QRCodeScannerView: View {
                         }
                     }
                 }
-                .foregroundColor(.black)
+                .foregroundColor(.white)
+				.fontWeight(.heavy)
                 .sheet(isPresented: $isShowingScanner) {
-                    CodeScannerView(codeTypes: [.qr], showViewfinder: true, simulatedData: "Test&Test&Test&Testnum.&49808", completion: handleScan)
+                    CodeScannerView(codeTypes: [.qr], showViewfinder: true, simulatedData: "Steve&Jobs&Kaiserstraße&12&49808", completion: handleScan)
                 }
                 
-                .navigationTitle("Qr-Code Scanner")
+                .navigationTitle("New Order")
                 
                 
             }
@@ -71,9 +68,8 @@ struct QRCodeScannerView: View {
                                               streetNr: details[3],
                                               zip: details[4])
             print(repAddress.toString())
-            //AddressControllView(currentRecipientAddress: repAddress)
-            //NavigationLink("",destination: FirstStepView(repAddress: repAddress))
             self.repAddress = repAddress
+			showShippingView = true
             
         case .failure(let error):
             print("Scanning failed: \(error.localizedDescription)")
@@ -84,6 +80,9 @@ struct QRCodeScannerView: View {
 
 struct QRCodeScannerView_Previews: PreviewProvider {
     static var previews: some View {
-        QRCodeScannerView()
+		let repAdress = recipientAddress(name: "Dettler", surName: "Jan", street: "Kaiserstraße", streetNr: "12", zip: "49809")
+		let showShippingView = Binding.constant(false)
+
+		QRCodeScannerView(showShippingView: showShippingView, repAddress: Binding.constant(repAdress))
     }
 }

@@ -5,6 +5,7 @@
 //
 
 import SwiftUI
+import CodeScanner
 
 struct Person {
     var name: String
@@ -13,21 +14,29 @@ struct Person {
 
 struct ContentView: View {
 
-    @State private var signInSuccess = false
+    @State private var signInSuccess = true
+	@State private var showShippingView = false
+	@State private var repAddress = recipientAddress(name: "", surName: "", street: "", streetNr: "", zip: "")
 
     var body: some View {
 
 
         Group{
             if hasSavedToken() || signInSuccess {
-                TabView{
-                    QRCodeScannerView().tabItem{
-                        Label("Qr-code", systemImage: "qrcode")
-                    }
-                    SettingView(signInSuccess: $signInSuccess).tabItem{
-                        Label("Setting", systemImage: "gear")
-                    }
-                }
+
+				if !showShippingView {
+					TabView{
+						QRCodeScannerView(showShippingView: $showShippingView , repAddress: $repAddress).tabItem{
+							Label("Qr-code", systemImage: "qrcode")
+						}
+						SettingView(signInSuccess: $signInSuccess).tabItem{
+							Label("Settings", systemImage: "gear")
+						}
+
+					}
+				}else {
+					FirstStepView(showShippingView: $showShippingView, repAddress: $repAddress)
+				}
             }else{
                 LogINView(signInSuccess: $signInSuccess)
             }
@@ -40,6 +49,29 @@ struct ContentView: View {
 	func hasSavedToken() -> Bool {
 		   return getSavedToken() != nil
 	   }
+
+	func handleScan(result: Result<ScanResult, ScanError>) {
+		//isShowingScanner = false
+		switch result{
+		case .success(let result):
+			let details = result.string.components(separatedBy: "&")
+			guard details.count == 5 else { return }
+
+			let repAddress = recipientAddress(name: details[1],
+											  surName: details[0],
+											  street: details[2],
+											  streetNr: details[3],
+											  zip: details[4])
+			print(repAddress.toString())
+			//AddressControllView(currentRecipientAddress: repAddress)
+			//NavigationLink("",destination: FirstStepView(repAddress: repAddress))
+			//self.repAddress = repAddress
+
+		case .failure(let error):
+			print("Scanning failed: \(error.localizedDescription)")
+		}
+
+	}
 }
 
 struct ContentView_Previews: PreviewProvider {

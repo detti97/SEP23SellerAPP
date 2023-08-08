@@ -11,34 +11,34 @@ struct AddressControllView: View {
     
     var currentRecipientAddress: recipientAddress
     
-    var body: some View {
-        VStack{
-            HStack{
-                Image(systemName: "person")
-                Text(currentRecipientAddress.surName)
-                    .font(.headline)
-                Text(currentRecipientAddress.name)
-                    .font(.headline)
-            }
-            Spacer()
-                .frame(height: 30)
-            HStack{
-                
-                Image(systemName: "house")
-                    .font(.system(size: 30))
-                VStack{
-                    HStack{
-                        Text(currentRecipientAddress.street)
-                        Text(currentRecipientAddress.streetNr)
-                    }
-                    HStack{
-                        Text(currentRecipientAddress.zip)
-                        Text("Lingen")
-                    }
-                }
-            }
-        }
-    }
+	var body: some View {
+		VStack{
+			HStack{
+				Image(systemName: "person")
+				Text(currentRecipientAddress.surName)
+					.font(.headline)
+				Text(currentRecipientAddress.name)
+					.font(.headline)
+			}
+			Spacer()
+				.frame(height: 30)
+			HStack{
+				
+				Image(systemName: "house")
+					.font(.system(size: 30))
+				VStack{
+					HStack{
+						Text(currentRecipientAddress.street)
+						Text(currentRecipientAddress.streetNr)
+					}
+					HStack{
+						Text(currentRecipientAddress.zip)
+						Text("Lingen")
+					}
+				}
+			}
+		}
+	}
 }
 
 struct AddressControllView_Previews: PreviewProvider {

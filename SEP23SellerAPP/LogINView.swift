@@ -76,7 +76,7 @@ struct LogINView: View {
 									return
 								}
 								print(test)
-								guard let url = URL(string: "http://131.173.65.77:3000/login") else {
+								guard let url = URL(string: "http://131.173.65.77:8080/auth/login") else {
 									return
 								}
 								var request = URLRequest(url: url)
@@ -92,12 +92,8 @@ struct LogINView: View {
 									do {
 										let responseData = try JSONDecoder().decode(ResponseToken.self, from: data)
 										let jwtToken = responseData.token
-										//print(jwtToken)
-										decodeToken(test: jwtToken)
 										extractedExpr = .green
-
 										self.signInSuccess = true
-										//print("erfolg")
 										saveToken(jwtToken)
 
 										print("new token: " + getSavedToken()!)
