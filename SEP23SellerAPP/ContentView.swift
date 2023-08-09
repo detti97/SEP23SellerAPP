@@ -14,7 +14,7 @@ struct Person {
 
 struct ContentView: View {
 
-    @State private var signInSuccess = true
+    @State private var signInSuccess = false
 	@State private var showShippingView = false
 	@State private var repAddress = recipientAddress(name: "", surName: "", street: "", streetNr: "", zip: "")
 
@@ -29,11 +29,28 @@ struct ContentView: View {
 						QRCodeScannerView(showShippingView: $showShippingView , repAddress: $repAddress).tabItem{
 							Label("Qr-code", systemImage: "qrcode")
 						}
+
 						SettingView(signInSuccess: $signInSuccess).tabItem{
 							Label("Settings", systemImage: "gear")
 						}
+						.onAppear() {
+							/*
+										let standardAppearance = UITabBarAppearance()
+										standardAppearance.backgroundColor = UIColor(Color.gray)
+										standardAppearance.shadowColor = UIColor(Color.black)
+										let itemAppearance = UITabBarItemAppearance()
+										itemAppearance.normal.iconColor = UIColor(Color.white)
+										itemAppearance.selected.iconColor = UIColor(Color.red)
+										standardAppearance.inlineLayoutAppearance = itemAppearance
+										standardAppearance.stackedLayoutAppearance = itemAppearance
+										standardAppearance.compactInlineLayoutAppearance = itemAppearance
+										UITabBar.appearance().standardAppearance = standardAppearance
+							 */
+									}
+									.edgesIgnoringSafeArea(.bottom)
 
 					}
+
 				}else {
 					FirstStepView(showShippingView: $showShippingView, repAddress: $repAddress)
 				}
@@ -41,6 +58,7 @@ struct ContentView: View {
                 LogINView(signInSuccess: $signInSuccess)
             }
         }
+		
     }
 	func getSavedToken() -> String? {
 		return UserDefaults.standard.string(forKey: "AuthToken")

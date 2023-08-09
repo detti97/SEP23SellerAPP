@@ -23,7 +23,7 @@
 		604287CC29E4771D009798B5 /* DeliveryControllView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604287CB29E4771D009798B5 /* DeliveryControllView.swift */; };
 		604287CE29E4A3D8009798B5 /* ShippingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604287CD29E4A3D8009798B5 /* ShippingView.swift */; };
 		6084D5562A5F45D2005AC588 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D5552A5F45D2005AC588 /* Setting.swift */; };
-		6084D55A2A7AD90B005AC588 /* ShippingView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D5592A7AD90B005AC588 /* ShippingView2.swift */; };
+		6084D55C2A82970E005AC588 /* StatistcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D55B2A82970E005AC588 /* StatistcView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,7 +43,7 @@
 		604287CB29E4771D009798B5 /* DeliveryControllView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryControllView.swift; sourceTree = "<group>"; };
 		604287CD29E4A3D8009798B5 /* ShippingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShippingView.swift; sourceTree = "<group>"; };
 		6084D5552A5F45D2005AC588 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
-		6084D5592A7AD90B005AC588 /* ShippingView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShippingView2.swift; sourceTree = "<group>"; };
+		6084D55B2A82970E005AC588 /* StatistcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatistcView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,12 +80,12 @@
 				604287A629E08062009798B5 /* SEP23SellerAPPApp.swift */,
 				604287A829E08062009798B5 /* ContentView.swift */,
 				604287B429E080C8009798B5 /* AddressEncoder.swift */,
+				6084D55B2A82970E005AC588 /* StatistcView.swift */,
 				604287BF29E1FFC5009798B5 /* Models */,
 				604287BB29E0B242009798B5 /* AddressControllView.swift */,
 				604287B929E0A189009798B5 /* QRCodeScannerView.swift */,
 				603CC74E2A4B0DE000C3D3E3 /* LogINView.swift */,
 				526962BA2A4CBA1400835E8B /* SettingView.swift */,
-				6084D5592A7AD90B005AC588 /* ShippingView2.swift */,
 				604287C429E21733009798B5 /* CheckoutViews */,
 				604287AA29E08063009798B5 /* Assets.xcassets */,
 				604287AC29E08063009798B5 /* Preview Content */,
@@ -204,9 +204,9 @@
 				6084D5562A5F45D2005AC588 /* Setting.swift in Sources */,
 				604287A929E08062009798B5 /* ContentView.swift in Sources */,
 				603CC74F2A4B0DE000C3D3E3 /* LogINView.swift in Sources */,
+				6084D55C2A82970E005AC588 /* StatistcView.swift in Sources */,
 				604287C629E21769009798B5 /* FirstStepView.swift in Sources */,
 				604287BC29E0B242009798B5 /* AddressControllView.swift in Sources */,
-				6084D55A2A7AD90B005AC588 /* ShippingView2.swift in Sources */,
 				604287C829E21B3C009798B5 /* HandlingInfo.swift in Sources */,
 				526962BB2A4CBA1400835E8B /* SettingView.swift in Sources */,
 				604287CE29E4A3D8009798B5 /* ShippingView.swift in Sources */,
@@ -344,6 +344,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "LL HändlerApp";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Die App benötigt Kamera zugriff um qr Codes zu scannen";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Wird benötigt fürs Uploaden von Bildern";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -375,6 +376,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "LL HändlerApp";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Die App benötigt Kamera zugriff um qr Codes zu scannen";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Wird benötigt fürs Uploaden von Bildern";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

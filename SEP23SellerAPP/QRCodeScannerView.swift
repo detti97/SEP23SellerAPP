@@ -7,8 +7,6 @@ import CodeScanner
 
 struct QRCodeScannerView: View {
     
-    
-    
     @State private var isShowingScanner = false
 	@Binding var showShippingView: Bool
 	@Binding var repAddress: recipientAddress
@@ -44,7 +42,7 @@ struct QRCodeScannerView: View {
                 .foregroundColor(.white)
 				.fontWeight(.heavy)
                 .sheet(isPresented: $isShowingScanner) {
-                    CodeScannerView(codeTypes: [.qr], showViewfinder: true, simulatedData: "Steve&Jobs&Kaiserstraße&12&49808", completion: handleScan)
+                    CodeScannerView(codeTypes: [.qr], showViewfinder: true, simulatedData: "Steve&Jobs&Bernd-Rosemeyer-Straße&40&49808", completion: handleScan)
                 }
                 
                 .navigationTitle("New Order")

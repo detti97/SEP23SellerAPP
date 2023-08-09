@@ -7,24 +7,28 @@
 
 import Foundation
 
-struct Setting: Codable {
+struct Setting: Codable, Equatable {
 
-	var storeID: Int
+	var token: String
 	var storeName: String
-	var shopOwner: String
-	var phoneNumber: String
-	var openingHours: OpeningHours
+	var password: String
+	var owner: String
+	var street: String
+	var houseNumber: String
+	var zip: String
+	var telephone: String
+	var email: String
 
-}
-
-struct OpeningHours: Codable{
-
-	var mondayOpenCloseTime: String
-	var tuesdayOpenCloseTime: String
-	var wednesdayOpenCloseTime: String
-	var thursdayOpenCloseTime: String
-	var fridayOpenCloseTime: String
-	var saturdayOpenCloseTime: String
-
+	init(token: String?, storeName: String, password: String, owner: String, street: String, houseNumber: String, zip: String, telephone: String, email: String) {
+			self.token = token ?? "StandardToken"
+			self.storeName = storeName
+			self.password = password
+			self.owner = owner
+			self.street = street
+			self.houseNumber = houseNumber
+			self.zip = zip
+			self.telephone = telephone
+			self.email = email
+		}
 
 }

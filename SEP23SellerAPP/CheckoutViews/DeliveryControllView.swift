@@ -18,14 +18,19 @@ struct DeliveryControllView: View {
 
 	var order: Order
 	@State private var orderID = "_"
+
+	@State private var isActiveDeliveryControll = true
+	@State private var isActiveSendOrder = false
 	@State private var isActiveOrderSuccess = false
+
 	@State private var orderSuccess = false
+	@State private var orderFail = false
 
 	@Binding var showShippingView: Bool
 
 	var body: some View {
 
-		if !isActiveOrderSuccess{
+		if isActiveDeliveryControll{ // Delivery Controll Page
 
 			ScrollView {
 				Spacer(minLength: 70)
@@ -43,10 +48,10 @@ struct DeliveryControllView: View {
 
 						VStack (alignment: .leading, spacing: 10){
 
-								Text("Mitarbeiter: ")
-								Text("Paket Größe: ")
-								Text("Wichtige Hinweise: ")
-								Text("Lieferdatum: ")
+							Text("Mitarbeiter: ")
+							Text("Paket Größe: ")
+							Text("Wichtige Hinweise: ")
+							Text("Lieferdatum: ")
 
 
 
@@ -78,9 +83,9 @@ struct DeliveryControllView: View {
 
 						VStack (alignment: .leading, spacing: 10){
 
-								Text("Empfänger: ")
-								Text("Straße: ")
-								Text("Stadt: ")
+							Text("Empfänger: ")
+							Text("Straße: ")
+							Text("Stadt: ")
 
 						}
 						.fontWeight(.heavy)
@@ -105,9 +110,9 @@ struct DeliveryControllView: View {
 				Spacer(minLength: 40)
 
 				Button(action: {
-					sendOrder(newOrder: order)
+					isActiveDeliveryControll = false
 					isActiveOrderSuccess = true
-
+					sendOrder(newOrder: order)
 				}) {
 					Text("Bestellung senden")
 						.padding()
@@ -122,7 +127,9 @@ struct DeliveryControllView: View {
 			}
 			.navigationTitle("New Order for " + order.firstName + " " + order.lastName)
 			.navigationBarTitleDisplayMode(.inline)
-		}else{
+			// Delivery Controll Page
+		}
+		if isActiveOrderSuccess{
 
 			VStack{
 
@@ -136,44 +143,85 @@ struct DeliveryControllView: View {
 				Spacer()
 					.frame(height: 60)
 
-				Text("Lieferung Beauftragt")
-					.font(.largeTitle)
-					.fontWeight(.heavy)
-					.padding()
-					.multilineTextAlignment(.center)
-
-				Spacer()
-					.frame(height: 20)
-
 				if orderID == "_" {
-								ProgressView()
-									.progressViewStyle(CircularProgressViewStyle(tint: .purple))
-							} else {
-								Text("Bitte das Paket mit \(orderID) beschriften")
-									.font(.body)
-									.fontWeight(.heavy)
-									.padding()
-									.multilineTextAlignment(.center)
-									.foregroundColor(.purple)
-							}
 
-				Spacer()
-					.frame(height: 100)
+					if orderFail {
 
-				Button(action: {
+						Text("Fehler bei der Kommunikation mit dem Server!")
+							.font(.largeTitle)
+							.fontWeight(.heavy)
+							.padding()
+							.multilineTextAlignment(.center)
+							.foregroundColor(.red)
 
-					showShippingView = false
+						Spacer()
+							.frame(height: 20)
 
-				}) {
-					Text("Back to Dashboard")
-						.font(.headline)
+						Button(action: {
+							isActiveOrderSuccess = false
+							isActiveDeliveryControll = true
+							orderFail = false
+
+						}) {
+							Text("Erneut Versuchen")
+								.padding()
+								.foregroundColor(.white)
+								.fontWeight(.heavy)
+								.background(Color.blue)
+								.cornerRadius(8)
+						}
 						.padding()
-						.frame(maxWidth: .infinity)
-						.background(Color.purple)
-						.foregroundColor(.white)
-						.cornerRadius(18)
-						.padding()
-				}
+						.frame(maxWidth: .infinity, alignment: .center)
+
+					}else{
+
+						Text("Lieferung wird gesendet")
+							.font(.largeTitle)
+							.fontWeight(.heavy)
+							.padding()
+							.multilineTextAlignment(.center)
+						Spacer()
+							.frame(height: 20)
+						ProgressView()
+							.progressViewStyle(CircularProgressViewStyle(tint: .purple))
+					}} else {
+
+						Text("Lieferung Beauftragt")
+							.font(.largeTitle)
+							.fontWeight(.heavy)
+							.padding()
+							.multilineTextAlignment(.center)
+
+						Spacer()
+							.frame(height: 20)
+
+						Text("Bitte das Paket mit \(orderID) beschriften")
+							.font(.body)
+							.fontWeight(.heavy)
+							.padding()
+							.multilineTextAlignment(.center)
+							.foregroundColor(.purple)
+
+						Spacer()
+							.frame(height: 100)
+
+						Button(action: {
+
+							showShippingView = false
+
+						}) {
+							Text("Back to Dashboard")
+								.font(.headline)
+								.padding()
+								.frame(maxWidth: .infinity)
+								.background(Color.purple)
+								.foregroundColor(.white)
+								.cornerRadius(18)
+								.padding()
+						}
+					}
+
+
 			}
 
 		}
@@ -187,9 +235,11 @@ struct DeliveryControllView: View {
 		let test = Order(token: getSavedToken()!, timestamp: newOrder.timestamp, employeeName: newOrder.employeeName, firstName: newOrder.firstName, lastName: newOrder.lastName, street: newOrder.street, houseNumber: newOrder.houseNumber, zip: newOrder.zip, city: newOrder.city, packageSize: newOrder.packageSize, handlingInfo: newOrder.handlingInfo, deliveryDate: newOrder.deliveryDate)
 		print(test)
 		guard let data = try? JSONEncoder().encode(test) else {
+			orderFail = true
 			return
 		}
 		guard let url = URL(string: "http://131.173.65.77:8080/api/order") else {
+			orderFail = true
 			return
 		}
 		var request = URLRequest(url: url)
@@ -198,6 +248,7 @@ struct DeliveryControllView: View {
 		request.httpBody = data
 		let task = URLSession.shared.dataTask(with: request) { data, response, error in
 			guard let _ = data else {
+				orderFail = true
 				return
 			}
 			if let httpResponse = response as? HTTPURLResponse,
@@ -217,6 +268,7 @@ struct DeliveryControllView: View {
 
 				} catch let error {
 
+					orderFail = true
 					print("Fehler beim Parsen des JSON: \(error.localizedDescription)")
 
 				}
