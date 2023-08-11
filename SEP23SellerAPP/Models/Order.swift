@@ -9,8 +9,7 @@ import SwiftUI
 import Foundation
 
 struct Order: Encodable{
-    
-    //var id = UUID()
+
 	var token: String
     var timestamp: String
     var employeeName: String
@@ -23,6 +22,7 @@ struct Order: Encodable{
     var packageSize: String
     var handlingInfo: String
     var deliveryDate: String
+	var customDropOffPlace: String
     
     func toString() -> String {
             let string = """
@@ -41,4 +41,22 @@ struct Order: Encodable{
             return string
         }
     
+}
+
+struct PlacedOrder: Decodable {
+
+	var orderID: Int
+	var timestamp: String
+	var employeeName: String
+	var packageSize: String
+	var deliveryDate: String
+	var customDropoffPlace: String
+	var handlingInfo: String
+	var firstName: String
+	var lastName: String
+	var street: String
+	var houseNumber: String
+	var ZIP: Int
+
+
 }

@@ -232,8 +232,8 @@ struct DeliveryControllView: View {
 	}
 
 	func sendOrder(newOrder: Order, session: URLSession = URLSession.shared) {
-		let test = Order(token: getSavedToken()!, timestamp: newOrder.timestamp, employeeName: newOrder.employeeName, firstName: newOrder.firstName, lastName: newOrder.lastName, street: newOrder.street, houseNumber: newOrder.houseNumber, zip: newOrder.zip, city: newOrder.city, packageSize: newOrder.packageSize, handlingInfo: newOrder.handlingInfo, deliveryDate: newOrder.deliveryDate)
-		print(test)
+		let test = Order(token: getSavedToken()!, timestamp: newOrder.timestamp, employeeName: newOrder.employeeName, firstName: newOrder.firstName, lastName: newOrder.lastName, street: newOrder.street, houseNumber: newOrder.houseNumber, zip: newOrder.zip, city: newOrder.city, packageSize: newOrder.packageSize, handlingInfo: newOrder.handlingInfo, deliveryDate: newOrder.deliveryDate, customDropOffPlace: newOrder.customDropOffPlace)
+		print("Order: \(test)")
 		guard let data = try? JSONEncoder().encode(test) else {
 			orderFail = true
 			return
@@ -282,7 +282,7 @@ struct DeliveryControllView: View {
 
 struct DeliveryControllView_Previews: PreviewProvider {
 	static var previews: some View {
-		let order = Order(token: "", timestamp: "22-11-2023", employeeName: "WB", firstName: "Jan", lastName: "De", street: "Kais", houseNumber: "12", zip: "49809", city: "Lingen", packageSize: "L", handlingInfo: "Gebrechlich", deliveryDate: "10-04-2023")
+		let order = Order(token: "", timestamp: "22-11-2023", employeeName: "WB", firstName: "Jan", lastName: "De", street: "Kais", houseNumber: "12", zip: "49809", city: "Lingen", packageSize: "L", handlingInfo: "Gebrechlich", deliveryDate: "10-04-2023", customDropOffPlace: "Garage")
 		DeliveryControllView(order: order, showShippingView: Binding.constant(false))
 	}
 }

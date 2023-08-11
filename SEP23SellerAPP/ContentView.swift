@@ -27,12 +27,18 @@ struct ContentView: View {
 				if !showShippingView {
 					TabView{
 						QRCodeScannerView(showShippingView: $showShippingView , repAddress: $repAddress).tabItem{
-							Label("Qr-code", systemImage: "qrcode")
+							Label("Neue Bestellung", systemImage: "airplane.departure")
+						}
+
+						Statistc2View().tabItem{
+							Label("Aufgegebe Bestellungen", systemImage: "shippingbox.and.arrow.backward.fill")
 						}
 
 						SettingView(signInSuccess: $signInSuccess).tabItem{
-							Label("Settings", systemImage: "gear")
+							Label("Einstellungen", systemImage: "gear")
+
 						}
+						//.fontWeight(.heavy)
 						.onAppear() {
 							/*
 										let standardAppearance = UITabBarAppearance()

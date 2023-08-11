@@ -14,6 +14,7 @@ struct FirstStepView: View {
 	@State private var choosenPackage: String = "M"
 	@State private var selectedDate = Date()
 	@State private var selectedDateString = ""
+	@State private var customDropOffPlace = ""
 	@State private var handInfo = [ HandlingInfo(name: "Zerbrechlich", isMarked: false), HandlingInfo(name: "Glas", isMarked: false), HandlingInfo(name: "Flüßigkeiten", isMarked: false), HandlingInfo(name: "Schwer", isMarked: false)]
 	@State private var currentTime = Date()
 	@State private var isShowingDeliveryControll = false
@@ -61,7 +62,7 @@ struct FirstStepView: View {
 					 .shadow(radius: 6)
 					 */
 					Section(header: Text("Paket Größe auswählen")){
-						Picker("Postleitzahl", selection: $choosenPackage) {
+						Picker("PackageSize", selection: $choosenPackage) {
 							ForEach(packageSizes, id: \.self) { packageSizes in
 								Text(packageSizes)
 							}
@@ -99,9 +100,12 @@ struct FirstStepView: View {
 					Section(header: Text("Mitarbeiter Kürzel")){
 						TextField("Optional", text: $employeSign)
 					}
+					Section(header: Text("Ablage Ort")){
+						TextField("Abweichender Ablageort", text: $customDropOffPlace)
+					}
 
 				}
-
+				
 					HStack{
 
 						Button {
@@ -131,12 +135,14 @@ struct FirstStepView: View {
 								.cornerRadius(8)
 						}
 						.sheet(isPresented: $isShowingDeliveryControll) {
-							DeliveryControllView(order: setOrder(repAddress: repAddress, handInfo: handInfoToString(), packageSize: choosenPackage, numberPackages: 1, employeSign: employeSign, deliveryDate: selectedDateString), showShippingView: $showShippingView)
+							DeliveryControllView(order: setOrder(repAddress: repAddress, handInfo: handInfoToString(), packageSize: choosenPackage, numberPackages: 1, employeSign: employeSign, deliveryDate: selectedDateString, customDropOffPlace: customDropOffPlace), showShippingView: $showShippingView)
 						}
 						.frame(maxWidth: .infinity, alignment: .center)
 
 
 					}
+					.background(
+						Color.clear)
 
 
 
@@ -166,16 +172,16 @@ struct FirstStepView: View {
 		return combinedNames
 	}
 
-	func setOrder(repAddress: recipientAddress, handInfo: String, packageSize: String, numberPackages: Int, employeSign: String, deliveryDate: String) -> Order{
+	func setOrder(repAddress: recipientAddress, handInfo: String, packageSize: String, numberPackages: Int, employeSign: String, deliveryDate: String, customDropOffPlace: String ) -> Order{
 
-		let newOrder = Order(token: "", timestamp: getCurrentDateTime(), employeeName: employeSign, firstName: repAddress.surName, lastName: repAddress.name, street: repAddress.street, houseNumber: repAddress.streetNr, zip: repAddress.zip, city: "Lingen", packageSize: packageSize, handlingInfo: handInfo, deliveryDate: deliveryDate)
+		let newOrder = Order(token: "", timestamp: getCurrentDateTime(), employeeName: employeSign, firstName: repAddress.surName, lastName: repAddress.name, street: repAddress.street, houseNumber: repAddress.streetNr, zip: repAddress.zip, city: "Lingen", packageSize: packageSize, handlingInfo: handInfo, deliveryDate: deliveryDate, customDropOffPlace: customDropOffPlace )
 
 		return newOrder
 	}
 
-	func setOrderAddress(repAddress: recipientAddress, handInfo: String, packageSize: Int, numberPackages: Int, employeSign: String) -> Order{
+	func setOrderAddress(repAddress: recipientAddress, handInfo: String, packageSize: Int, numberPackages: Int, employeSign: String, customDropOffPlace: String) -> Order{
 
-		let newOrder = Order(token: "", timestamp: getCurrentDateTime(), employeeName: employeSign, firstName: repAddress.surName, lastName: repAddress.name, street: repAddress.street, houseNumber: repAddress.streetNr, zip: repAddress.zip, city: "Lingen", packageSize: packageSizes[packageSize], handlingInfo: handInfo, deliveryDate: "")
+		let newOrder = Order(token: "", timestamp: getCurrentDateTime(), employeeName: employeSign, firstName: repAddress.surName, lastName: repAddress.name, street: repAddress.street, houseNumber: repAddress.streetNr, zip: repAddress.zip, city: "Lingen", packageSize: packageSizes[packageSize], handlingInfo: handInfo, deliveryDate: "", customDropOffPlace: customDropOffPlace)
 
 		return newOrder
 	}

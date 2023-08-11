@@ -6,8 +6,9 @@ import SwiftUI
 import CodeScanner
 
 struct QRCodeScannerView: View {
-    
+
     @State private var isShowingScanner = false
+	@State private var isShowingAddressPanel = false
 	@Binding var showShippingView: Bool
 	@Binding var repAddress: recipientAddress
     
@@ -44,13 +45,40 @@ struct QRCodeScannerView: View {
                 .sheet(isPresented: $isShowingScanner) {
                     CodeScannerView(codeTypes: [.qr], showViewfinder: true, simulatedData: "Steve&Jobs&Bernd-Rosemeyer-Straße&40&49808", completion: handleScan)
                 }
-                
-                .navigationTitle("New Order")
-                
-                
+
+				Button{
+
+					isShowingAddressPanel = true
+
+				}label: {
+
+					ZStack{
+						Capsule()
+							.fill(.blue)
+							.frame(width: 330, height: 130)
+							.shadow(radius: 11)
+
+						HStack{
+
+							Image(systemName: "figure.hunting")
+								.foregroundColor(.white)
+								.font(.system(size: 80))
+
+							Text("Adress Eingabe")
+								.font(.headline)
+						}
+					}
+				}
+				.foregroundColor(.white)
+				.fontWeight(.heavy)
+				.sheet(isPresented: $isShowingAddressPanel) {
+					AddressPanelView(showShippingView: $showShippingView, isActiveAddressPanel: $isShowingAddressPanel, repAddress: $repAddress)
+				}
+
             }
+			.navigationTitle("New Order")
         }
-        
+
     }
     
     func handleScan(result: Result<ScanResult, ScanError>) {
@@ -80,6 +108,7 @@ struct QRCodeScannerView_Previews: PreviewProvider {
     static var previews: some View {
 		let repAdress = recipientAddress(name: "Dettler", surName: "Jan", street: "Kaiserstraße", streetNr: "12", zip: "49809")
 		let showShippingView = Binding.constant(false)
+		
 
 		QRCodeScannerView(showShippingView: showShippingView, repAddress: Binding.constant(repAdress))
     }

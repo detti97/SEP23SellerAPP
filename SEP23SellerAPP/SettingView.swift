@@ -1,5 +1,5 @@
 import SwiftUI
-import  PhotosUI
+import PhotosUI
 
 
 struct token: Encodable {
@@ -8,6 +8,7 @@ struct token: Encodable {
 }
 
 struct SettingView: View {
+
 	@AppStorage("isDarkMode") private var isDarkMode = false
 	@State private var showEditAddress = false
 	@State private var showEditOpeningHours = false
@@ -22,40 +23,48 @@ struct SettingView: View {
 
 	@Binding var signInSuccess: Bool
 
+	@StateObject public var dataManager = DataManager()
+
 	var body: some View {
 
 		NavigationView{
 
+
 			VStack{
 
-				HStack{
+				VStack(alignment: .center){
 
-					VStack{
-						Image(systemName: "person")
-							.font(.headline)
-						Image(systemName: "house")
-							.font(.headline)
-						Image(systemName: "phone")
-							.font(.headline)
-						Image(systemName: "envelope")
-							.font(.headline)
+					HStack{
+
+						VStack{
+							Image(systemName: "person")
+								.font(.headline)
+							Image(systemName: "house")
+								.font(.headline)
+							Image(systemName: "phone")
+								.font(.headline)
+							Image(systemName: "envelope")
+								.font(.headline)
+
+						}
+
+						VStack{
+							Text(settings.owner)
+							Text("\(settings.street) \(settings.houseNumber)")
+							Text(settings.telephone)
+							Text(settings.email)
+						}
 
 					}
-
-					VStack{
-						Text(settings.owner)
-						Text("\(settings.street) \(settings.houseNumber)")
-						Text(settings.telephone)
-						Text(settings.email)
-					}
+					.padding()
+					.background()
+					.cornerRadius(10)
+					.shadow(radius: 6)
 
 				}
-				.padding()
-				.background()
-				.cornerRadius(10)
-				.shadow(radius: 6)
 
-				Spacer(minLength: 10)
+
+				//Spacer(minLength: 10)
 
 				Form {
 					Section(header: Text("Geschäftsinformationen")) {
@@ -95,6 +104,23 @@ struct SettingView: View {
 						.sheet(isPresented: $showEditOwner) {
 							EditOwnerView(Owner: $settings.owner, newSettings: $settings)
 						}
+						VStack {
+							PhotosPicker("Select Picture", selection: $avatarItem, matching: .images)
+						}
+						.onChange(of: avatarItem) { _ in
+							Task {
+								if let data = try? await avatarItem?.loadTransferable(type: Data.self) {
+									if let uiImage = UIImage(data: data) {
+										avatarImage = Image(uiImage: uiImage)
+										//sendImage(uiImage)
+										newStore(uiImage)
+										return
+									}
+								}
+
+								print("Failed")
+							}
+						}
 					}
 
 					Section {
@@ -104,42 +130,12 @@ struct SettingView: View {
 							Text("Abmelden")
 								.foregroundColor(.red)
 						}
-					/*	Button(action: {
-							getSettings()
-						}) {
-							Text("Get Settings")
-								.foregroundColor(.green)
-						}*/
+
 					}
 
 					Section(header: Text("Einstellungen")) {
 						Toggle(isOn: $isDarkMode) {
 							Text("Dark Mode")
-						}
-					}
-
-					VStack {
-						PhotosPicker("Select Picture", selection: $avatarItem, matching: .images)
-
-					/*	if let avatarImage {
-							avatarImage
-								.resizable()
-								.scaledToFit()
-								.frame(width: 300, height: 300)
-
-						}*/
-					}
-					.onChange(of: avatarItem) { _ in
-						Task {
-							if let data = try? await avatarItem?.loadTransferable(type: Data.self) {
-								if let uiImage = UIImage(data: data) {
-									avatarImage = Image(uiImage: uiImage)
-									sendImage(uiImage)
-									return
-								}
-							}
-
-							print("Failed")
 						}
 					}
 					.navigationBarTitle("Einstellungen")
@@ -148,7 +144,91 @@ struct SettingView: View {
 					}
 				}
 			}
+
+			.background(
+				AsyncImage(url: URL(string: "https://wallpapers.com/wp-content/themes/wallpapers.com/src/splash-n.jpg")) { image in
+					image.resizable()
+						.aspectRatio(contentMode: .fill)
+						.edgesIgnoringSafeArea(.all)
+						.opacity(0.7)
+				} placeholder: {
+					Color.clear
+				})
 		}
+
+	}
+
+	func newStore(_ image: UIImage?) {
+
+		struct newStore: Codable{
+
+			var storeName: String
+			var username: String
+			var password: String
+			var owner: String
+			var street: String
+			var houseNumber: String
+			var zip: String
+			var telephone: String
+			var email: String
+			var logo: String
+
+		}
+
+		guard let image = image else {
+			print("Kein ausgewähltes Bild")
+			return
+		}
+
+		guard let imageData = image.jpegData(compressionQuality: 0.8) else {
+			print("Fehler beim Konvertieren des Bildes in Data")
+			return
+		}
+
+		let store = newStore(storeName: "Bild", username: "Test1234561231", password: "BK", owner: "Ronald McDonald", street: "Zum Heidhof", houseNumber: "22", zip: "49809", telephone: "1234098", email: "MCD@BK.de", logo: imageData.base64EncodedString())
+
+
+		guard let data = try? JSONEncoder().encode(store) else {
+			print("Fehler beim JSON-erstellen")
+			return
+		}
+		//print(store)
+		guard let url = URL(string: "http://131.173.65.77:8080/auth/register") else {
+			return
+		}
+		var request = URLRequest(url: url)
+		request.httpMethod = "POST"
+		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+		request.httpBody = data
+		let task = URLSession.shared.dataTask(with: request){ data, response, error in
+				if let error = error {
+					// Wenn ein Fehler aufgetreten ist, wird er in der Konsole ausgegeben
+					print("Fehler beim Senden der Anfrage: \(error.localizedDescription)")
+					return
+				}
+				guard let data = data else {
+					// Wenn keine Daten zurückgegeben wurden, wird eine Fehlermeldung ausgegeben
+					print("Keine Daten vom Server erhalten.")
+					return
+				}
+				guard let httpResponse = response as? HTTPURLResponse else {
+					// Wenn die Antwort keine HTTP-Antwort ist, wird eine Fehlermeldung ausgegeben
+					print("Keine HTTP-Antwort vom Server erhalten.")
+					return
+				}
+				if httpResponse.statusCode == 200 {
+					// Wenn der Statuscode 200 ist, wird die Antwort des Servers in der Konsole ausgegeben
+					if let responseString = String(data: data, encoding: .utf8) {
+						print("Antwort des Servers: \(responseString)")
+					}
+				} else {
+					// Wenn der Statuscode nicht 200 ist, wird eine Fehlermeldung ausgegeben
+					print("Fehler beim Empfangen der Antwort vom Server. Statuscode: \(httpResponse.statusCode)")
+				}
+			}
+		task.resume()
+
+
 	}
 
 	func sendImage(_ image: UIImage?) {
@@ -443,6 +523,9 @@ struct SettingView: View {
 	}
 
 	struct EditAddressView: View {
+
+		let zipCodes = ["49808", "49809" , "49811"]
+
 		@Binding var address: String
 		@Binding var homeNumber: String
 		@Binding var zipCode: String
@@ -455,6 +538,12 @@ struct SettingView: View {
 					TextField("Adresse", text: $address)
 					TextField("Hausnummer", text: $homeNumber)
 					TextField("PLZ", text: $zipCode)
+					Picker("Postleitzahl", selection: $zipCode) {
+						ForEach(zipCodes, id: \.self) { plz in
+							Text(plz)
+						}
+					}
+					.pickerStyle(SegmentedPickerStyle())
 				}
 				.navigationBarTitle("Adresse bearbeiten")
 				.navigationBarItems(leading: cancelButton, trailing: saveButton)
