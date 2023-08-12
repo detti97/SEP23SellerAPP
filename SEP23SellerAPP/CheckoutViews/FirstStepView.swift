@@ -25,7 +25,7 @@ struct FirstStepView: View {
 
 	private var dateFormatter: DateFormatter {
 		let formatter = DateFormatter()
-		formatter.dateFormat = "dd-MM-yy"
+		formatter.dateFormat = "yyyy-MM-dd"
 		return formatter
 	}
 
