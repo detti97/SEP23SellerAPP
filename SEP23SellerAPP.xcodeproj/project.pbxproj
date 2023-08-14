@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		526962BB2A4CBA1400835E8B /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526962BA2A4CBA1400835E8B /* SettingView.swift */; };
+		52DA1D6F2A8AF034005602AB /* SEP23SellerAPP_UnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DA1D6E2A8AF034005602AB /* SEP23SellerAPP_UnitTests.swift */; };
 		603CC74F2A4B0DE000C3D3E3 /* LogINView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 603CC74E2A4B0DE000C3D3E3 /* LogINView.swift */; };
 		604287A729E08062009798B5 /* SEP23SellerAPPApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604287A629E08062009798B5 /* SEP23SellerAPPApp.swift */; };
 		604287A929E08062009798B5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604287A829E08062009798B5 /* ContentView.swift */; };
@@ -31,8 +32,20 @@
 		6084D56C2A893CDD005AC588 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D56B2A893CDD005AC588 /* API.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		52DA1D702A8AF034005602AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6042879B29E08062009798B5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 604287A229E08062009798B5;
+			remoteInfo = SEP23SellerAPP;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		526962BA2A4CBA1400835E8B /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
+		52DA1D6C2A8AF034005602AB /* SEP23SellerAPP-UnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SEP23SellerAPP-UnitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		52DA1D6E2A8AF034005602AB /* SEP23SellerAPP_UnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SEP23SellerAPP_UnitTests.swift; sourceTree = "<group>"; };
 		603CC74E2A4B0DE000C3D3E3 /* LogINView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogINView.swift; sourceTree = "<group>"; };
 		604287A329E08062009798B5 /* SEP23SellerAPP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SEP23SellerAPP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		604287A629E08062009798B5 /* SEP23SellerAPPApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SEP23SellerAPPApp.swift; sourceTree = "<group>"; };
@@ -57,6 +70,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		52DA1D692A8AF034005602AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		604287A029E08062009798B5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -68,10 +88,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		52DA1D6D2A8AF034005602AB /* SEP23SellerAPP-UnitTests */ = {
+			isa = PBXGroup;
+			children = (
+				52DA1D6E2A8AF034005602AB /* SEP23SellerAPP_UnitTests.swift */,
+			);
+			path = "SEP23SellerAPP-UnitTests";
+			sourceTree = "<group>";
+		};
 		6042879A29E08062009798B5 = {
 			isa = PBXGroup;
 			children = (
 				604287A529E08062009798B5 /* SEP23SellerAPP */,
+				52DA1D6D2A8AF034005602AB /* SEP23SellerAPP-UnitTests */,
 				604287A429E08062009798B5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -80,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				604287A329E08062009798B5 /* SEP23SellerAPP.app */,
+				52DA1D6C2A8AF034005602AB /* SEP23SellerAPP-UnitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -147,6 +177,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		52DA1D6B2A8AF034005602AB /* SEP23SellerAPP-UnitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 52DA1D742A8AF034005602AB /* Build configuration list for PBXNativeTarget "SEP23SellerAPP-UnitTests" */;
+			buildPhases = (
+				52DA1D682A8AF034005602AB /* Sources */,
+				52DA1D692A8AF034005602AB /* Frameworks */,
+				52DA1D6A2A8AF034005602AB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				52DA1D712A8AF034005602AB /* PBXTargetDependency */,
+			);
+			name = "SEP23SellerAPP-UnitTests";
+			productName = "SEP23SellerAPP-UnitTests";
+			productReference = 52DA1D6C2A8AF034005602AB /* SEP23SellerAPP-UnitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		604287A229E08062009798B5 /* SEP23SellerAPP */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 604287B129E08063009798B5 /* Build configuration list for PBXNativeTarget "SEP23SellerAPP" */;
@@ -177,6 +225,10 @@
 				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					52DA1D6B2A8AF034005602AB = {
+						CreatedOnToolsVersion = 14.3.1;
+						TestTargetID = 604287A229E08062009798B5;
+					};
 					604287A229E08062009798B5 = {
 						CreatedOnToolsVersion = 14.3;
 					};
@@ -199,11 +251,19 @@
 			projectRoot = "";
 			targets = (
 				604287A229E08062009798B5 /* SEP23SellerAPP */,
+				52DA1D6B2A8AF034005602AB /* SEP23SellerAPP-UnitTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		52DA1D6A2A8AF034005602AB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		604287A129E08062009798B5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -216,6 +276,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		52DA1D682A8AF034005602AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				52DA1D6F2A8AF034005602AB /* SEP23SellerAPP_UnitTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6042879F29E08062009798B5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -244,7 +312,49 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		52DA1D712A8AF034005602AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 604287A229E08062009798B5 /* SEP23SellerAPP */;
+			targetProxy = 52DA1D702A8AF034005602AB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		52DA1D722A8AF034005602AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Tests.SEP23SellerAPP-UnitTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SEP23SellerAPP.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SEP23SellerAPP";
+			};
+			name = Debug;
+		};
+		52DA1D732A8AF034005602AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Tests.SEP23SellerAPP-UnitTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SEP23SellerAPP.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SEP23SellerAPP";
+			};
+			name = Release;
+		};
 		604287AF29E08063009798B5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -426,6 +536,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		52DA1D742A8AF034005602AB /* Build configuration list for PBXNativeTarget "SEP23SellerAPP-UnitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52DA1D722A8AF034005602AB /* Debug */,
+				52DA1D732A8AF034005602AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		6042879E29E08062009798B5 /* Build configuration list for PBXProject "SEP23SellerAPP" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
