@@ -8,7 +8,7 @@ import SwiftUI
 
 
 struct LogINView: View {
-	
+
 	
 	@State private var username = ""
 	@State private var password = ""
@@ -18,19 +18,19 @@ struct LogINView: View {
 	@State private var selectedDate = Date()
 	@State private var extractedExpr: Color = .blue
 	@State private var showErrorAlert = false
-	
+
 	@State private var responseToken = ""
 	@State private var loginData = LoginData(username: "", password: "")
-	
+
 	@Binding var signInSuccess: Bool
-	
+
 	var body: some View {
-		
-		
+
+
 		NavigationView{
-			
+
 			if isActiveLogin{
-				
+
 				VStack
 				{
 					Image(systemName: "checkmark.seal")
@@ -38,26 +38,26 @@ struct LogINView: View {
 						.foregroundColor(extractedExpr)
 					Spacer()
 						.frame(height: 20)
-					
+
 					VStack {
 						TextField("Benutzername", text: $username)
 							.padding()
 							.background(Color.gray.opacity(0.2))
 							.cornerRadius(10)
-						
+
 						SecureField("Passwort", text: $password)
 							.padding()
 							.background(Color.gray.opacity(0.2))
 							.cornerRadius(10)
-						
+
 						Spacer()
 							.frame(height: 30)
-						
+
 						Button(action: {
-							
+
 							loginData.username = username
 							loginData.password = password
-							
+
 							NetworkManager.sendPostRequest(to: APIEndpoints.login, with: loginData, responseType: ResponseToken.self){ result in
 								switch result {
 								case .success(let response):
@@ -65,7 +65,10 @@ struct LogINView: View {
 									saveToken(response.token)
 								case .failure(let error):
 									print("Error: \(error)")
+								case .successNoAnswer(_):
+									print("Success")
 								}
+								
 							}
 						}){
 							Text("Anmelden")
@@ -77,8 +80,8 @@ struct LogINView: View {
 						.background(Color.blue)
 						.foregroundColor(.white)
 						.cornerRadius(40)
-						
-						
+
+
 						Text(responseToken)
 					}
 					.padding()
@@ -87,27 +90,27 @@ struct LogINView: View {
 					}
 				}
 			}
-			
+
 		}
 	}
-	
+
 	func saveToken(_ token: String) {
 		UserDefaults.standard.set(token, forKey: "AuthToken")
 	}
-	
+
 	func getSavedToken() -> String? {
 		return UserDefaults.standard.string(forKey: "AuthToken")
 	}
-	
+
 	func sendLoginData(){
-		
+
 		let test = LoginData(username: username, password: password)
-		
+
 		guard let data = try? JSONEncoder().encode(test) else {
 			print("Fehler beim JSON-erstellen")
 			return
 		}
-		
+
 		print(test)
 		guard let url = URL(string: "http://131.173.65.77:8080/auth/login") else {
 			return
@@ -128,9 +131,9 @@ struct LogINView: View {
 				extractedExpr = .green
 				self.signInSuccess = true
 				saveToken(jwtToken)
-				
+
 				print("new token: " + getSavedToken()!)
-				
+
 			} catch let error {
 				extractedExpr = .red
 				responseToken = ""
@@ -141,7 +144,7 @@ struct LogINView: View {
 			}
 		}
 		task.resume()
-		
+
 	}
 }
 

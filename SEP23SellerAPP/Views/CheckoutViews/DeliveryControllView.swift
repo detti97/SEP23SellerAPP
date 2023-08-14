@@ -306,6 +306,8 @@ struct DeliveryControllView: View {
 			case .failure(let error):
 				print("Error: \(error)")
 				orderFail = true
+			case .successNoAnswer(_):
+				print("Success")
 			}
 		}
 

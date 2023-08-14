@@ -240,7 +240,6 @@ struct SettingView: View {
 		}
 		task.resume()
 
-
 	}
 
 	private func signOut() {
@@ -253,51 +252,6 @@ struct SettingView: View {
 		return UserDefaults.standard.string(forKey: "AuthToken")
 	}
 
-	public func setSettings(){
-
-		guard let data = try? JSONEncoder().encode(settings) else {
-			print("Fehler beim JSON-erstellen")
-			return
-		}
-		print(data)
-		guard let url = URL(string: "http://131.173.65.77:8080/api/setSettings") else {
-			return
-		}
-		var request = URLRequest(url: url)
-		request.httpMethod = "POST"
-		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-		request.httpBody = data
-		let task = URLSession.shared.dataTask(with: request){ data, response, error in
-			if let error = error {
-				// Wenn ein Fehler aufgetreten ist, wird er in der Konsole ausgegeben
-				print("Fehler beim Senden der Anfrage: \(error.localizedDescription)")
-				return
-			}
-			guard let data = data else {
-				// Wenn keine Daten zurückgegeben wurden, wird eine Fehlermeldung ausgegeben
-				print("Keine Daten vom Server erhalten.")
-				return
-			}
-			guard let httpResponse = response as? HTTPURLResponse else {
-				// Wenn die Antwort keine HTTP-Antwort ist, wird eine Fehlermeldung ausgegeben
-				print("Keine HTTP-Antwort vom Server erhalten.")
-				return
-			}
-			if httpResponse.statusCode == 200 {
-				// Wenn der Statuscode 200 ist, wird die Antwort des Servers in der Konsole ausgegeben
-				if let responseString = String(data: data, encoding: .utf8) {
-					print("Antwort des Servers: \(responseString)")
-				}
-			} else {
-				// Wenn der Statuscode nicht 200 ist, wird eine Fehlermeldung ausgegeben
-				print("Fehler beim Empfangen der Antwort vom Server. Statuscode: \(httpResponse.statusCode)")
-			}
-		}
-		task.resume()
-
-
-	}
-
 }
 
 struct SettingsManager{
@@ -307,13 +261,16 @@ struct SettingsManager{
 		var changedSettings = newSettings
 		changedSettings.token = getSavedToken()!
 
-		NetworkManager.sendPostRequest(to: APIEndpoints.setSettings, with: newSettings, responseType: Setting.self){ result in
+		NetworkManager.sendPostRequest(to: APIEndpoints.setSettings, with: changedSettings, responseType: Setting.self){ result in
 			switch result {
 			case .success(let response):
 				print("Token: \(response)")
 
 			case .failure(let error):
 				print("Error: \(error)")
+
+			case .successNoAnswer(_):
+				print("Success")
 			}
 		}
 	}
@@ -327,6 +284,8 @@ struct SettingsManager{
 			case .failure(let error):
 				print("Error: \(error)")
 				completion(nil) // Bei einem Fehler nil zurückgeben
+			case .successNoAnswer(_):
+				print("Success")
 			}
 		}
 	}

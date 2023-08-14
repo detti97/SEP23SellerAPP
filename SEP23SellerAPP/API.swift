@@ -10,6 +10,7 @@ import Foundation
 enum RequestResult<T> {
 	case success(T)
 	case failure(Error)
+	case successNoAnswer(Bool)
 }
 
 enum APIEndpoints {
@@ -18,7 +19,6 @@ enum APIEndpoints {
 	static let placedOrders = "http://131.173.65.77:8080/api/allOrders"
 	static let getSettings = "http://131.173.65.77:8080/api/getSettings"
 	static let setSettings = "http://131.173.65.77:8080/api/setSettings"
-
 }
 
 class NetworkManager {
@@ -44,18 +44,28 @@ class NetworkManager {
 				return
 			}
 
-			guard let responseData = data else {
-				completion(.failure(NSError(domain: "No data received", code: -1, userInfo: nil)))
-				return
-			}
-			print(responseData)
+			if endpoint == APIEndpoints.setSettings {
 
-			do {
-				let decodedResponse = try JSONDecoder().decode(U.self, from: responseData)
-				completion(.success(decodedResponse))
-			} catch {
-				completion(.failure(error))
+				completion(.successNoAnswer(true))
+
+			}else{
+
+				guard let responseData = data else {
+					completion(.failure(NSError(domain: "No data received", code: -1, userInfo: nil)))
+					return
+				}
+				print(responseData)
+
+				do {
+					let decodedResponse = try JSONDecoder().decode(U.self, from: responseData)
+					completion(.success(decodedResponse))
+				} catch {
+					completion(.failure(error))
+				}
+
 			}
+
+
 		}
 
 		task.resume()

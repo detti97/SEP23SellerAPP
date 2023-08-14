@@ -32,6 +32,8 @@ class DataManager: ObservableObject {
 					self.allOrders = response
 				case .failure(let error):
 					print("Error: \(error)")
+				case .successNoAnswer(_):
+					print("Success")
 				}
 			}
 		}
