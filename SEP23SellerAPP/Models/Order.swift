@@ -8,7 +8,7 @@
 import SwiftUI
 import Foundation
 
-struct Order: Encodable{
+struct Order: Decodable, Encodable{
 
 	var token: String
     var timestamp: String

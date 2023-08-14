@@ -28,6 +28,8 @@ struct DeliveryControllView: View {
 
 	@Binding var showShippingView: Bool
 
+	@Environment(\.presentationMode) private var presentationMode
+
 	var body: some View {
 
 		if isActiveDeliveryControll{ // Delivery Controll Page
@@ -112,13 +114,26 @@ struct DeliveryControllView: View {
 				Button(action: {
 					isActiveDeliveryControll = false
 					isActiveOrderSuccess = true
-					sendOrder(newOrder: order)
+					//sendOrder(newOrder: order)
+					sendOrder2(newOrder: order)
 				}) {
 					Text("Bestellung senden")
 						.padding()
 						.foregroundColor(.white)
 						.fontWeight(.heavy)
 						.background(Color.blue)
+						.cornerRadius(8)
+				}
+				.padding()
+				.frame(maxWidth: .infinity, alignment: .center)
+				Button(action: {
+					presentationMode.wrappedValue.dismiss()
+				}) {
+					Text("Daten bearbeiten")
+						.padding()
+						.foregroundColor(.white)
+						.fontWeight(.heavy)
+						.background(Color.red)
 						.cornerRadius(8)
 				}
 				.padding()
@@ -221,7 +236,6 @@ struct DeliveryControllView: View {
 						}
 					}
 
-
 			}
 
 		}
@@ -276,6 +290,25 @@ struct DeliveryControllView: View {
 			}
 		}
 		task.resume()
+	}
+	func sendOrder2(newOrder: Order){
+
+		var toSendOrder = newOrder
+		toSendOrder.token = getSavedToken()!
+
+		NetworkManager.sendPostRequest(to: APIEndpoints.order, with: toSendOrder, responseType: ServerAnswer.self){ result in
+			switch result {
+			case .success(let response):
+				print("Token: \(response)")
+				orderSuccess = true
+				self.orderID = String(response.orderID)
+
+			case .failure(let error):
+				print("Error: \(error)")
+				orderFail = true
+			}
+		}
+
 	}
 
 }
