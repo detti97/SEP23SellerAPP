@@ -15,11 +15,12 @@ struct SettingView: View {
 	@State private var showEditPhoneNumber = false
 	@State private var showEditEmail = false
 	@State private var showEditOwner = false
+	@State private var showPreview = false
 
 	@State private var avatarItem: PhotosPickerItem?
 	@State private var avatarImage: Image?
 
-	@State var settings = Setting(token: "", storeName: "", owner: "", street: "", houseNumber: "", zip: "", telephone: "", email: "")
+	@State var settings = Setting(token: "", storeName: "", owner: "", street: "", houseNumber: "", zip: "", telephone: "", email: "", logo: "", backgroundImage: "https://images.ctfassets.net/uaddx06iwzdz/23fraOkNA2L2nYsNhqQePb/72d26aa66f33cca8b639f4ca4c344474/porsche-911-gt3-touring-front.jpg")
 
 	@Binding var signInSuccess: Bool
 
@@ -34,36 +35,79 @@ struct SettingView: View {
 
 			VStack{
 
-				VStack(alignment: .center){
+				VStack{
 
-					HStack{
+					ZStack{
 
-						VStack{
-							Image(systemName: "person")
-								.font(.headline)
-							Image(systemName: "house")
-								.font(.headline)
-							Image(systemName: "phone")
-								.font(.headline)
-							Image(systemName: "envelope")
-								.font(.headline)
+						if let url = URL(string: settings.backgroundImage) {
+							AsyncImage(url: url) { phase in
+								switch phase {
+								case .success(let image):
+									image.resizable()
+										.scaledToFill()
+										.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+										.opacity(0.7)
+								default:
+									Color.clear
+								}
+							}
+							.edgesIgnoringSafeArea(.all)
+							.frame(height: 200)
+						}
+
+						VStack(alignment: .center){
+
+							HStack{
+
+								AsyncImage(url: URL(string: settings.logo)) { image in
+									image.resizable()
+								} placeholder: {
+									ProgressView()
+								}
+								.frame(width: 100, height: 100)
+								.clipShape(Circle())
+								.overlay {
+									Circle().stroke(Color.white, lineWidth: 4)
+								}
+								.shadow(radius: 6)
+								.accessibility(identifier: "storeLogo")
+
+								HStack{
+
+									VStack{
+										Image(systemName: "person")
+											.font(.headline)
+										Image(systemName: "house")
+											.font(.headline)
+										Image(systemName: "phone")
+											.font(.headline)
+										Image(systemName: "envelope")
+											.font(.headline)
+
+									}
+
+									VStack{
+										Text(settings.owner)
+										Text("\(settings.street) \(settings.houseNumber)")
+										Text(settings.telephone)
+										Text(settings.email)
+									}
+
+								}
+								.padding()
+								.background()
+								.cornerRadius(10)
+								.shadow(radius: 6)
+
+							}
 
 						}
 
-						VStack{
-							Text(settings.owner)
-							Text("\(settings.street) \(settings.houseNumber)")
-							Text(settings.telephone)
-							Text(settings.email)
-						}
 
 					}
-					.padding()
-					.background()
-					.cornerRadius(10)
-					.shadow(radius: 6)
 
 				}
+
 
 
 				//Spacer(minLength: 10)
@@ -134,12 +178,25 @@ struct SettingView: View {
 
 					}
 
-					Section(header: Text("Einstellungen")) {
-						Toggle(isOn: $isDarkMode) {
-							Text("Dark Mode")
+					Section {
+						Button(action: {
+							showPreview = true
+						}) {
+							Text("Vorschau anzeigen")
+								.foregroundColor(.green)
 						}
+						.sheet(isPresented: $showPreview) {
+							StoreDetailPreviewView(showPreview: $showPreview, store: settings)
+						}
+
+
+
+
+
 					}
+
 					.navigationBarTitle("Einstellungen")
+					.navigationBarTitleDisplayMode(.inline)
 					.onAppear{
 						//getSettings()
 						if(getSavedToken() == nil){
@@ -154,93 +211,80 @@ struct SettingView: View {
 						}
 
 					}
+
 				}
+				
 			}
 
-			.background(
-				AsyncImage(url: URL(string: "https://wallpapers.com/wp-content/themes/wallpapers.com/src/splash-n.jpg")) { image in
-					image.resizable()
-						.aspectRatio(contentMode: .fill)
-						.edgesIgnoringSafeArea(.all)
-						.opacity(0.7)
-				} placeholder: {
-					Color.clear
-				})
 		}
 
 	}
 
-	func newStore(_ image: UIImage?) {
+func newStore(_ image: UIImage?) {
 
-		struct newStore: Codable{
+	struct sendImage: Codable{
 
-			var storeName: String
-			var username: String
-			var password: String
-			var owner: String
-			var street: String
-			var houseNumber: String
-			var zip: String
-			var telephone: String
-			var email: String
-			var logo: String
-
-		}
-
-		guard let image = image else {
-			print("Kein ausgewähltes Bild")
-			return
-		}
-
-		guard let imageData = image.jpegData(compressionQuality: 0.8) else {
-			print("Fehler beim Konvertieren des Bildes in Data")
-			return
-		}
-
-		let store = newStore(storeName: "Bild", username: "Test1234561231", password: "BK", owner: "Ronald McDonald", street: "Zum Heidhof", houseNumber: "22", zip: "49809", telephone: "1234098", email: "MCD@BK.de", logo: imageData.base64EncodedString())
-
-
-		guard let data = try? JSONEncoder().encode(store) else {
-			print("Fehler beim JSON-erstellen")
-			return
-		}
-		//print(store)
-		guard let url = URL(string: "http://131.173.65.77:8080/auth/register") else {
-			return
-		}
-		var request = URLRequest(url: url)
-		request.httpMethod = "POST"
-		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-		request.httpBody = data
-		let task = URLSession.shared.dataTask(with: request){ data, response, error in
-			if let error = error {
-				// Wenn ein Fehler aufgetreten ist, wird er in der Konsole ausgegeben
-				print("Fehler beim Senden der Anfrage: \(error.localizedDescription)")
-				return
-			}
-			guard let data = data else {
-				// Wenn keine Daten zurückgegeben wurden, wird eine Fehlermeldung ausgegeben
-				print("Keine Daten vom Server erhalten.")
-				return
-			}
-			guard let httpResponse = response as? HTTPURLResponse else {
-				// Wenn die Antwort keine HTTP-Antwort ist, wird eine Fehlermeldung ausgegeben
-				print("Keine HTTP-Antwort vom Server erhalten.")
-				return
-			}
-			if httpResponse.statusCode == 200 {
-				// Wenn der Statuscode 200 ist, wird die Antwort des Servers in der Konsole ausgegeben
-				if let responseString = String(data: data, encoding: .utf8) {
-					print("Antwort des Servers: \(responseString)")
-				}
-			} else {
-				// Wenn der Statuscode nicht 200 ist, wird eine Fehlermeldung ausgegeben
-				print("Fehler beim Empfangen der Antwort vom Server. Statuscode: \(httpResponse.statusCode)")
-			}
-		}
-		task.resume()
+		var token: String
+		var parameter: String
+		var value: String
 
 	}
+
+	guard let image = image else {
+		print("Kein ausgewähltes Bild")
+		return
+	}
+
+	guard let imageData = image.jpegData(compressionQuality: 0.8) else {
+		print("Fehler beim Konvertieren des Bildes in Data")
+		return
+	}
+
+	let sendNewImage = sendImage(token: getSavedToken()!, parameter: "backgroundImage", value: imageData.base64EncodedString())
+
+
+	guard let data = try? JSONEncoder().encode(sendNewImage) else {
+		print("Fehler beim JSON-erstellen")
+		return
+	}
+	//print(store)
+	guard let url = URL(string: "http://131.173.65.77:8080/api/setSettings") else {
+		return
+	}
+	var request = URLRequest(url: url)
+	request.httpMethod = "POST"
+	request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+	request.httpBody = data
+	let task = URLSession.shared.dataTask(with: request){ data, response, error in
+		if let error = error {
+			// Wenn ein Fehler aufgetreten ist, wird er in der Konsole ausgegeben
+			print("Fehler beim Senden der Anfrage: \(error.localizedDescription)")
+			return
+		}
+		print("Response data:", String(data: data! , encoding: .utf8) ?? "")
+		guard let data = data else {
+			// Wenn keine Daten zurückgegeben wurden, wird eine Fehlermeldung ausgegeben
+			print("Keine Daten vom Server erhalten.")
+			return
+		}
+		guard let httpResponse = response as? HTTPURLResponse else {
+			// Wenn die Antwort keine HTTP-Antwort ist, wird eine Fehlermeldung ausgegeben
+			print("Keine HTTP-Antwort vom Server erhalten.")
+			return
+		}
+		if httpResponse.statusCode == 200 {
+			// Wenn der Statuscode 200 ist, wird die Antwort des Servers in der Konsole ausgegeben
+			if let responseString = String(data: data, encoding: .utf8) {
+				print("Antwort des Servers: \(responseString)")
+			}
+		} else {
+			// Wenn der Statuscode nicht 200 ist, wird eine Fehlermeldung ausgegeben
+			print("Fehler beim Empfangen der Antwort vom Server. Statuscode: \(httpResponse.statusCode)")
+		}
+	}
+	task.resume()
+
+}
 
 	private func signOut() {
 

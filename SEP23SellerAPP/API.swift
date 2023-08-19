@@ -54,7 +54,7 @@ class NetworkManager {
 					completion(.failure(NSError(domain: "No data received", code: -1, userInfo: nil)))
 					return
 				}
-				print(responseData)
+				print("Response data:", String(data: responseData, encoding: .utf8) ?? "")
 
 				do {
 					let decodedResponse = try JSONDecoder().decode(U.self, from: responseData)
@@ -64,7 +64,6 @@ class NetworkManager {
 				}
 
 			}
-
 
 		}
 

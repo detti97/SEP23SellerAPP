@@ -18,8 +18,10 @@ struct Setting: Codable, Equatable {
 	var zip: String
 	var telephone: String
 	var email: String
+	var logo: String
+	var backgroundImage: String
 
-	init(token: String?, storeName: String, owner: String, street: String, houseNumber: String, zip: String, telephone: String, email: String) {
+	init(token: String?, storeName: String, owner: String, street: String, houseNumber: String, zip: String, telephone: String, email: String, logo: String, backgroundImage: String) {
 			self.token = token ?? "StandardToken"
 			self.storeName = storeName
 			//self.password = password
@@ -29,6 +31,8 @@ struct Setting: Codable, Equatable {
 			self.zip = zip
 			self.telephone = telephone
 			self.email = email
+			self.logo = logo
+			self.backgroundImage = backgroundImage
 		}
 
 }

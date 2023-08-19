@@ -86,7 +86,7 @@ struct QRCodeScannerView: View {
         switch result{
         case .success(let result):
             let details = result.string.components(separatedBy: "&")
-            guard details.count == 5 else { return }
+            guard details.count <= 6 else { return }
             
             let repAddress = recipientAddress(name: details[1],
                                               surName: details[0],

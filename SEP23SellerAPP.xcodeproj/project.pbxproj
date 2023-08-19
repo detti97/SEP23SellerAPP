@@ -29,6 +29,7 @@
 		6084D5682A855209005AC588 /* CustomTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D5672A855209005AC588 /* CustomTextFieldStyle.swift */; };
 		6084D56A2A8913E0005AC588 /* LoginData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D5692A8913DF005AC588 /* LoginData.swift */; };
 		6084D56C2A893CDD005AC588 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D56B2A893CDD005AC588 /* API.swift */; };
+		6084D5952A8FB704005AC588 /* StoreDetailPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D5942A8FB704005AC588 /* StoreDetailPreviewView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		6084D5672A855209005AC588 /* CustomTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldStyle.swift; sourceTree = "<group>"; };
 		6084D5692A8913DF005AC588 /* LoginData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginData.swift; sourceTree = "<group>"; };
 		6084D56B2A893CDD005AC588 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		6084D5942A8FB704005AC588 /* StoreDetailPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreDetailPreviewView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +140,7 @@
 				6084D5652A8551A3005AC588 /* AddressPanelView.swift */,
 				603CC74E2A4B0DE000C3D3E3 /* LogINView.swift */,
 				526962BA2A4CBA1400835E8B /* SettingView.swift */,
+				6084D5942A8FB704005AC588 /* StoreDetailPreviewView.swift */,
 				6084D5632A85368D005AC588 /* Statistic2View.swift */,
 				6084D55F2A852BFE005AC588 /* OrderDetailView.swift */,
 			);
@@ -224,6 +227,7 @@
 				6084D55E2A85194F005AC588 /* OrderData.swift in Sources */,
 				604287CC29E4771D009798B5 /* DeliveryControllView.swift in Sources */,
 				604287B529E080C8009798B5 /* AddressEncoder.swift in Sources */,
+				6084D5952A8FB704005AC588 /* StoreDetailPreviewView.swift in Sources */,
 				604287BA29E0A189009798B5 /* QRCodeScannerView.swift in Sources */,
 				6084D5562A5F45D2005AC588 /* Setting.swift in Sources */,
 				6084D5662A8551A3005AC588 /* AddressPanelView.swift in Sources */,
