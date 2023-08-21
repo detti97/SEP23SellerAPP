@@ -36,3 +36,23 @@ struct Setting: Codable, Equatable {
 		}
 
 }
+
+struct SetSetting: Codable{
+
+	enum Parameters{
+		static let storeName = "storeName"
+		static let owner = "owner"
+		static let street = "street"
+		static let houseNumber = "houseNumber"
+		static let zip = "zip"
+		static let telephone = "telephone"
+		static let email = "email"
+		static let logo = "logo"
+		static let backgroundImage = "backgroundImage"
+	}
+
+	var token: String
+	var parameter: String
+	var value: String
+
+}

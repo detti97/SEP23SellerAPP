@@ -38,22 +38,17 @@ struct ContentView: View {
 							Label("Einstellungen", systemImage: "gear")
 
 						}
-						//.fontWeight(.heavy)
-						.onAppear() {
-							/*
-										let standardAppearance = UITabBarAppearance()
-										standardAppearance.backgroundColor = UIColor(Color.gray)
-										standardAppearance.shadowColor = UIColor(Color.black)
-										let itemAppearance = UITabBarItemAppearance()
-										itemAppearance.normal.iconColor = UIColor(Color.white)
-										itemAppearance.selected.iconColor = UIColor(Color.red)
-										standardAppearance.inlineLayoutAppearance = itemAppearance
-										standardAppearance.stackedLayoutAppearance = itemAppearance
-										standardAppearance.compactInlineLayoutAppearance = itemAppearance
-										UITabBar.appearance().standardAppearance = standardAppearance
-							 */
-									}
-									.edgesIgnoringSafeArea(.bottom)
+
+
+
+					}
+					.onAppear {
+						let appearance = UITabBarAppearance()
+						appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+						appearance.backgroundColor = UIColor(Color.white.opacity(0.3))
+
+						UITabBar.appearance().standardAppearance = appearance
+						UITabBar.appearance().scrollEdgeAppearance = appearance
 
 					}
 

@@ -16,15 +16,16 @@ struct SettingView: View {
 	@State private var showEditEmail = false
 	@State private var showEditOwner = false
 	@State private var showPreview = false
-
+	@State private var address = Address(street: "", houseNumber: "", zip: "")
 	@State private var avatarItem: PhotosPickerItem?
 	@State private var avatarImage: Image?
 
 	@State var settings = Setting(token: "", storeName: "", owner: "", street: "", houseNumber: "", zip: "", telephone: "", email: "", logo: "", backgroundImage: "https://images.ctfassets.net/uaddx06iwzdz/23fraOkNA2L2nYsNhqQePb/72d26aa66f33cca8b639f4ca4c344474/porsche-911-gt3-touring-front.jpg")
-
 	@Binding var signInSuccess: Bool
 
 	@StateObject public var dataManager = DataManager()
+
+	
 
 	let settingsManager = SettingsManager()
 
@@ -116,11 +117,13 @@ struct SettingView: View {
 					Section(header: Text("Geschäftsinformationen")) {
 						Button(action: {
 							showEditAddress = true
+							address = Address(street: settings.street, houseNumber: settings.houseNumber, zip: settings.zip)
+
 						}) {
 							Text("Adresse bearbeiten")
 						}
 						.sheet(isPresented: $showEditAddress) {
-							EditAddressView(address: $settings.street, homeNumber: $settings.houseNumber, zipCode: $settings.zip, newSettings: $settings)
+							EditAddressView(address: $address)
 						}
 
 
@@ -130,7 +133,7 @@ struct SettingView: View {
 							Text("Telefonnummer bearbeiten")
 						}
 						.sheet(isPresented: $showEditPhoneNumber) {
-							EditPhoneNumberView(phoneNumber: $settings.telephone, newSettings: $settings)
+							EditPhoneNumberView(phoneNumber: $settings.telephone)
 						}
 
 						Button(action: {
@@ -139,7 +142,7 @@ struct SettingView: View {
 							Text("E-Mail ändern")
 						}
 						.sheet(isPresented: $showEditEmail) {
-							EditEmailView(Email: $settings.email, newSettings: $settings)
+							EditEmailView(email: $settings.email)
 
 						}
 						Button(action: {
@@ -148,7 +151,7 @@ struct SettingView: View {
 							Text("Inhaber ändern")
 						}
 						.sheet(isPresented: $showEditOwner) {
-							EditOwnerView(Owner: $settings.owner, newSettings: $settings)
+							EditOwnerView(owner: $settings.owner)
 						}
 						VStack {
 							PhotosPicker("Select Picture", selection: $avatarItem, matching: .images)
@@ -189,12 +192,7 @@ struct SettingView: View {
 							StoreDetailPreviewView(showPreview: $showPreview, store: settings)
 						}
 
-
-
-
-
 					}
-
 					.navigationBarTitle("Einstellungen")
 					.navigationBarTitleDisplayMode(.inline)
 					.onAppear{
@@ -300,7 +298,7 @@ func newStore(_ image: UIImage?) {
 
 struct SettingsManager{
 
-	func setSettings(newSettings: Setting){
+	func setSettings(newSettings: SetSetting){
 
 		var changedSettings = newSettings
 		changedSettings.token = getSavedToken()!
@@ -324,10 +322,10 @@ struct SettingsManager{
 			switch result {
 			case .success(let response):
 				print("Token: \(response)")
-				completion(response) // Die Antwort übergeben
+				completion(response)
 			case .failure(let error):
 				print("Error: \(error)")
-				completion(nil) // Bei einem Fehler nil zurückgeben
+				completion(nil)
 			case .successNoAnswer(_):
 				print("Success")
 			}
@@ -343,14 +341,13 @@ struct SettingsManager{
 
 
 struct EditEmailView: View {
-	@Binding var Email: String
-	@Binding var newSettings: Setting
+	@Binding var email: String
 	@Environment(\.presentationMode) private var presentationMode
 
 	var body: some View {
 		NavigationView {
 			Form {
-				TextField("Email", text: $Email)
+				TextField("Email", text: $email)
 			}
 			.navigationBarTitle("Email bearbeiten")
 			.navigationBarItems(leading: cancelButton, trailing: saveButton)
@@ -360,7 +357,7 @@ struct EditEmailView: View {
 	private var saveButton: some View {
 		Button(action: {
 			let settingsManager = SettingsManager()
-			settingsManager.setSettings(newSettings: newSettings)
+			settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.email, value: email))
 			presentationMode.wrappedValue.dismiss()
 		}) {
 			Text("Speichern")
@@ -378,14 +375,13 @@ struct EditEmailView: View {
 }
 
 struct EditOwnerView: View {
-	@Binding var Owner: String
-	@Binding var newSettings: Setting
+	@Binding var owner: String
 	@Environment(\.presentationMode) private var presentationMode
 
 	var body: some View {
 		NavigationView {
 			Form {
-				TextField("Verantwortliche", text: $Owner)
+				TextField("Verantwortliche", text: $owner)
 			}
 			.navigationBarTitle("Verantwortliche bearbeiten")
 			.navigationBarItems(leading: cancelButton, trailing: saveButton)
@@ -395,7 +391,7 @@ struct EditOwnerView: View {
 	private var saveButton: some View {
 		Button(action: {
 			let settingsManager = SettingsManager()
-			settingsManager.setSettings(newSettings: newSettings)
+			settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.owner, value: owner))
 			presentationMode.wrappedValue.dismiss()
 		}) {
 			Text("Speichern")
@@ -416,19 +412,15 @@ struct EditAddressView: View {
 
 	let zipCodes = ["49808", "49809" , "49811"]
 
-	@Binding var address: String
-	@Binding var homeNumber: String
-	@Binding var zipCode: String
-	@Binding var newSettings: Setting
+	@Binding var address: Address
 	@Environment(\.presentationMode) private var presentationMode
 
 	var body: some View {
 		NavigationView {
 			Form {
-				TextField("Adresse", text: $address)
-				TextField("Hausnummer", text: $homeNumber)
-				TextField("PLZ", text: $zipCode)
-				Picker("Postleitzahl", selection: $zipCode) {
+				TextField("Adresse", text: $address.street)
+				TextField("Hausnummer", text: $address.houseNumber)
+				Picker("Postleitzahl", selection: $address.zip) {
 					ForEach(zipCodes, id: \.self) { plz in
 						Text(plz)
 					}
@@ -443,7 +435,9 @@ struct EditAddressView: View {
 	private var saveButton: some View {
 		Button(action: {
 			let settingsManager = SettingsManager()
-			settingsManager.setSettings(newSettings: newSettings)
+			settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.street, value: address.street))
+			settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.houseNumber, value: address.houseNumber))
+			settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.zip, value: address.zip))
 			presentationMode.wrappedValue.dismiss()
 		}) {
 			Text("Speichern")
@@ -462,7 +456,6 @@ struct EditAddressView: View {
 
 struct EditPhoneNumberView: View {
 	@Binding var phoneNumber: String
-	@Binding var newSettings: Setting
 	@Environment(\.presentationMode) private var presentationMode
 
 	var body: some View {
@@ -478,7 +471,7 @@ struct EditPhoneNumberView: View {
 	private var saveButton: some View {
 		Button(action: {
 			let settingsManager = SettingsManager()
-			settingsManager.setSettings(newSettings: newSettings)
+			settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.telephone, value: phoneNumber))
 			presentationMode.wrappedValue.dismiss()
 		}) {
 			Text("Speichern")

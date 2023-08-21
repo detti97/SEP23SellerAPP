@@ -60,3 +60,11 @@ struct PlacedOrder: Decodable {
 
 
 }
+
+struct Address{
+
+	var street: String
+	var houseNumber: String
+	var zip: String
+
+}
