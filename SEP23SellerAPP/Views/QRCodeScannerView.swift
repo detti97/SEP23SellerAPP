@@ -25,18 +25,19 @@ struct QRCodeScannerView: View {
                     
                     ZStack{
                         Capsule()
-                            .fill(.blue)
+							.fill(Color.accentColor)
                             .frame(width: 330, height: 130)
                             .shadow(radius: 11)
                         
                         HStack{
                             
                             Image(systemName: "qrcode.viewfinder")
-                                .foregroundColor(.white)
+                                .foregroundColor(.yellow)
                                 .font(.system(size: 80))
                             
                             Text("Scanner starten")
-                                .font(.headline)
+								.fontWeight(.heavy)
+								.foregroundColor(.white)
                         }
                     }
                 }
@@ -54,7 +55,7 @@ struct QRCodeScannerView: View {
 
 					ZStack{
 						Capsule()
-							.fill(.blue)
+							.fill(Color.accentColor)
 							.frame(width: 330, height: 130)
 							.shadow(radius: 11)
 

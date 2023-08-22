@@ -9,7 +9,7 @@ import SwiftUI
 
 import SwiftUI
 
-struct Statistc2View: View {
+struct StatistcView: View {
 
 	@StateObject public var dataManager = DataManager()
 	@State private var showErrorAlert = false
@@ -107,6 +107,6 @@ struct SearchBar: View {
 
 struct Statistic2View_Previews: PreviewProvider {
 	static var previews: some View {
-		Statistc2View()
+		StatistcView()
 	}
 }

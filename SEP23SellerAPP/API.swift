@@ -19,6 +19,8 @@ enum APIEndpoints {
 	static let placedOrders = "http://131.173.65.77:8080/api/allOrders"
 	static let getSettings = "http://131.173.65.77:8080/api/getSettings"
 	static let setSettings = "http://131.173.65.77:8080/api/setSettings"
+	static let setAddress = "http://131.173.65.77:8080/api/setAddress"
+	static let setPassword = "http://131.173.65.77:8080/auth/updatePassword"
 }
 
 class NetworkManager {
@@ -44,31 +46,45 @@ class NetworkManager {
 				return
 			}
 
-			if endpoint == APIEndpoints.setSettings {
+			if let httpResponse = response as? HTTPURLResponse {
 
-				completion(.successNoAnswer(true))
+				if endpoint == APIEndpoints.setSettings || endpoint == APIEndpoints.setAddress || endpoint == APIEndpoints.setPassword {
 
-			}else{
+					let responseCode = httpResponse.statusCode
 
-				guard let responseData = data else {
-					completion(.failure(NSError(domain: "No data received", code: -1, userInfo: nil)))
-					return
+					if responseCode == 200{
+
+						print("server response: \(responseCode)")
+						completion(.successNoAnswer(true))
+
+					}else {
+						print("server response: \(responseCode)")
+						completion(.successNoAnswer(false))
+
+					}
+
+				} else {
+					guard let responseData = data else {
+						completion(.failure(NSError(domain: "No data received", code: -1, userInfo: nil)))
+						return
+					}
+					print("Response data:", String(data: responseData, encoding: .utf8) ?? "")
+
+					do {
+						let decodedResponse = try JSONDecoder().decode(U.self, from: responseData)
+						completion(.success(decodedResponse))
+					} catch {
+						completion(.failure(error))
+					}
 				}
-				print("Response data:", String(data: responseData, encoding: .utf8) ?? "")
-
-				do {
-					let decodedResponse = try JSONDecoder().decode(U.self, from: responseData)
-					completion(.success(decodedResponse))
-				} catch {
-					completion(.failure(error))
-				}
-
+			} else {
+				completion(.failure(NSError(domain: "Invalid response", code: -1, userInfo: nil)))
 			}
-
 		}
 
 		task.resume()
 	}
+
 
 	static func sendPostRequest<T: Encodable, U: Decodable>(to endpoint: String, with data: T, responseType: U.Type, completion: @escaping (RequestResult<U>) -> Void) {
 		sendPostRequestInternal(to: endpoint, with: data, responseType: responseType, completion: completion)

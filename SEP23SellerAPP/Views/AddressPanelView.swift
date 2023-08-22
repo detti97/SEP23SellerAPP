@@ -51,7 +51,7 @@ struct AddressPanelView: View {
 					.padding(10)
 					.textFieldStyle(CustomTextFieldStyle(systemImageName: "person"))
 					.overlay(
-						RoundedRectangle(cornerRadius: 8)
+						RoundedRectangle(cornerRadius: 20)
 							.stroke(Color.gray, lineWidth: 1)
 					)
 
@@ -67,7 +67,7 @@ struct AddressPanelView: View {
 					.frame(maxWidth: .infinity)
 					.textFieldStyle(CustomTextFieldStyle(systemImageName: "figure.fall"))
 					.overlay(
-						RoundedRectangle(cornerRadius: 8)
+						RoundedRectangle(cornerRadius: 20)
 							.stroke(Color.gray, lineWidth: 1)
 					)
 					.focused($focusField, equals: .name)
@@ -80,7 +80,7 @@ struct AddressPanelView: View {
 					.frame(maxWidth: .infinity)
 					.padding(10)
 					.overlay(
-						RoundedRectangle(cornerRadius: 8)
+						RoundedRectangle(cornerRadius: 20)
 							.stroke(Color.gray, lineWidth: 1)
 					)
 					.textFieldStyle(CustomTextFieldStyle(systemImageName: "house"))
@@ -94,7 +94,7 @@ struct AddressPanelView: View {
 					.frame(maxWidth: .infinity)
 					.padding(10)
 					.overlay(
-						RoundedRectangle(cornerRadius: 8)
+						RoundedRectangle(cornerRadius: 20)
 							.stroke(Color.gray, lineWidth: 1)
 					)
 					.textFieldStyle(CustomTextFieldStyle(systemImageName: "figure.skiing.downhill"))
@@ -115,7 +115,7 @@ struct AddressPanelView: View {
 					.frame(maxWidth: .infinity)
 					.padding(10)
 					.overlay(
-						RoundedRectangle(cornerRadius: 8)
+						RoundedRectangle(cornerRadius: 20)
 							.stroke(Color.gray, lineWidth: 1)
 					)
 					.textFieldStyle(CustomTextFieldStyle(systemImageName: "square.and.pencil"))

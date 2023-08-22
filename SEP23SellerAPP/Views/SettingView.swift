@@ -9,30 +9,31 @@ struct token: Encodable {
 
 struct SettingView: View {
 
-	@AppStorage("isDarkMode") private var isDarkMode = false
+	@StateObject public var settingsManager = SettingsManager()
+	@Binding var signInSuccess: Bool
+
 	@State private var showEditAddress = false
 	@State private var showEditOpeningHours = false
 	@State private var showEditPhoneNumber = false
 	@State private var showEditEmail = false
 	@State private var showEditOwner = false
 	@State private var showPreview = false
+	@State private var showEditPassword = false
 	@State private var address = Address(street: "", houseNumber: "", zip: "")
-	@State private var avatarItem: PhotosPickerItem?
-	@State private var avatarImage: Image?
+	@State private var backgroundPickerItem: PhotosPickerItem?
 
-	@State var settings = Setting(token: "", storeName: "", owner: "", street: "", houseNumber: "", zip: "", telephone: "", email: "", logo: "", backgroundImage: "https://images.ctfassets.net/uaddx06iwzdz/23fraOkNA2L2nYsNhqQePb/72d26aa66f33cca8b639f4ca4c344474/porsche-911-gt3-touring-front.jpg")
-	@Binding var signInSuccess: Bool
 
-	@StateObject public var dataManager = DataManager()
 
-	
+	@State private var logoPickerItem: PhotosPickerItem?
+	@State private var logoImage: Image?
 
-	let settingsManager = SettingsManager()
+
+
+
 
 	var body: some View {
 
 		NavigationView{
-
 
 			VStack{
 
@@ -40,7 +41,8 @@ struct SettingView: View {
 
 					ZStack{
 
-						if let url = URL(string: settings.backgroundImage) {
+
+						if let url = URL(string: settingsManager.settings.backgroundImage) {
 							AsyncImage(url: url) { phase in
 								switch phase {
 								case .success(let image):
@@ -53,26 +55,34 @@ struct SettingView: View {
 								}
 							}
 							.edgesIgnoringSafeArea(.all)
-							.frame(height: 200)
+							.frame(height: 180)
 						}
+
+
 
 						VStack(alignment: .center){
 
 							HStack{
 
-								AsyncImage(url: URL(string: settings.logo)) { image in
-									image.resizable()
-								} placeholder: {
-									ProgressView()
-								}
-								.frame(width: 100, height: 100)
-								.clipShape(Circle())
-								.overlay {
-									Circle().stroke(Color.white, lineWidth: 4)
-								}
-								.shadow(radius: 6)
-								.accessibility(identifier: "storeLogo")
+								VStack{
 
+									AsyncImage(url: URL(string: settingsManager.settings.logo)) { image in
+										image.resizable()
+									} placeholder: {
+										ProgressView()
+									}
+									.frame(width: 100, height: 100)
+									.clipShape(Circle())
+									.overlay {
+										Circle().stroke(Color.white, lineWidth: 4)
+									}
+									.shadow(radius: 6)
+									.accessibility(identifier: "storeLogo")
+								}
+								.onTapGesture {
+
+
+								}
 								HStack{
 
 									VStack{
@@ -88,10 +98,10 @@ struct SettingView: View {
 									}
 
 									VStack{
-										Text(settings.owner)
-										Text("\(settings.street) \(settings.houseNumber)")
-										Text(settings.telephone)
-										Text(settings.email)
+										Text(settingsManager.settings.owner)
+										Text("\(settingsManager.settings.address.street) \(settingsManager.settings.address.houseNumber)")
+										Text(settingsManager.settings.telephone)
+										Text(settingsManager.settings.email)
 									}
 
 								}
@@ -109,23 +119,8 @@ struct SettingView: View {
 
 				}
 
-
-
-				//Spacer(minLength: 10)
-
 				Form {
 					Section(header: Text("Geschäftsinformationen")) {
-						Button(action: {
-							showEditAddress = true
-							address = Address(street: settings.street, houseNumber: settings.houseNumber, zip: settings.zip)
-
-						}) {
-							Text("Adresse bearbeiten")
-						}
-						.sheet(isPresented: $showEditAddress) {
-							EditAddressView(address: $address)
-						}
-
 
 						Button(action: {
 							showEditPhoneNumber = true
@@ -133,7 +128,8 @@ struct SettingView: View {
 							Text("Telefonnummer bearbeiten")
 						}
 						.sheet(isPresented: $showEditPhoneNumber) {
-							EditPhoneNumberView(phoneNumber: $settings.telephone)
+							EditPhoneNumberView(phoneNumber: $settingsManager.settings.telephone)
+								.environmentObject(settingsManager)
 						}
 
 						Button(action: {
@@ -142,8 +138,8 @@ struct SettingView: View {
 							Text("E-Mail ändern")
 						}
 						.sheet(isPresented: $showEditEmail) {
-							EditEmailView(email: $settings.email)
-
+							EditEmailView(email: $settingsManager.settings.email)
+								.environmentObject(settingsManager)
 						}
 						Button(action: {
 							showEditOwner = true
@@ -151,17 +147,53 @@ struct SettingView: View {
 							Text("Inhaber ändern")
 						}
 						.sheet(isPresented: $showEditOwner) {
-							EditOwnerView(owner: $settings.owner)
+							EditOwnerView(owner: $settingsManager.settings.owner)
+								.environmentObject(settingsManager)
 						}
+						Button(action: {
+							showEditAddress = true
+						}) {
+							Text("Adresse bearbeiten")
+						}
+						.sheet(isPresented: $showEditAddress) {
+							EditAddressView(address: $settingsManager.settings.address)
+								.environmentObject(settingsManager)
+						}
+						Button(action: {
+							showEditPassword = true
+						}) {
+							Text("Passwort ändern")
+						}
+						.sheet(isPresented: $showEditPassword) {
+							EditPasswordView()
+								.environmentObject(settingsManager)
+						}
+					}
+					Section(header: Text("Bilder ändern")) {
 						VStack {
-							PhotosPicker("Select Picture", selection: $avatarItem, matching: .images)
+							PhotosPicker("Hintergrund ändern", selection: $backgroundPickerItem, matching: .images)
 						}
-						.onChange(of: avatarItem) { _ in
+						.onChange(of: backgroundPickerItem) { _ in
 							Task {
-								if let data = try? await avatarItem?.loadTransferable(type: Data.self) {
+								if let data = try? await backgroundPickerItem?.loadTransferable(type: Data.self) {
 									if let uiImage = UIImage(data: data) {
-										avatarImage = Image(uiImage: uiImage)
-										newStore(uiImage)
+										settingsManager.setImage(uiImage, parameter: SetSetting.Parameters.backgroundImage)
+										return
+									}
+								}
+
+								print("Failed")
+							}
+						}
+
+						VStack {
+							PhotosPicker("Logo ändern", selection: $logoPickerItem, matching: .images)
+						}
+						.onChange(of: logoPickerItem) { _ in
+							Task {
+								if let data = try? await logoPickerItem?.loadTransferable(type: Data.self) {
+									if let uiImage = UIImage(data: data) {
+										settingsManager.setImage(uiImage, parameter: SetSetting.Parameters.logo)
 										return
 									}
 								}
@@ -171,6 +203,7 @@ struct SettingView: View {
 						}
 					}
 
+
 					Section {
 						Button(action: {
 							signOut()
@@ -178,10 +211,6 @@ struct SettingView: View {
 							Text("Abmelden")
 								.foregroundColor(.red)
 						}
-
-					}
-
-					Section {
 						Button(action: {
 							showPreview = true
 						}) {
@@ -189,308 +218,225 @@ struct SettingView: View {
 								.foregroundColor(.green)
 						}
 						.sheet(isPresented: $showPreview) {
-							StoreDetailPreviewView(showPreview: $showPreview, store: settings)
+							StoreDetailPreviewView(showPreview: $showPreview, store: settingsManager.settings)
 						}
+						
 
 					}
 					.navigationBarTitle("Einstellungen")
 					.navigationBarTitleDisplayMode(.inline)
 					.onAppear{
-						//getSettings()
 						if(getSavedToken() == nil){
 							print("no token")
+						}else{
+							settingsManager.loadData()
 						}
-						settingsManager.getSettings { setting in
-							if let setting = setting {
-								self.settings = setting
-							} else {
-								print("Fehler")
-							}
-						}
-
 					}
-
 				}
-				
 			}
-
-		}
-
-	}
-
-func newStore(_ image: UIImage?) {
-
-	struct sendImage: Codable{
-
-		var token: String
-		var parameter: String
-		var value: String
-
-	}
-
-	guard let image = image else {
-		print("Kein ausgewähltes Bild")
-		return
-	}
-
-	guard let imageData = image.jpegData(compressionQuality: 0.8) else {
-		print("Fehler beim Konvertieren des Bildes in Data")
-		return
-	}
-
-	let sendNewImage = sendImage(token: getSavedToken()!, parameter: "backgroundImage", value: imageData.base64EncodedString())
-
-
-	guard let data = try? JSONEncoder().encode(sendNewImage) else {
-		print("Fehler beim JSON-erstellen")
-		return
-	}
-	//print(store)
-	guard let url = URL(string: "http://131.173.65.77:8080/api/setSettings") else {
-		return
-	}
-	var request = URLRequest(url: url)
-	request.httpMethod = "POST"
-	request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-	request.httpBody = data
-	let task = URLSession.shared.dataTask(with: request){ data, response, error in
-		if let error = error {
-			// Wenn ein Fehler aufgetreten ist, wird er in der Konsole ausgegeben
-			print("Fehler beim Senden der Anfrage: \(error.localizedDescription)")
-			return
-		}
-		print("Response data:", String(data: data! , encoding: .utf8) ?? "")
-		guard let data = data else {
-			// Wenn keine Daten zurückgegeben wurden, wird eine Fehlermeldung ausgegeben
-			print("Keine Daten vom Server erhalten.")
-			return
-		}
-		guard let httpResponse = response as? HTTPURLResponse else {
-			// Wenn die Antwort keine HTTP-Antwort ist, wird eine Fehlermeldung ausgegeben
-			print("Keine HTTP-Antwort vom Server erhalten.")
-			return
-		}
-		if httpResponse.statusCode == 200 {
-			// Wenn der Statuscode 200 ist, wird die Antwort des Servers in der Konsole ausgegeben
-			if let responseString = String(data: data, encoding: .utf8) {
-				print("Antwort des Servers: \(responseString)")
-			}
-		} else {
-			// Wenn der Statuscode nicht 200 ist, wird eine Fehlermeldung ausgegeben
-			print("Fehler beim Empfangen der Antwort vom Server. Statuscode: \(httpResponse.statusCode)")
 		}
 	}
-	task.resume()
 
-}
+
 
 	private func signOut() {
-
-		signInSuccess = false
 		UserDefaults.standard.removeObject(forKey: "AuthToken")
+		signInSuccess = false
 	}
 
 	func getSavedToken() -> String? {
 		return UserDefaults.standard.string(forKey: "AuthToken")
 	}
 
-}
 
-struct SettingsManager{
+	struct EditEmailView: View {
+		@Binding var email: String
+		@Environment(\.presentationMode) private var presentationMode
+		@EnvironmentObject private var settingsManager: SettingsManager
 
-	func setSettings(newSettings: SetSetting){
-
-		var changedSettings = newSettings
-		changedSettings.token = getSavedToken()!
-
-		NetworkManager.sendPostRequest(to: APIEndpoints.setSettings, with: changedSettings, responseType: Setting.self){ result in
-			switch result {
-			case .success(let response):
-				print("Token: \(response)")
-
-			case .failure(let error):
-				print("Error: \(error)")
-
-			case .successNoAnswer(_):
-				print("Success")
-			}
-		}
-	}
-
-	func getSettings(completion: @escaping (Setting?) -> Void) {
-		NetworkManager.sendPostRequest(to: APIEndpoints.getSettings, with: token(token: getSavedToken()!), responseType: Setting.self) { result in
-			switch result {
-			case .success(let response):
-				print("Token: \(response)")
-				completion(response)
-			case .failure(let error):
-				print("Error: \(error)")
-				completion(nil)
-			case .successNoAnswer(_):
-				print("Success")
-			}
-		}
-	}
-
-
-	func getSavedToken() -> String? {
-		return UserDefaults.standard.string(forKey: "AuthToken")
-	}
-
-}
-
-
-struct EditEmailView: View {
-	@Binding var email: String
-	@Environment(\.presentationMode) private var presentationMode
-
-	var body: some View {
-		NavigationView {
-			Form {
-				TextField("Email", text: $email)
-			}
-			.navigationBarTitle("Email bearbeiten")
-			.navigationBarItems(leading: cancelButton, trailing: saveButton)
-		}
-	}
-
-	private var saveButton: some View {
-		Button(action: {
-			let settingsManager = SettingsManager()
-			settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.email, value: email))
-			presentationMode.wrappedValue.dismiss()
-		}) {
-			Text("Speichern")
-		}
-	}
-
-	private var cancelButton: some View {
-		Button(action: {
-			// Schließe die Ansicht und kehre zum Einstellungsmenü zurück
-			presentationMode.wrappedValue.dismiss()
-		}) {
-			Text("Zurück")
-		}
-	}
-}
-
-struct EditOwnerView: View {
-	@Binding var owner: String
-	@Environment(\.presentationMode) private var presentationMode
-
-	var body: some View {
-		NavigationView {
-			Form {
-				TextField("Verantwortliche", text: $owner)
-			}
-			.navigationBarTitle("Verantwortliche bearbeiten")
-			.navigationBarItems(leading: cancelButton, trailing: saveButton)
-		}
-	}
-
-	private var saveButton: some View {
-		Button(action: {
-			let settingsManager = SettingsManager()
-			settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.owner, value: owner))
-			presentationMode.wrappedValue.dismiss()
-		}) {
-			Text("Speichern")
-		}
-	}
-
-	private var cancelButton: some View {
-		Button(action: {
-			// Schließe die Ansicht und kehre zum Einstellungsmenü zurück
-			presentationMode.wrappedValue.dismiss()
-		}) {
-			Text("Zurück")
-		}
-	}
-}
-
-struct EditAddressView: View {
-
-	let zipCodes = ["49808", "49809" , "49811"]
-
-	@Binding var address: Address
-	@Environment(\.presentationMode) private var presentationMode
-
-	var body: some View {
-		NavigationView {
-			Form {
-				TextField("Adresse", text: $address.street)
-				TextField("Hausnummer", text: $address.houseNumber)
-				Picker("Postleitzahl", selection: $address.zip) {
-					ForEach(zipCodes, id: \.self) { plz in
-						Text(plz)
-					}
+		var body: some View {
+			NavigationView {
+				Form {
+					TextField("Email", text: $email)
 				}
-				.pickerStyle(SegmentedPickerStyle())
+				.navigationBarTitle("Email bearbeiten")
+				.navigationBarItems(leading: cancelButton, trailing: saveButton)
 			}
-			.navigationBarTitle("Adresse bearbeiten")
-			.navigationBarItems(leading: cancelButton, trailing: saveButton)
 		}
-	}
 
-	private var saveButton: some View {
-		Button(action: {
-			let settingsManager = SettingsManager()
-			settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.street, value: address.street))
-			settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.houseNumber, value: address.houseNumber))
-			settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.zip, value: address.zip))
-			presentationMode.wrappedValue.dismiss()
-		}) {
-			Text("Speichern")
-		}
-	}
-
-	private var cancelButton: some View {
-		Button(action: {
-			// Schließe die Ansicht und kehre zum Einstellungsmenü zurück
-			presentationMode.wrappedValue.dismiss()
-		}) {
-			Text("Zurück")
-		}
-	}
-}
-
-struct EditPhoneNumberView: View {
-	@Binding var phoneNumber: String
-	@Environment(\.presentationMode) private var presentationMode
-
-	var body: some View {
-		NavigationView {
-			Form {
-				TextField("Telefonnummer", text: $phoneNumber)
+		private var saveButton: some View {
+			Button(action: {
+				settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.email, value: email))
+				//settingsManager.loadData()
+				presentationMode.wrappedValue.dismiss()
+			}) {
+				Text("Speichern")
 			}
-			.navigationBarTitle("Telefonnummer bearbeiten")
-			.navigationBarItems(leading: cancelButton, trailing: saveButton)
+		}
+
+		private var cancelButton: some View {
+			Button(action: {
+				// Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+				presentationMode.wrappedValue.dismiss()
+			}) {
+				Text("Zurück")
+			}
 		}
 	}
 
-	private var saveButton: some View {
-		Button(action: {
-			let settingsManager = SettingsManager()
-			settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.telephone, value: phoneNumber))
-			presentationMode.wrappedValue.dismiss()
-		}) {
-			Text("Speichern")
+	struct EditOwnerView: View {
+		@Binding var owner: String
+		@Environment(\.presentationMode) private var presentationMode
+		@EnvironmentObject private var settingsManager: SettingsManager
+
+		var body: some View {
+			NavigationView {
+				Form {
+					TextField("Verantwortliche", text: $owner)
+				}
+				.navigationBarTitle("Verantwortliche bearbeiten")
+				.navigationBarItems(leading: cancelButton, trailing: saveButton)
+			}
+		}
+
+		private var saveButton: some View {
+			Button(action: {
+				settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.owner, value: owner))
+				presentationMode.wrappedValue.dismiss()
+			}) {
+				Text("Speichern")
+			}
+		}
+
+		private var cancelButton: some View {
+			Button(action: {
+				// Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+				presentationMode.wrappedValue.dismiss()
+			}) {
+				Text("Zurück")
+			}
 		}
 	}
 
-	private var cancelButton: some View {
-		Button(action: {
-			// Schließe die Ansicht und kehre zum Einstellungsmenü zurück
-			presentationMode.wrappedValue.dismiss()
-		}) {
-			Text("Zurück")
+	struct EditAddressView: View {
+
+		let zipCodes = ["49808", "49809" , "49811"]
+
+		@Binding var address: Address
+		@Environment(\.presentationMode) private var presentationMode
+		@EnvironmentObject private var settingsManager: SettingsManager
+
+		var body: some View {
+			NavigationView {
+				Form {
+					TextField("Adresse", text: $address.street)
+					TextField("Hausnummer", text: $address.houseNumber)
+					Picker("Postleitzahl", selection: $address.zip) {
+						ForEach(zipCodes, id: \.self) { plz in
+							Text(plz)
+						}
+					}
+					.pickerStyle(SegmentedPickerStyle())
+				}
+				.navigationBarTitle("Adresse bearbeiten")
+				.navigationBarItems(leading: cancelButton, trailing: saveButton)
+			}
+		}
+
+		private var saveButton: some View {
+			Button(action: {
+				settingsManager.setAddress(address: address)
+				presentationMode.wrappedValue.dismiss()
+			}) {
+				Text("Speichern")
+			}
+		}
+
+		private var cancelButton: some View {
+			Button(action: {
+				// Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+				presentationMode.wrappedValue.dismiss()
+			}) {
+				Text("Zurück")
+			}
 		}
 	}
 
-}
+	struct EditPhoneNumberView: View {
+		@Binding var phoneNumber: String
+		@Environment(\.presentationMode) private var presentationMode
+		@EnvironmentObject private var settingsManager: SettingsManager
 
-struct SettingView_Previews: PreviewProvider {
-	static var previews: some View {
-		SettingView(signInSuccess: .constant(true))
+		var body: some View {
+			NavigationView {
+				Form {
+					TextField("Telefonnummer", text: $phoneNumber)
+				}
+				.navigationBarTitle("Telefonnummer bearbeiten")
+				.navigationBarItems(leading: cancelButton, trailing: saveButton)
+			}
+		}
+
+		private var saveButton: some View {
+			Button(action: {
+				settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.telephone, value: phoneNumber))
+				presentationMode.wrappedValue.dismiss()
+			}) {
+				Text("Speichern")
+			}
+		}
+
+		private var cancelButton: some View {
+			Button(action: {
+				// Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+				presentationMode.wrappedValue.dismiss()
+			}) {
+				Text("Zurück")
+			}
+		}
+
+	}
+
+	struct EditPasswordView: View {
+		@Environment(\.presentationMode) private var presentationMode
+		@EnvironmentObject private var settingsManager: SettingsManager
+		@State var oldPassword = ""
+		@State var newPassword = ""
+
+		var body: some View {
+			NavigationView {
+				Form {
+					TextField("Altes Passwort", text: $oldPassword)
+					TextField("Neues Passwort", text: $newPassword)
+				}
+				.navigationBarTitle("Passwort ändern")
+				.navigationBarItems(leading: cancelButton, trailing: saveButton)
+			}
+		}
+
+		private var saveButton: some View {
+			Button(action: {
+				settingsManager.setPassword(oldPassword: oldPassword, newPassword: newPassword)
+				presentationMode.wrappedValue.dismiss()
+			}) {
+				Text("Speichern")
+			}
+		}
+
+		private var cancelButton: some View {
+			Button(action: {
+				// Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+				presentationMode.wrappedValue.dismiss()
+			}) {
+				Text("Zurück")
+			}
+		}
+
+	}
+
+	struct SettingView_Previews: PreviewProvider {
+		static var previews: some View {
+			SettingView(signInSuccess: .constant(true))
+		}
 	}
 }

@@ -15,7 +15,7 @@ struct CustomTextFieldStyle: TextFieldStyle {
 			Image(systemName: systemImageName)
 				.foregroundColor(.secondary)
 			configuration
-				.padding(.horizontal, 20)
+				.padding(.horizontal, 5)
 
 		}
 	}

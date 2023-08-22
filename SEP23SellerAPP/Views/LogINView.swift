@@ -18,6 +18,7 @@ struct LogINView: View {
 	@State private var selectedDate = Date()
 	@State private var extractedExpr: Color = .blue
 	@State private var showErrorAlert = false
+	@State private var emptyFields = false
 
 	@State private var responseToken = ""
 	@Binding var signInSuccess: Bool
@@ -29,51 +30,113 @@ struct LogINView: View {
 
 			if isActiveLogin{
 
-				VStack
-				{
-					Image(systemName: "checkmark.seal")
-						.font(.system(size: 50))
-						.foregroundColor(extractedExpr)
-					Spacer()
-						.frame(height: 20)
+				VStack {
 
-					VStack {
-						TextField("Benutzername", text: $username)
-							.padding()
-							.background(Color.gray.opacity(0.2))
-							.cornerRadius(10)
-
-						SecureField("Passwort", text: $password)
-							.padding()
-							.background(Color.gray.opacity(0.2))
-							.cornerRadius(10)
+					ZStack {
+/*
+						Image("cart")
+							.resizable()
+							.scaledToFit()
+							.ignoresSafeArea(.all)
+*/
 
 						Spacer()
-							.frame(height: 30)
+							.frame(height: 20)
 
-						Button(action: {
+						VStack {
 
-							sendLoginData(loginData: LoginData(username: username, password: password))
+							Image("logo")
+								.resizable()
+								.scaledToFit()
+								.frame(height: 140)
+								.padding(5)
 
-						}){
-							Text("Anmelden")
+
+							Spacer()
+								.frame(height: 20)
+
+
+							/*Image(systemName: "checkmark.seal")
+							 .font(.system(size: 50))
+							 .foregroundColor(extractedExpr)
+							 Spacer()
+							 .frame(height: 20)
+							 */
+
+
+							VStack {
+								TextField("Benutzername", text: $username)
+									.padding()
+									.background(Color.gray.opacity(0.2))
+									.cornerRadius(20)
+									.textFieldStyle(CustomTextFieldStyle(systemImageName: "person"))
+									.fontWeight(.bold)
+									.overlay(RoundedRectangle(cornerRadius: 20)
+										.stroke(emptyFields ? Color.red : Color.accentColor, lineWidth: 3)
+									)
+									.onTapGesture {
+										emptyFields = false
+									}
+
+								SecureField("Passwort", text: $password)
+									.padding()
+									.background(Color.gray.opacity(0.2))
+									.cornerRadius(20)
+									.textFieldStyle(CustomTextFieldStyle(systemImageName: "lock"))
+									.fontWeight(.bold)
+									.overlay(RoundedRectangle(cornerRadius: 20)
+										.stroke(emptyFields ? Color.red : Color.accentColor, lineWidth: 3)
+									)
+									.onTapGesture {
+										emptyFields = false
+									}
+
+								Spacer()
+									.frame(height: 30)
+
+								Button(action: {
+
+									sendLoginData(loginData: LoginData(username: username, password: password))
+
+								}){
+									Text("Anmelden")
+								}
+								.disabled(username.isEmpty || password.isEmpty)
+								.alert(isPresented: $showErrorAlert) {
+									Alert(title: Text("Fehler"), message: Text("Falsche Log In Daten"), dismissButton: .cancel())
+								}
+								.padding(20)
+								.background(Color.accentColor)
+								.foregroundColor(.white)
+								.fontWeight(.bold)
+								.cornerRadius(20)
+								.onTapGesture {
+									if username.isEmpty || password.isEmpty {
+
+										emptyFields = true
+
+									}
+								}
+
+							}
+							.padding()
+							.onAppear {
+
+								if getSavedToken() != nil {
+
+									signInSuccess = true
+
+								}
+							}
 						}
-						.alert(isPresented: $showErrorAlert) {
-							Alert(title: Text("Fehler"), message: Text("Falsche Log In Daten"), dismissButton: .cancel())
-						}
-						.padding(20)
-						.background(Color.blue)
-						.foregroundColor(.white)
-						.cornerRadius(40)
+						.background(.ultraThinMaterial)
+						.cornerRadius(20)
+						.padding(25)
 
+					}
 
-						Text(responseToken)
-					}
-					.padding()
-					.onAppear {
-						responseToken = getSavedToken() ?? ""
-					}
 				}
+				
 			}
 
 		}
@@ -100,6 +163,7 @@ struct LogINView: View {
 				self.signInSuccess = true
 			case .failure(let error):
 				extractedExpr = .red
+				showErrorAlert = true
 				print("Error: \(error)")
 			case .successNoAnswer(_):
 				print("Success")

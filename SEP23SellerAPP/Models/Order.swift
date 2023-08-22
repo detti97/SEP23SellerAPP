@@ -61,7 +61,7 @@ struct PlacedOrder: Decodable {
 
 }
 
-struct Address{
+struct Address: Decodable, Encodable{
 
 	var street: String
 	var houseNumber: String
