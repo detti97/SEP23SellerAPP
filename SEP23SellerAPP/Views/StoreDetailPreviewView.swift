@@ -11,7 +11,7 @@ struct StoreDetailPreviewView: View {
 
 	@Binding var showPreview: Bool
 
-	@State var store = Setting(token: "", storeName: "", owner: "", address: Address(street: "", houseNumber: "", zip: ""), telephone: "", email: "", logo: "", backgroundImage: "https://images.ctfassets.net/uaddx06iwzdz/23fraOkNA2L2nYsNhqQePb/72d26aa66f33cca8b639f4ca4c344474/porsche-911-gt3-touring-front.jpg")
+	@State var store = Setting(storeName: "", owner: "", address: Address(street: "", houseNumber: "", zip: ""), telephone: "", email: "", logo: "", backgroundImage: "https://images.ctfassets.net/uaddx06iwzdz/23fraOkNA2L2nYsNhqQePb/72d26aa66f33cca8b639f4ca4c344474/porsche-911-gt3-touring-front.jpg")
 
 	var body: some View {
 		
@@ -108,7 +108,7 @@ struct StoreDetailPreviewView: View {
 		static var previews: some View {
 			Group{
 
-				let store = Setting(token: "", storeName: "Apple", owner: "Steve Jobs", address: Address(street: "Apple Park", houseNumber: "1", zip: "49809"), telephone: "123456", email: "jobs@apple.com", logo: "https://img.freepik.com/freie-ikonen/mac-os_318-10374.jpg", backgroundImage: "https://wallpapers.com/wp-content/themes/wallpapers.com/src/splash-n.jpg")
+				let store = Setting(storeName: "Apple", owner: "Steve Jobs", address: Address(street: "Apple Park", houseNumber: "1", zip: "49809"), telephone: "123456", email: "jobs@apple.com", logo: "https://img.freepik.com/freie-ikonen/mac-os_318-10374.jpg", backgroundImage: "https://wallpapers.com/wp-content/themes/wallpapers.com/src/splash-n.jpg")
 
 
 				StoreDetailPreviewView(showPreview: Binding.constant(false), store: store)

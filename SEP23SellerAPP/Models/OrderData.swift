@@ -22,9 +22,8 @@ class DataManager: ObservableObject {
 	}
 
 	private func getAllOrders(session: URLSession = URLSession.shared) {
-		let jwt = Token(token: getSavedToken()!)
 
-		NetworkManager.sendPostRequestWithArrayResponse(to: APIEndpoints.placedOrders, with: jwt, responseType: [PlacedOrder].self) { result in
+		NetworkManager.sendGetRequestWithArrayResponse(to: APIEndpoints.placedOrders, responseType: [PlacedOrder].self) { result in
 			
 			DispatchQueue.main.async {
 				switch result {

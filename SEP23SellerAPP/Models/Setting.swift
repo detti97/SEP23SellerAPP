@@ -9,7 +9,6 @@ import Foundation
 
 struct Setting: Decodable {
 
-	var token: String
 	var storeName: String
 	var owner: String
 	var address: Address
@@ -18,8 +17,8 @@ struct Setting: Decodable {
 	var logo: String
 	var backgroundImage: String
 
-	init(token: String?, storeName: String, owner: String, address: Address, telephone: String, email: String, logo: String, backgroundImage: String) {
-			self.token = token ?? "StandardToken"
+	init(storeName: String, owner: String, address: Address, telephone: String, email: String, logo: String, backgroundImage: String) {
+
 			self.storeName = storeName
 			self.owner = owner
 			self.address = address
@@ -43,7 +42,6 @@ struct SetSetting: Codable{
 		static let password = "password"
 	}
 
-	var token: String
 	var parameter: String
 	var value: String
 

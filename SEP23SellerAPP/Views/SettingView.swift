@@ -22,14 +22,9 @@ struct SettingView: View {
 	@State private var address = Address(street: "", houseNumber: "", zip: "")
 	@State private var backgroundPickerItem: PhotosPickerItem?
 
-
-
+	@State public var networkManager = NetworkManager()
 	@State private var logoPickerItem: PhotosPickerItem?
 	@State private var logoImage: Image?
-
-
-
-
 
 	var body: some View {
 
@@ -220,8 +215,6 @@ struct SettingView: View {
 						.sheet(isPresented: $showPreview) {
 							StoreDetailPreviewView(showPreview: $showPreview, store: settingsManager.settings)
 						}
-						
-
 					}
 					.navigationBarTitle("Einstellungen")
 					.navigationBarTitleDisplayMode(.inline)
@@ -266,7 +259,7 @@ struct SettingView: View {
 
 		private var saveButton: some View {
 			Button(action: {
-				settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.email, value: email))
+				settingsManager.setSettings(newSettings: SetSetting(parameter: SetSetting.Parameters.email, value: email))
 				//settingsManager.loadData()
 				presentationMode.wrappedValue.dismiss()
 			}) {
@@ -301,7 +294,7 @@ struct SettingView: View {
 
 		private var saveButton: some View {
 			Button(action: {
-				settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.owner, value: owner))
+				settingsManager.setSettings(newSettings: SetSetting(parameter: SetSetting.Parameters.owner, value: owner))
 				presentationMode.wrappedValue.dismiss()
 			}) {
 				Text("Speichern")
@@ -379,7 +372,7 @@ struct SettingView: View {
 
 		private var saveButton: some View {
 			Button(action: {
-				settingsManager.setSettings(newSettings: SetSetting(token: "", parameter: SetSetting.Parameters.telephone, value: phoneNumber))
+				settingsManager.setSettings(newSettings: SetSetting(parameter: SetSetting.Parameters.telephone, value: phoneNumber))
 				presentationMode.wrappedValue.dismiss()
 			}) {
 				Text("Speichern")

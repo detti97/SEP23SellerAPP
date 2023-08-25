@@ -13,7 +13,7 @@ class SettingsManager: ObservableObject {
 
 	@Published var settings: Setting
 
-	init(settings: Setting = Setting(token: "", storeName: "", owner: "", address: Address(street: "", houseNumber: "", zip: ""),
+	init(settings: Setting = Setting(storeName: "", owner: "", address: Address(street: "", houseNumber: "", zip: ""),
 									 telephone: "", email: "", logo: "", backgroundImage: "")) {
 			self.settings = settings
 		}
@@ -32,10 +32,7 @@ class SettingsManager: ObservableObject {
 
 		func setSettings(newSettings: SetSetting){
 
-			var changedSettings = newSettings
-			changedSettings.token = getSavedToken()!
-
-			NetworkManager.sendPostRequest(to: APIEndpoints.setSettings, with: changedSettings, responseType: Setting.self){ result in
+			NetworkManager.sendPostRequest(to: APIEndpoints.settings, with: newSettings, responseType: Setting.self){ result in
 				switch result {
 				case .success(let response):
 					print("Response: \(response)")
@@ -62,7 +59,7 @@ class SettingsManager: ObservableObject {
 				return
 			}
 
-			NetworkManager.sendPostRequest(to: APIEndpoints.setSettings, with: SetSetting(token: getSavedToken()!, parameter: parameter, value: imageData.base64EncodedString()), responseType: Setting.self) { result in
+			NetworkManager.sendPostRequest(to: APIEndpoints.settings, with: SetSetting(parameter: parameter, value: imageData.base64EncodedString()), responseType: Setting.self) { result in
 				switch result {
 				case .success(let response):
 					print("Response: \(response)")
@@ -83,7 +80,7 @@ class SettingsManager: ObservableObject {
 
 
 		func getSettings(completion: @escaping (Setting?) -> Void) {
-			NetworkManager.sendPostRequest(to: APIEndpoints.getSettings, with: token(token: getSavedToken()!), responseType: Setting.self) { result in
+			NetworkManager.sendGetRequest(to: APIEndpoints.settings, responseType: Setting.self) { result in
 				switch result {
 				case .success(let response):
 					print("Setting: \(response)")
@@ -99,7 +96,7 @@ class SettingsManager: ObservableObject {
 
 		func setAddress(address: Address){
 
-			NetworkManager.sendPostRequest(to: APIEndpoints.setAddress, with: SetAddress(token: getSavedToken()!, address: address), responseType: Setting.self) { result in
+			NetworkManager.sendPostRequest(to: APIEndpoints.setAddress, with: SetAddress(address: address), responseType: Setting.self) { result in
 				switch result {
 				case .success(let response):
 					print("Response :\(response)")
@@ -115,6 +112,61 @@ class SettingsManager: ObservableObject {
 					print("Fail - Server")
 				}
 			}
+/*
+			let apiUrl = URL(string: APIEndpoints.setAddress)!
+
+			// Token
+			let token = getSavedToken()!
+
+			// Dein Objekt erstellen
+			let yourObject = SetAddress(address: address)
+
+			// URLRequest erstellen
+			var request = URLRequest(url: apiUrl)
+			request.httpMethod = "POST"
+			request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+			request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+			// Dein Objekt in JSON kodieren
+			let encoder = JSONEncoder()
+			do {
+				let jsonData = try encoder.encode(yourObject)
+				request.httpBody = jsonData
+			} catch {
+				print("Error encoding JSON: \(error)")
+				return
+			}
+
+			// URLSession-Konfiguration
+			let config = URLSessionConfiguration.default
+			let session = URLSession(configuration: config)
+
+			// Datenaufgabe
+			let task = session.dataTask(with: request) { data, response, error in
+				if let error = error {
+					print("Error: \(error)")
+					return
+				}
+
+				guard let data = data else {
+					print("No data received")
+					return
+				}
+
+				do {
+					// JSON-Daten in ein Swift-Objekt (z.B. Dictionary) konvertieren
+					if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+						// JSON in der Konsole ausgeben
+						print(json)
+					}
+				} catch {
+					print("JSON parsing error: \(error)")
+				}
+			}
+
+			// Anfrage starten
+			task.resume()
+ */
 		}
 
 		func setPassword(oldPassword: String, newPassword: String){
@@ -152,7 +204,7 @@ class SettingsManager: ObservableObject {
 
 		struct SetAddress: Encodable{
 
-			var token: String
+			//var token: String
 			var address: Address
 
 		}
