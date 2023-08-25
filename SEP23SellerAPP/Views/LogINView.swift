@@ -33,12 +33,11 @@ struct LogINView: View {
 				VStack {
 
 					ZStack {
-/*
-						Image("cart")
+
+						Image("wallpaper")
 							.resizable()
-							.scaledToFit()
 							.ignoresSafeArea(.all)
-*/
+
 
 						Spacer()
 							.frame(height: 20)

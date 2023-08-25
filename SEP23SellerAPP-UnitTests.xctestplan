@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "E2BDDDCF-8D39-48EB-9F8D-2118877D9AF3",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:SEP23SellerAPP.xcodeproj",
+        "identifier" : "52DA1D6B2A8AF034005602AB",
+        "name" : "SEP23SellerAPP-UnitTests"
+      }
+    }
+  ],
+  "version" : 1
+}

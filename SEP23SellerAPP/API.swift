@@ -24,17 +24,20 @@ enum APIEndpoints {
 }
 
 class NetworkManager {
+	
 	private static func sendPostRequestInternal<T: Encodable, U: Decodable>(to endpoint: String, with data: T, responseType: U.Type, completion: @escaping (RequestResult<U>) -> Void) {
 		guard let url = URL(string: endpoint) else {
 			completion(.failure(NSError(domain: "Invalid URL", code: -1, userInfo: nil)))
+
 			return
 		}
 
 		guard let requestData = try? JSONEncoder().encode(data) else {
 			completion(.failure(NSError(domain: "JSON encoding error", code: -1, userInfo: nil)))
+
 			return
 		}
-
+		print("Send data:", String(data: requestData, encoding: .utf8) ?? "")
 		var request = URLRequest(url: url)
 		request.httpMethod = "POST"
 		request.setValue("application/json", forHTTPHeaderField: "Content-Type")

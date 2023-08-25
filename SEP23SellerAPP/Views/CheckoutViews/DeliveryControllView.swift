@@ -23,6 +23,8 @@ struct DeliveryControllView: View {
 	@State private var isActiveSendOrder = false
 	@State private var isActiveOrderSuccess = false
 
+	@State private var isActiveAddresPanel = false
+
 	@State private var orderSuccess = false
 	@State private var orderFail = false
 
@@ -114,8 +116,10 @@ struct DeliveryControllView: View {
 				Button(action: {
 					isActiveDeliveryControll = false
 					isActiveOrderSuccess = true
-					//sendOrder(newOrder: order)
-					sendOrder2(newOrder: order)
+					order.sendOrder(newOrder: order) { orderID in
+						print("Received order ID: \(orderID)")
+						self.orderID = orderID
+					}
 				}) {
 					Text("Bestellung senden")
 						.padding()
@@ -126,18 +130,35 @@ struct DeliveryControllView: View {
 				}
 				.padding()
 				.frame(maxWidth: .infinity, alignment: .center)
-				Button(action: {
-					presentationMode.wrappedValue.dismiss()
-				}) {
-					Text("Daten bearbeiten")
-						.padding()
-						.foregroundColor(.white)
-						.fontWeight(.heavy)
-						.background(Color.red)
-						.cornerRadius(8)
+
+				HStack(spacing: 16) {
+					Button(action: {
+						presentationMode.wrappedValue.dismiss()
+					}) {
+
+
+							Text("Daten bearbeiten")
+								.padding()
+								.foregroundColor(.white)
+								.fontWeight(.heavy)
+								.background(Color.red)
+								.cornerRadius(8)
+
+					}
+
+					Button(action: {
+						isActiveAddresPanel = true
+					}) {
+						Text("Adresse ändern")
+							.padding()
+							.foregroundColor(.white)
+							.fontWeight(.heavy)
+							.background(Color.red)
+							.cornerRadius(8)
+					}
 				}
 				.padding()
-				.frame(maxWidth: .infinity, alignment: .center)
+
 
 			}
 			.navigationTitle("New Order for " + order.firstName + " " + order.lastName)
@@ -245,56 +266,12 @@ struct DeliveryControllView: View {
 		return UserDefaults.standard.string(forKey: "AuthToken")
 	}
 
-	func sendOrder(newOrder: Order, session: URLSession = URLSession.shared) {
-		let test = Order(token: getSavedToken()!, timestamp: newOrder.timestamp, employeeName: newOrder.employeeName, firstName: newOrder.firstName, lastName: newOrder.lastName, street: newOrder.street, houseNumber: newOrder.houseNumber, zip: newOrder.zip, city: newOrder.city, packageSize: newOrder.packageSize, handlingInfo: newOrder.handlingInfo, deliveryDate: newOrder.deliveryDate, customDropOffPlace: newOrder.customDropOffPlace)
-		print("Order: \(test)")
-		guard let data = try? JSONEncoder().encode(test) else {
-			orderFail = true
-			return
-		}
-		guard let url = URL(string: "http://131.173.65.77:8080/api/order") else {
-			orderFail = true
-			return
-		}
-		var request = URLRequest(url: url)
-		request.httpMethod = "POST"
-		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-		request.httpBody = data
-		let task = URLSession.shared.dataTask(with: request) { data, response, error in
-			guard let _ = data else {
-				orderFail = true
-				return
-			}
-			if let httpResponse = response as? HTTPURLResponse,
-			   httpResponse.statusCode == 200 {
-				if let responseString = String(data: data!, encoding: .utf8) {
-					print("Antwort des Servers: \(responseString)")
-					orderSuccess = true
-
-				}
-				do {
-					let responseData = try JSONDecoder().decode(ServerAnswer.self, from: data!)
-					let orderID = responseData.orderID
-
-					self.orderID = String(orderID)
-
-					print(orderID)
-
-				} catch let error {
-
-					orderFail = true
-					print("Fehler beim Parsen des JSON: \(error.localizedDescription)")
-
-				}
-				print("Order erfolgreich gesendet")
-			}
-		}
-		task.resume()
-	}
-	func sendOrder2(newOrder: Order){
+	/*func sendOrder(newOrder: Order){
 
 		var toSendOrder = newOrder
 		toSendOrder.token = getSavedToken()!
+
+		print("Order object \(toSendOrder)")
 
 		NetworkManager.sendPostRequest(to: APIEndpoints.order, with: toSendOrder, responseType: ServerAnswer.self){ result in
 			switch result {
@@ -311,7 +288,7 @@ struct DeliveryControllView: View {
 			}
 		}
 
-	}
+	}*/
 
 }
 

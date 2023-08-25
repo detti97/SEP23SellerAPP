@@ -61,9 +61,9 @@ struct QRCodeScannerView: View {
 
 						HStack{
 
-							Image(systemName: "figure.hunting")
-								.foregroundColor(.white)
-								.font(.system(size: 80))
+							Image(systemName: "house.fill")
+								.foregroundColor(.yellow)
+								.font(.system(size: 70))
 
 							Text("Adress Eingabe")
 								.font(.headline)

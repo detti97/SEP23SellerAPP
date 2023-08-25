@@ -23,6 +23,9 @@
 		604287C629E21769009798B5 /* FirstStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604287C529E21769009798B5 /* FirstStepView.swift */; };
 		604287C829E21B3C009798B5 /* HandlingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604287C729E21B3C009798B5 /* HandlingInfo.swift */; };
 		604287CC29E4771D009798B5 /* DeliveryControllView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604287CB29E4771D009798B5 /* DeliveryControllView.swift */; };
+		60545B452A9778CD00539157 /* AddressFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60545B442A9778CD00539157 /* AddressFormView.swift */; };
+		60545B472A977A9100539157 /* CustomTextFieldStyleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60545B462A977A9100539157 /* CustomTextFieldStyleView.swift */; };
+		60545B492A977CC400539157 /* AddressEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60545B482A977CC400539157 /* AddressEditView.swift */; };
 		6084D5562A5F45D2005AC588 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D5552A5F45D2005AC588 /* Setting.swift */; };
 		6084D55E2A85194F005AC588 /* OrderData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D55D2A85194F005AC588 /* OrderData.swift */; };
 		6084D5602A852BFE005AC588 /* OrderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D55F2A852BFE005AC588 /* OrderDetailView.swift */; };
@@ -49,6 +52,7 @@
 		52DA1D6C2A8AF034005602AB /* SEP23SellerAPP-UnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SEP23SellerAPP-UnitTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		52DA1D6E2A8AF034005602AB /* SEP23SellerAPP_UnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SEP23SellerAPP_UnitTests.swift; sourceTree = "<group>"; };
 		601644E12A950CDA005A608D /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsManager.swift; path = SEP23SellerAPP/Models/SettingsManager.swift; sourceTree = SOURCE_ROOT; };
+		601644E32A9564BA005A608D /* SEP23SellerAPP-UnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = "SEP23SellerAPP-UnitTests.xctestplan"; sourceTree = "<group>"; };
 		603CC74E2A4B0DE000C3D3E3 /* LogINView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogINView.swift; sourceTree = "<group>"; };
 		604287A329E08062009798B5 /* SEP23SellerAPP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SEP23SellerAPP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		604287A629E08062009798B5 /* SEP23SellerAPPApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SEP23SellerAPPApp.swift; sourceTree = "<group>"; };
@@ -62,6 +66,9 @@
 		604287C529E21769009798B5 /* FirstStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstStepView.swift; sourceTree = "<group>"; };
 		604287C729E21B3C009798B5 /* HandlingInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HandlingInfo.swift; sourceTree = "<group>"; };
 		604287CB29E4771D009798B5 /* DeliveryControllView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryControllView.swift; sourceTree = "<group>"; };
+		60545B442A9778CD00539157 /* AddressFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddressFormView.swift; path = SEP23SellerAPP/Views/AddressFormView.swift; sourceTree = SOURCE_ROOT; };
+		60545B462A977A9100539157 /* CustomTextFieldStyleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldStyleView.swift; sourceTree = "<group>"; };
+		60545B482A977CC400539157 /* AddressEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressEditView.swift; sourceTree = "<group>"; };
 		6084D5552A5F45D2005AC588 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
 		6084D55D2A85194F005AC588 /* OrderData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderData.swift; sourceTree = "<group>"; };
 		6084D55F2A852BFE005AC588 /* OrderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDetailView.swift; sourceTree = "<group>"; };
@@ -103,6 +110,7 @@
 		6042879A29E08062009798B5 = {
 			isa = PBXGroup;
 			children = (
+				601644E32A9564BA005A608D /* SEP23SellerAPP-UnitTests.xctestplan */,
 				604287A529E08062009798B5 /* SEP23SellerAPP */,
 				52DA1D6D2A8AF034005602AB /* SEP23SellerAPP-UnitTests */,
 				604287A429E08062009798B5 /* Products */,
@@ -158,6 +166,8 @@
 			isa = PBXGroup;
 			children = (
 				604287C529E21769009798B5 /* FirstStepView.swift */,
+				60545B442A9778CD00539157 /* AddressFormView.swift */,
+				60545B482A977CC400539157 /* AddressEditView.swift */,
 				604287CB29E4771D009798B5 /* DeliveryControllView.swift */,
 			);
 			path = CheckoutViews;
@@ -166,6 +176,7 @@
 		6084D56F2A8AA484005AC588 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				60545B462A977A9100539157 /* CustomTextFieldStyleView.swift */,
 				604287C429E21733009798B5 /* CheckoutViews */,
 				604287BB29E0B242009798B5 /* AddressControllView.swift */,
 				604287B929E0A189009798B5 /* QRCodeScannerView.swift */,
@@ -309,8 +320,11 @@
 				604287C629E21769009798B5 /* FirstStepView.swift in Sources */,
 				6084D5602A852BFE005AC588 /* OrderDetailView.swift in Sources */,
 				6084D56C2A893CDD005AC588 /* API.swift in Sources */,
+				60545B492A977CC400539157 /* AddressEditView.swift in Sources */,
 				604287BC29E0B242009798B5 /* AddressControllView.swift in Sources */,
 				6084D56A2A8913E0005AC588 /* LoginData.swift in Sources */,
+				60545B472A977A9100539157 /* CustomTextFieldStyleView.swift in Sources */,
+				60545B452A9778CD00539157 /* AddressFormView.swift in Sources */,
 				601644E22A950CDA005A608D /* SettingsManager.swift in Sources */,
 				604287C829E21B3C009798B5 /* HandlingInfo.swift in Sources */,
 				526962BB2A4CBA1400835E8B /* SettingView.swift in Sources */,

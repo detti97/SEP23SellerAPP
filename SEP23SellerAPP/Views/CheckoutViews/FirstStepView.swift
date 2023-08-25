@@ -18,6 +18,8 @@ struct FirstStepView: View {
 	@State private var handInfo = [ HandlingInfo(name: "Zerbrechlich", isMarked: false), HandlingInfo(name: "Glas", isMarked: false), HandlingInfo(name: "Flüßigkeiten", isMarked: false), HandlingInfo(name: "Schwer", isMarked: false)]
 	@State private var currentTime = Date()
 	@State private var isShowingDeliveryControll = false
+	@State private var isActiveAddressPanel = false
+
 	@Binding var showShippingView: Bool
 	@Binding var repAddress: recipientAddress
 
@@ -106,39 +108,53 @@ struct FirstStepView: View {
 
 				}
 				
-					HStack{
+					HStack(spacing: 16){
 
 						Button {
 
 							showShippingView = false
 
 						} label: {
-							Text("Order abbrechen")
+							Text("Abbrechen")
 								.padding()
 								.foregroundColor(.white)
 								.fontWeight(.heavy)
 								.background(Color.red)
-								.cornerRadius(8)
+								.cornerRadius(24)
 						}
-						.frame(maxWidth: .infinity, alignment: .center)
+
+						Button {
+
+							isActiveAddressPanel = true
+
+						} label: {
+							Text("Addrese ändern")
+								.padding()
+								.foregroundColor(.white)
+								.fontWeight(.heavy)
+								.background(Color.red)
+								.cornerRadius(24)
+						}
+						.sheet(isPresented: $isActiveAddressPanel){
+							AddressEditView(address: $repAddress)
+						}
 
 						Button {
 
 							isShowingDeliveryControll = true
 
 						} label: {
-							Text("Confirm details")
+							Text("Bestätigen")
 								.padding()
 								.foregroundColor(.white)
 								.fontWeight(.heavy)
 								.background(Color.blue)
-								.cornerRadius(8)
+								.cornerRadius(24)
 						}
 						.sheet(isPresented: $isShowingDeliveryControll) {
 							DeliveryControllView(order: setOrder(repAddress: repAddress, handInfo: handInfoToString(), packageSize: choosenPackage, numberPackages: 1, employeSign: employeSign, deliveryDate: selectedDateString, customDropOffPlace: customDropOffPlace), showShippingView: $showShippingView)
-						}
-						.frame(maxWidth: .infinity, alignment: .center)
 
+						}
 
 					}
 					.background(
@@ -189,7 +205,8 @@ struct FirstStepView: View {
 	func getCurrentDateTime() -> String {
 		let now = Date()
 		let formatter = DateFormatter()
-		formatter.dateFormat = "dd-MM-yyyy:HH-mm"
+		formatter.dateFormat = "dd-MM-yyyy:HH-mm-ss"
+		print(formatter.string(from: now))
 		return formatter.string(from: now)
 	}
 
