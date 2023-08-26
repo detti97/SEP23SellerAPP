@@ -10,7 +10,9 @@ struct QRCodeScannerView: View {
     @State private var isShowingScanner = false
 	@State private var isShowingAddressPanel = false
 	@Binding var showShippingView: Bool
-	@Binding var repAddress: recipientAddress
+	@Binding var order: Order
+	@State var addressEntered = false
+
     
     var body: some View {
         
@@ -73,11 +75,16 @@ struct QRCodeScannerView: View {
 				.foregroundColor(.white)
 				.fontWeight(.heavy)
 				.sheet(isPresented: $isShowingAddressPanel) {
-					AddressPanelView(showShippingView: $showShippingView, isActiveAddressPanel: $isShowingAddressPanel, repAddress: $repAddress)
+					AddressEditView(recipient: $order.recipient, addressChanged: $addressEntered)
+				}
+				.onChange(of: addressEntered) { newValue in
+					if newValue {
+						showShippingView = true
+					}
 				}
 
             }
-			.navigationTitle("New Order")
+			.navigationTitle("Neue Bestellung aufgeben")
         }
 
     }
@@ -89,13 +96,15 @@ struct QRCodeScannerView: View {
             let details = result.string.components(separatedBy: "&")
             guard details.count <= 6 else { return }
             
-            let repAddress = recipientAddress(name: details[1],
-                                              surName: details[0],
-                                              street: details[2],
-                                              streetNr: details[3],
-                                              zip: details[4])
-            print(repAddress.toString())
-            self.repAddress = repAddress
+            let decodedString = Recipient(firstName: details[1],
+										  lastName: details[0],
+										  address: Address(street: details[2],
+										  houseNumber: details[3],
+										  zip: details[4]))
+            //self.repAddress = decodedString
+			self.order.recipient = decodedString
+			print(decodedString)
+			print(self.order)
 			showShippingView = true
             
         case .failure(let error):
@@ -107,10 +116,11 @@ struct QRCodeScannerView: View {
 
 struct QRCodeScannerView_Previews: PreviewProvider {
     static var previews: some View {
-		let repAdress = recipientAddress(name: "Dettler", surName: "Jan", street: "Kaiserstraße", streetNr: "12", zip: "49809")
+		
 		let showShippingView = Binding.constant(false)
+		let order = Binding.constant(Order(timestamp: "", employeeName: "", recipient: Recipient(firstName: "", lastName: "", address: Address(street: "", houseNumber: "", zip: "")), packageSize: "", handlingInfo: "", deliveryDate: "", customDropOffPlace: ""))
 		
 
-		QRCodeScannerView(showShippingView: showShippingView, repAddress: Binding.constant(repAdress))
+		QRCodeScannerView(showShippingView: showShippingView, order: order)
     }
 }

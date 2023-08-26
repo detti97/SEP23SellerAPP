@@ -32,9 +32,9 @@ struct StatistcView: View {
 						return true
 					} else {
 						let searchTextLowercased = searchText.lowercased()
-						return order.firstName.localizedCaseInsensitiveContains(searchTextLowercased) ||
-							   order.lastName.localizedCaseInsensitiveContains(searchTextLowercased) ||
-							   String(order.orderID).localizedCaseInsensitiveContains(searchTextLowercased)
+						return order.recipient.firstName.localizedCaseInsensitiveContains(searchTextLowercased) ||
+						order.recipient.lastName.localizedCaseInsensitiveContains(searchTextLowercased) ||
+							   String(order.orderID!).localizedCaseInsensitiveContains(searchTextLowercased)
 					}
 				}, id: \.orderID) { order in
 					NavigationLink(destination: OrderDetailView(order: order)) {
@@ -51,8 +51,8 @@ struct StatistcView: View {
 							Spacer(minLength: 5)
 							VStack(alignment: .trailing){
 
-								Text("Bestellnummer: \(order.orderID)")
-								Text("Empfänger: \(order.firstName) \(order.lastName)")
+								Text("Bestellnummer: \(order.orderID!)")
+								Text("Empfänger: \(order.recipient.firstName) \(order.recipient.lastName)")
 								Text("Bestelldatum: \(timeStampFormatter(timeStamp:order.timestamp))")
 
 							}

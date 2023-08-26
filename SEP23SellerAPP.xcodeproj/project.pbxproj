@@ -26,6 +26,7 @@
 		60545B452A9778CD00539157 /* AddressFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60545B442A9778CD00539157 /* AddressFormView.swift */; };
 		60545B472A977A9100539157 /* CustomTextFieldStyleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60545B462A977A9100539157 /* CustomTextFieldStyleView.swift */; };
 		60545B492A977CC400539157 /* AddressEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60545B482A977CC400539157 /* AddressEditView.swift */; };
+		60545B4B2A99828B00539157 /* Recipient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60545B4A2A99828B00539157 /* Recipient.swift */; };
 		6084D5562A5F45D2005AC588 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D5552A5F45D2005AC588 /* Setting.swift */; };
 		6084D55E2A85194F005AC588 /* OrderData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D55D2A85194F005AC588 /* OrderData.swift */; };
 		6084D5602A852BFE005AC588 /* OrderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D55F2A852BFE005AC588 /* OrderDetailView.swift */; };
@@ -69,6 +70,7 @@
 		60545B442A9778CD00539157 /* AddressFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddressFormView.swift; path = SEP23SellerAPP/Views/AddressFormView.swift; sourceTree = SOURCE_ROOT; };
 		60545B462A977A9100539157 /* CustomTextFieldStyleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldStyleView.swift; sourceTree = "<group>"; };
 		60545B482A977CC400539157 /* AddressEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressEditView.swift; sourceTree = "<group>"; };
+		60545B4A2A99828B00539157 /* Recipient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipient.swift; sourceTree = "<group>"; };
 		6084D5552A5F45D2005AC588 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
 		6084D55D2A85194F005AC588 /* OrderData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderData.swift; sourceTree = "<group>"; };
 		6084D55F2A852BFE005AC588 /* OrderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDetailView.swift; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 				604287B429E080C8009798B5 /* AddressEncoder.swift */,
 				6084D55D2A85194F005AC588 /* OrderData.swift */,
 				604287C029E1FFE6009798B5 /* Order.swift */,
+				60545B4A2A99828B00539157 /* Recipient.swift */,
 				604287C729E21B3C009798B5 /* HandlingInfo.swift */,
 				6084D5552A5F45D2005AC588 /* Setting.swift */,
 				6084D5692A8913DF005AC588 /* LoginData.swift */,
@@ -305,6 +308,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60545B4B2A99828B00539157 /* Recipient.swift in Sources */,
 				604287C129E1FFE6009798B5 /* Order.swift in Sources */,
 				6084D55E2A85194F005AC588 /* OrderData.swift in Sources */,
 				604287CC29E4771D009798B5 /* DeliveryControllView.swift in Sources */,

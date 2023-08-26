@@ -19,7 +19,7 @@ struct FieldTapped{
 struct addressFormView: View {
 
 
-	@Binding var address: recipientAddress
+	@Binding var recipient: Recipient
 	@Binding var success: Bool
 	@State var label = ""
 
@@ -48,7 +48,7 @@ struct addressFormView: View {
 
 			VStack{
 
-				TextField("Vorname", text: $address.name)
+				TextField("Vorname", text: $recipient.firstName)
 					.frame(height: 30)
 					.frame(maxWidth: .infinity)
 					.padding(10)
@@ -59,7 +59,7 @@ struct addressFormView: View {
 						fields[0].turnRed = false
 
 					}
-					.onChange(of: address.name) { _ in
+					.onChange(of: recipient.firstName) { _ in
 
 						fields[0].textEntert = true
 					}
@@ -73,7 +73,7 @@ struct addressFormView: View {
 						focusField = .name
 					}
 
-				TextField("Nachname", text: $address.surName)
+				TextField("Nachname", text: $recipient.lastName)
 					.frame(height: 30)
 					.padding(10)
 					.frame(maxWidth: .infinity)
@@ -85,7 +85,7 @@ struct addressFormView: View {
 
 
 					}
-					.onChange(of: address.surName) { _ in
+					.onChange(of: recipient.lastName) { _ in
 
 						fields[1].textEntert = true
 					}
@@ -98,7 +98,7 @@ struct addressFormView: View {
 						focusField = .street
 					}
 
-				TextField("Straße", text: $address.street)
+				TextField("Straße", text: $recipient.address.street)
 					.frame(height: 30)
 					.frame(maxWidth: .infinity)
 					.padding(10)
@@ -114,7 +114,7 @@ struct addressFormView: View {
 
 
 					}
-					.onChange(of: address.street) { _ in
+					.onChange(of: recipient.address.street) { _ in
 
 						fields[2].textEntert = true
 					}
@@ -127,7 +127,7 @@ struct addressFormView: View {
 						focusField = .housenumber
 					}
 
-				TextField("Hausnummer", text: $address.streetNr)
+				TextField("Hausnummer", text: $recipient.address.houseNumber)
 					.frame(height: 30)
 					.frame(maxWidth: .infinity)
 					.padding(10)
@@ -141,7 +141,7 @@ struct addressFormView: View {
 						fields[3].fieldTapped = true
 						fields[3].turnRed = false
 					}
-					.onChange(of: address.streetNr) { _ in
+					.onChange(of: recipient.address.houseNumber) { _ in
 
 						fields[3].textEntert = true
 					}
@@ -153,7 +153,7 @@ struct addressFormView: View {
 					.onSubmit {
 						focusField = .zip
 					}
-				Picker("Postleitzahl", selection: $address.zip) {
+				Picker("Postleitzahl", selection: $recipient.address.zip) {
 					ForEach(zipCodes, id: \.self) { plz in
 						Text(plz)
 					}
@@ -187,7 +187,7 @@ struct addressFormView: View {
 
 				Button(action: {
 
-					address.label = label
+					//address.label = label
 
 					showSuccessAlert = true
 					success = true
@@ -205,7 +205,7 @@ struct addressFormView: View {
 					.cornerRadius(18)
 					.padding()
 				}
-				.disabled(address.name.isEmpty || address.street.isEmpty || address.streetNr.isEmpty || address.zip.isEmpty)
+				.disabled(recipient.firstName.isEmpty || recipient.address.street.isEmpty || recipient.address.houseNumber.isEmpty || recipient.lastName.isEmpty)
 				.onTapGesture{
 					checkForEmptyFieldFinal()
 				}
@@ -251,9 +251,9 @@ struct addressFormView: View {
 struct AddressFormView_Previews: PreviewProvider {
 	static var previews: some View {
 
-		let address = recipientAddress(name: "", surName: "", street: "", streetNr: "", zip: "")
+		let address = Recipient(firstName: "", lastName: "", address: Address(street: "", houseNumber: "", zip: ""))
 		let success = false
 
-		addressFormView(address: Binding.constant(address), success: Binding.constant(success))
+		addressFormView(recipient: Binding.constant(address), success: Binding.constant(success))
 	}
 }

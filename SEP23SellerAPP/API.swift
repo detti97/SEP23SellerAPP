@@ -47,7 +47,7 @@ class NetworkManager {
 				completion(.failure(NSError(domain: "No Token", code: -1, userInfo: nil)))
 				return
 			}
-			
+
 			request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
 		}
 		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -61,7 +61,7 @@ class NetworkManager {
 
 			if let httpResponse = response as? HTTPURLResponse {
 
-				if endpoint == APIEndpoints.settings || endpoint == APIEndpoints.setAddress || endpoint == APIEndpoints.setPassword {
+				if endpoint == APIEndpoints.setAddress || endpoint == APIEndpoints.setPassword {
 
 					let responseCode = httpResponse.statusCode
 
@@ -143,6 +143,10 @@ class NetworkManager {
 
 	static func getSavedToken() -> String? {
 		return UserDefaults.standard.string(forKey: "AuthToken")
+	}
+
+	static func saveToken(_ token: String) {
+		UserDefaults.standard.set(token, forKey: "AuthToken")
 	}
 
 	static func sendPostRequest<T: Encodable, U: Decodable>(to endpoint: String, with data: T, responseType: U.Type, completion: @escaping (RequestResult<U>) -> Void) {

@@ -10,15 +10,10 @@ import Foundation
 
 struct Order: Decodable, Encodable{
 
-	var token: String
+	var orderID: String?
 	var timestamp: String
 	var employeeName: String
-	var firstName: String
-	var lastName: String
-	var street: String
-	var houseNumber: String
-	var zip: String
-	var city: String
+	var recipient: Recipient
 	var packageSize: String
 	var handlingInfo: String
 	var deliveryDate: String
@@ -29,23 +24,31 @@ struct Order: Decodable, Encodable{
 				Bestellung
 				Zeitstempel: \(timestamp)
 				Mitarbeiter-ID: \(employeeName)
-				Vorname: \(firstName)
-				Nachname: \(lastName)
-				Straße: \(street)
-				Hausnummer: \(houseNumber)
-				PLZ: \(zip)
-				Stadt: \(city)
+				Vorname: \(recipient.firstName)
+				Nachname: \(recipient.lastName)
+				Straße: \(recipient.address.street)
+				Hausnummer: \(recipient.address.houseNumber)
+				PLZ: \(recipient.address.zip)
+				Stadt: \(recipient.address.city ?? "Lingen")
 				Paket Größe: \(packageSize)
 				Handhabungsinformationen: \(handlingInfo)
 				"""
 		return string
 	}
 
+	static func defaultOrder() -> Order {
+		return Order(timestamp: "",
+					 employeeName: "",
+					 recipient: Recipient(firstName: "", lastName: "", address: Address(street: "", houseNumber: "", zip: "", city: "")),
+					 packageSize: "M",
+					 handlingInfo: "",
+					 deliveryDate: "",
+					 customDropOffPlace: "")
+	}
+
 	func sendOrder(newOrder: Order, completion: @escaping (String) -> Void) {
-		var orderSuccess = false
 		var toSendOrder = newOrder
 		var orderID = ""
-		toSendOrder.token = getSavedToken()!
 
 		print("Order object \(toSendOrder)")
 
@@ -53,12 +56,10 @@ struct Order: Decodable, Encodable{
 			switch result {
 			case .success(let response):
 				print("Token: \(response)")
-				orderSuccess = true
 				orderID = String(response.orderID)
 
 			case .failure(let error):
 				print("Error: \(error)")
-				orderSuccess = false
 
 			case .successNoAnswer(_):
 				print("Success")
@@ -99,6 +100,7 @@ struct Order: Decodable, Encodable{
 		var street: String
 		var houseNumber: String
 		var zip: String
+		var city: String?
 
 	}
 

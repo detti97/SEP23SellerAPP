@@ -16,7 +16,7 @@ struct ServerAnswer: Codable {
 
 struct DeliveryControllView: View {
 
-	var order: Order
+	@State var order: Order
 	@State private var orderID = "_"
 
 	@State private var isActiveDeliveryControll = true
@@ -96,9 +96,9 @@ struct DeliveryControllView: View {
 
 						VStack(alignment: .trailing, spacing: 10){
 
-							Text(order.firstName + " " + order.lastName )
-							Text(order.street + " " + order.houseNumber )
-							Text(order.zip + " Lingen")
+							Text(order.recipient.firstName + " " + order.recipient.lastName )
+							Text(order.recipient.address.street + " " + order.recipient.address.houseNumber )
+							Text(order.recipient.address.zip + " Lingen")
 
 						}
 
@@ -161,7 +161,7 @@ struct DeliveryControllView: View {
 
 
 			}
-			.navigationTitle("New Order for " + order.firstName + " " + order.lastName)
+			.navigationTitle("New Order for " + order.recipient.firstName + " " + order.recipient.lastName)
 			.navigationBarTitleDisplayMode(.inline)
 			// Delivery Controll Page
 		}
@@ -294,7 +294,7 @@ struct DeliveryControllView: View {
 
 struct DeliveryControllView_Previews: PreviewProvider {
 	static var previews: some View {
-		let order = Order(token: "", timestamp: "22-11-2023", employeeName: "WB", firstName: "Jan", lastName: "De", street: "Kais", houseNumber: "12", zip: "49809", city: "Lingen", packageSize: "L", handlingInfo: "Gebrechlich", deliveryDate: "10-04-2023", customDropOffPlace: "Garage")
+		let order = Order(timestamp: "", employeeName: "", recipient: Recipient(firstName: "", lastName: "", address: Address(street: "", houseNumber: "", zip: "")), packageSize: "", handlingInfo: "", deliveryDate: "", customDropOffPlace: "")
 		DeliveryControllView(order: order, showShippingView: Binding.constant(false))
 	}
 }

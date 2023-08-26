@@ -9,21 +9,16 @@ import SwiftUI
 
 struct FirstStepView: View {
 
-	let packageSizes = ["S", "M", "L", "XL" ]
-	@State private var employeSign = ""
+	@Binding var showShippingView: Bool
+	@Binding var order: Order
 	@State private var choosenPackage: String = "M"
 	@State private var selectedDate = Date()
-	@State private var selectedDateString = ""
-	@State private var customDropOffPlace = ""
-	@State private var handInfo = [ HandlingInfo(name: "Zerbrechlich", isMarked: false), HandlingInfo(name: "Glas", isMarked: false), HandlingInfo(name: "Flüßigkeiten", isMarked: false), HandlingInfo(name: "Schwer", isMarked: false)]
 	@State private var currentTime = Date()
 	@State private var isShowingDeliveryControll = false
 	@State private var isActiveAddressPanel = false
 
-	@Binding var showShippingView: Bool
-	@Binding var repAddress: recipientAddress
-
-
+	@State private var handInfo = [ HandlingInfo(name: "Zerbrechlich", isMarked: false), HandlingInfo(name: "Glas", isMarked: false), HandlingInfo(name: "Flüßigkeiten", isMarked: false), HandlingInfo(name: "Schwer", isMarked: false)]
+	private let packageSizes = ["S", "M", "L", "XL" ]
 
 	private var dateFormatter: DateFormatter {
 		let formatter = DateFormatter()
@@ -39,44 +34,42 @@ struct FirstStepView: View {
 			VStack{
 
 				Form{
-					/*
-					 Section(header: Text("Empfänger")){
-					 HStack(){
 
-					 VStack(){
-					 Image(systemName: "person")
-					 .font(.headline)
+					Section(header: Text("Empfänger")){
+						HStack(){
 
-					 Image(systemName: "house")
-					 .font(.headline)
-					 }
+							VStack(){
+								Image(systemName: "person")
+									.font(.headline)
 
-					 VStack(){
-					 Text(repAddress.surName + " " + repAddress.name)
-					 Text(repAddress.street + " " + repAddress.streetNr)
+								Image(systemName: "house")
+									.font(.headline)
+							}
 
-					 }
-					 }
+							VStack(alignment: .leading){
+								Text(order.recipient.firstName + " " + order.recipient.lastName)
+								Text(order.recipient.address.street + " " + order.recipient.address.houseNumber)
 
-					 }
-
-					 .cornerRadius(10)
-					 .shadow(radius: 6)
-					 */
-					Section(header: Text("Paket Größe auswählen")){
-						Picker("PackageSize", selection: $choosenPackage) {
-							ForEach(packageSizes, id: \.self) { packageSizes in
-								Text(packageSizes)
 							}
 						}
-						.pickerStyle(SegmentedPickerStyle())
+						.fontWeight(.heavy)
 					}
 
 					Section(header: Text("Handling Info")){
+
+						Picker("PackageSize", selection: $order.packageSize) {
+							ForEach(packageSizes, id: \.self) { packageSizes in
+								Text(packageSizes)
+
+							}
+							.fontWeight(.heavy)
+						}
+						.pickerStyle(SegmentedPickerStyle())
+
 						List($handInfo) { $HandlingInfo in
 							HStack{
 								Text(HandlingInfo.name)
-									.font(.headline)
+									.fontWeight(.heavy)
 								Spacer()
 								Image(systemName: HandlingInfo.isMarked ? "checkmark.square": "square")
 									.font(.system(size: 30))
@@ -85,9 +78,7 @@ struct FirstStepView: View {
 									}
 							}
 						}
-					}
 
-					Section(header: Text("Lieferdatum wählen")){
 						DatePicker(
 							"Lieferdatum wählen",
 							selection: $selectedDate,
@@ -96,89 +87,88 @@ struct FirstStepView: View {
 						)
 						.datePickerStyle(CompactDatePickerStyle())
 						.onChange(of: selectedDate){ newValue in
-							setDeliveryDate()
+							order.deliveryDate = setDeliveryDate()
 						}
+						.fontWeight(.heavy)
 					}
-					Section(header: Text("Mitarbeiter Kürzel")){
-						TextField("Optional", text: $employeSign)
+
+					Section(header: Text("Ablageort")){
+
+						TextField("Abweichender Ablageort", text: $order.customDropOffPlace)
+						TextField("Mitarbeiter (Optional)", text: $order.employeeName)
 					}
-					Section(header: Text("Ablage Ort")){
-						TextField("Abweichender Ablageort", text: $customDropOffPlace)
-					}
+
 
 				}
 				
-					HStack(spacing: 16){
+				HStack(spacing: 16){
 
-						Button {
+					Button {
 
-							showShippingView = false
+						order = Order.defaultOrder()
+						showShippingView = false
 
-						} label: {
-							Text("Abbrechen")
-								.padding()
-								.foregroundColor(.white)
-								.fontWeight(.heavy)
-								.background(Color.red)
-								.cornerRadius(24)
-						}
+					} label: {
+						Text("Abbrechen")
+							.padding()
+							.foregroundColor(.white)
+							.fontWeight(.heavy)
+							.background(Color.red)
+							.cornerRadius(24)
+					}
 
-						Button {
+					Button {
 
-							isActiveAddressPanel = true
+						isActiveAddressPanel = true
 
-						} label: {
-							Text("Addrese ändern")
-								.padding()
-								.foregroundColor(.white)
-								.fontWeight(.heavy)
-								.background(Color.red)
-								.cornerRadius(24)
-						}
-						.sheet(isPresented: $isActiveAddressPanel){
-							AddressEditView(address: $repAddress)
-						}
+					} label: {
+						Text("Addrese ändern")
+							.padding()
+							.foregroundColor(.white)
+							.fontWeight(.heavy)
+							.background(Color.red)
+							.cornerRadius(24)
+					}
+					.sheet(isPresented: $isActiveAddressPanel){
+						AddressEditView(recipient: $order.recipient, addressChanged: Binding.constant(false))
+					}
 
-						Button {
+					Button {
+						order.handlingInfo = handInfoToString()
+						isShowingDeliveryControll = true
 
-							isShowingDeliveryControll = true
-
-						} label: {
-							Text("Bestätigen")
-								.padding()
-								.foregroundColor(.white)
-								.fontWeight(.heavy)
-								.background(Color.blue)
-								.cornerRadius(24)
-						}
-						.sheet(isPresented: $isShowingDeliveryControll) {
-							DeliveryControllView(order: setOrder(repAddress: repAddress, handInfo: handInfoToString(), packageSize: choosenPackage, numberPackages: 1, employeSign: employeSign, deliveryDate: selectedDateString, customDropOffPlace: customDropOffPlace), showShippingView: $showShippingView)
-
-						}
+					} label: {
+						Text("Bestätigen")
+							.padding()
+							.foregroundColor(.white)
+							.fontWeight(.heavy)
+							.background(Color.blue)
+							.cornerRadius(24)
+					}
+					.sheet(isPresented: $isShowingDeliveryControll) {
+						DeliveryControllView(order: order, showShippingView: $showShippingView)
 
 					}
-					.background(
-						Color.clear)
 
-
+				}
 
 
 			}
-			.navigationTitle("New Order for " + repAddress.surName + " " + repAddress.name)
+			.navigationTitle("Bestellung für" + order.recipient.firstName + " " + order.recipient.lastName)
 			.navigationBarTitleDisplayMode(.inline)
 			.onAppear{
 				print(defaultDeliveryDate())
-				selectedDateString = defaultDeliveryDate()
+				order.deliveryDate = defaultDeliveryDate()
 			}
-
 		}
-
-
 	}
-	func setDeliveryDate(){
 
-		selectedDateString = dateFormatter.string(from: selectedDate)
+	func setDeliveryDate() -> String {
+
+		let selectedDateString = dateFormatter.string(from: selectedDate)
 		print("Gewähltes Datum: \(selectedDateString)")
+
+		return selectedDateString
 
 	}
 
@@ -186,20 +176,6 @@ struct FirstStepView: View {
 		let markedInfos = handInfo.filter { $0.isMarked }
 		let combinedNames = markedInfos.map { $0.name }.joined(separator: "&")
 		return combinedNames
-	}
-
-	func setOrder(repAddress: recipientAddress, handInfo: String, packageSize: String, numberPackages: Int, employeSign: String, deliveryDate: String, customDropOffPlace: String ) -> Order{
-
-		let newOrder = Order(token: "", timestamp: getCurrentDateTime(), employeeName: employeSign, firstName: repAddress.surName, lastName: repAddress.name, street: repAddress.street, houseNumber: repAddress.streetNr, zip: repAddress.zip, city: "Lingen", packageSize: packageSize, handlingInfo: handInfo, deliveryDate: deliveryDate, customDropOffPlace: customDropOffPlace )
-
-		return newOrder
-	}
-
-	func setOrderAddress(repAddress: recipientAddress, handInfo: String, packageSize: Int, numberPackages: Int, employeSign: String, customDropOffPlace: String) -> Order{
-
-		let newOrder = Order(token: "", timestamp: getCurrentDateTime(), employeeName: employeSign, firstName: repAddress.surName, lastName: repAddress.name, street: repAddress.street, houseNumber: repAddress.streetNr, zip: repAddress.zip, city: "Lingen", packageSize: packageSizes[packageSize], handlingInfo: handInfo, deliveryDate: "", customDropOffPlace: customDropOffPlace)
-
-		return newOrder
 	}
 
 	func getCurrentDateTime() -> String {
@@ -237,7 +213,6 @@ struct FirstStepView: View {
 		let currentHour = calendar.component(.hour, from: currentTime)
 		let currentMinute = calendar.component(.minute, from: currentTime)
 
-		// If current time is after 13:00, set the minimum date to the next day.
 		if currentHour >= 13 || (currentHour == 12 && currentMinute > 0) {
 			let nextDay = calendar.date(byAdding: .day, value: 1, to: currentTime)!
 			let startOfDay = calendar.startOfDay(for: nextDay)
@@ -251,10 +226,12 @@ struct FirstStepView: View {
 
 struct FirstStepView_Previews: PreviewProvider {
 	static var previews: some View {
-		let repAdress = recipientAddress(name: "Dettler", surName: "Jan", street: "Kaiserstraße", streetNr: "12", zip: "49809")
+		
 		let showShippingView = Binding.constant(false)
 
-		FirstStepView(showShippingView: showShippingView, repAddress: Binding.constant(repAdress))
+		let order = Binding.constant(Order(timestamp: "", employeeName: "", recipient: Recipient(firstName: "", lastName: "", address: Address(street: "", houseNumber: "", zip: "")), packageSize: "", handlingInfo: "", deliveryDate: "", customDropOffPlace: ""))
+
+		FirstStepView(showShippingView: showShippingView, order: order)
 	}
 }
 

@@ -15,7 +15,7 @@ class DataManager: ObservableObject {
 	}
 
 	@Published var errorLoading = false
-	@Published var allOrders: [PlacedOrder] = []
+	@Published var allOrders: [Order] = []
 
 	func loadData(){
 		getAllOrders()
@@ -23,7 +23,7 @@ class DataManager: ObservableObject {
 
 	private func getAllOrders(session: URLSession = URLSession.shared) {
 
-		NetworkManager.sendGetRequestWithArrayResponse(to: APIEndpoints.placedOrders, responseType: [PlacedOrder].self) { result in
+		NetworkManager.sendGetRequestWithArrayResponse(to: APIEndpoints.placedOrders, responseType: [Order].self) { result in
 			
 			DispatchQueue.main.async {
 				switch result {

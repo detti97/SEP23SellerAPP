@@ -9,7 +9,7 @@ import SwiftUI
 
 struct OrderDetailView: View {
 	
-	var order: PlacedOrder
+	var order: Order
 
 	var body: some View {
 
@@ -41,12 +41,12 @@ struct OrderDetailView: View {
 
 					VStack(alignment: .trailing, spacing: 10){
 
-						Text(String(order.orderID))
+						Text(String(order.orderID!))
 						Text(timeStampFormatter(timeStamp: order.timestamp))
 						Text(order.employeeName)
 						Text(order.packageSize)
 						Text(timeStampFormatter(timeStamp: order.deliveryDate))
-						Text(order.customDropoffPlace)
+						//Text(order.customDropoffPlace)
 
 						/*
 						 ForEach(order.handlingInfo.components(separatedBy: "&"), id: \.self) { info in
@@ -78,9 +78,9 @@ struct OrderDetailView: View {
 
 					VStack(alignment: .trailing, spacing: 10){
 
-						Text(order.firstName + " " + order.lastName )
-						Text(order.street + " " + order.houseNumber )
-						Text(String(order.ZIP) + " Lingen")
+						Text(order.recipient.firstName + " " + order.recipient.lastName )
+						Text(order.recipient.address.street + " " + order.recipient.address.houseNumber )
+						Text(String(order.recipient.address.zip) + " Lingen")
 
 					}
 
@@ -94,7 +94,7 @@ struct OrderDetailView: View {
 			)
 
 		}
-		.navigationTitle(order.lastName)
+		.navigationTitle(order.recipient.lastName)
 
 	}
 
@@ -105,7 +105,7 @@ struct OrderDetailView: View {
 struct OrderDetailView_Previews: PreviewProvider {
     static var previews: some View {
 
-		let test = PlacedOrder(orderID: 1, timestamp: "12-08-2023:23-23", employeeName: "Jobs", packageSize: "M", deliveryDate: "2014-08-22T22:00:00.000Z", customDropoffPlace: "Garage", handlingInfo: "Zerbrechlich&Zerbrechlich&Zerbrechlich", firstName: "Test", lastName: "test", street: "Kaiserstraße", houseNumber: "12", ZIP: 49809)
+		let test = Order.defaultOrder()
 
         OrderDetailView(order: test)
     }

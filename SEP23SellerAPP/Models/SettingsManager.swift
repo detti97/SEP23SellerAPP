@@ -32,12 +32,12 @@ class SettingsManager: ObservableObject {
 
 		func setSettings(newSettings: SetSetting){
 
-			NetworkManager.sendPostRequest(to: APIEndpoints.settings, with: newSettings, responseType: Setting.self){ result in
+			NetworkManager.sendPostRequest(to: APIEndpoints.settings, with: newSettings, responseType: ResponseToken.self){ result in
 				switch result {
 				case .success(let response):
 					print("Response: \(response)")
 					self.loadData()
-
+					NetworkManager.saveToken(response.token)
 				case .failure(let error):
 					print("Error: \(error)")
 

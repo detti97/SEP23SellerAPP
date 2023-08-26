@@ -16,7 +16,7 @@ struct ContentView: View {
 
     @State private var signInSuccess = false
 	@State private var showShippingView = false
-	@State private var repAddress = recipientAddress(name: "", surName: "", street: "", streetNr: "", zip: "")
+	@State private var order = Order.defaultOrder()
 
 	
 
@@ -28,7 +28,7 @@ struct ContentView: View {
 
 				if !showShippingView {
 					TabView{
-						QRCodeScannerView(showShippingView: $showShippingView , repAddress: $repAddress).tabItem{
+						QRCodeScannerView(showShippingView: $showShippingView , order: $order).tabItem{
 							Label("Neue Bestellung", systemImage: "airplane.departure")
 						}
 
@@ -53,7 +53,7 @@ struct ContentView: View {
 					}
 
 				}else {
-					FirstStepView(showShippingView: $showShippingView, repAddress: $repAddress)
+					FirstStepView(showShippingView: $showShippingView, order: $order)
 				}
             }else{
                 LogINView(signInSuccess: $signInSuccess)

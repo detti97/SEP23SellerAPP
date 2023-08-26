@@ -9,8 +9,8 @@ import SwiftUI
 
 struct AddressEditView: View {
 
-	@Binding var address: recipientAddress
-	@State var addressChanged = false
+	@Binding var recipient: Recipient
+	@Binding var addressChanged: Bool
 
 	var body: some View {
 
@@ -30,7 +30,7 @@ struct AddressEditView: View {
 
 
 			VStack{
-				addressFormView(address: $address ,success: $addressChanged)
+				addressFormView(recipient: $recipient ,success: $addressChanged)
 
 				if addressChanged{
 					
@@ -48,8 +48,8 @@ struct AddressEditView: View {
 struct AddressEditView_Previews: PreviewProvider {
     static var previews: some View {
 
-		let address = recipientAddress(name: "jan", surName: "de", street: "kais", streetNr: "12", zip: "49809")
+		let address = Recipient(firstName: "ja", lastName: "de", address: Address(street: "kais", houseNumber: "12", zip: "49809"))
 
-		AddressEditView(address: Binding.constant(address))
+		AddressEditView(recipient: Binding.constant(address), addressChanged: Binding.constant(false))
     }
 }
