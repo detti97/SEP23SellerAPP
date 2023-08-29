@@ -101,7 +101,7 @@ struct QRCodeScannerView: View {
 										  address: Address(street: details[2],
 										  houseNumber: details[3],
 										  zip: details[4]))
-            //self.repAddress = decodedString
+			
 			self.order.recipient = decodedString
 			print(decodedString)
 			print(self.order)

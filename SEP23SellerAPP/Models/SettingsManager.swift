@@ -112,61 +112,6 @@ class SettingsManager: ObservableObject {
 					print("Fail - Server")
 				}
 			}
-/*
-			let apiUrl = URL(string: APIEndpoints.setAddress)!
-
-			// Token
-			let token = getSavedToken()!
-
-			// Dein Objekt erstellen
-			let yourObject = SetAddress(address: address)
-
-			// URLRequest erstellen
-			var request = URLRequest(url: apiUrl)
-			request.httpMethod = "POST"
-			request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-			request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-			// Dein Objekt in JSON kodieren
-			let encoder = JSONEncoder()
-			do {
-				let jsonData = try encoder.encode(yourObject)
-				request.httpBody = jsonData
-			} catch {
-				print("Error encoding JSON: \(error)")
-				return
-			}
-
-			// URLSession-Konfiguration
-			let config = URLSessionConfiguration.default
-			let session = URLSession(configuration: config)
-
-			// Datenaufgabe
-			let task = session.dataTask(with: request) { data, response, error in
-				if let error = error {
-					print("Error: \(error)")
-					return
-				}
-
-				guard let data = data else {
-					print("No data received")
-					return
-				}
-
-				do {
-					// JSON-Daten in ein Swift-Objekt (z.B. Dictionary) konvertieren
-					if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-						// JSON in der Konsole ausgeben
-						print(json)
-					}
-				} catch {
-					print("JSON parsing error: \(error)")
-				}
-			}
-
-			// Anfrage starten
-			task.resume()
- */
 		}
 
 		func setPassword(oldPassword: String, newPassword: String){

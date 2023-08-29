@@ -16,7 +16,7 @@ struct ServerAnswer: Codable {
 
 struct DeliveryControllView: View {
 
-	@State var order: Order
+	@Binding var order: Order
 	@State private var orderID = "_"
 
 	@State private var isActiveDeliveryControll = true
@@ -116,10 +116,8 @@ struct DeliveryControllView: View {
 				Button(action: {
 					isActiveDeliveryControll = false
 					isActiveOrderSuccess = true
-					order.sendOrder(newOrder: order) { orderID in
-						print("Received order ID: \(orderID)")
-						self.orderID = orderID
-					}
+					order.timestamp = getCurrentDateTime()
+					sendOrder(newOrder: order)
 				}) {
 					Text("Bestellung senden")
 						.padding()
@@ -244,6 +242,7 @@ struct DeliveryControllView: View {
 						Button(action: {
 
 							showShippingView = false
+							order = Order.defaultOrder()
 
 						}) {
 							Text("Back to Dashboard")
@@ -256,7 +255,6 @@ struct DeliveryControllView: View {
 								.padding()
 						}
 					}
-
 			}
 
 		}
@@ -266,17 +264,12 @@ struct DeliveryControllView: View {
 		return UserDefaults.standard.string(forKey: "AuthToken")
 	}
 
-	/*func sendOrder(newOrder: Order){
+	func sendOrder(newOrder: Order){
 
-		var toSendOrder = newOrder
-		toSendOrder.token = getSavedToken()!
-
-		print("Order object \(toSendOrder)")
-
-		NetworkManager.sendPostRequest(to: APIEndpoints.order, with: toSendOrder, responseType: ServerAnswer.self){ result in
+		NetworkManager.sendPostRequest(to: APIEndpoints.order, with: newOrder, responseType: ServerAnswer.self){ result in
 			switch result {
 			case .success(let response):
-				print("Token: \(response)")
+				print("OrderID: \(response)")
 				orderSuccess = true
 				self.orderID = String(response.orderID)
 
@@ -288,13 +281,21 @@ struct DeliveryControllView: View {
 			}
 		}
 
-	}*/
+	}
+
+	func getCurrentDateTime() -> String {
+		let now = Date()
+		let formatter = DateFormatter()
+		formatter.dateFormat = "dd-MM-yyyy:HH-mm-ss.SSS"
+		print(formatter.string(from: now))
+		return formatter.string(from: now)
+	}
 
 }
 
 struct DeliveryControllView_Previews: PreviewProvider {
 	static var previews: some View {
 		let order = Order(timestamp: "", employeeName: "", recipient: Recipient(firstName: "", lastName: "", address: Address(street: "", houseNumber: "", zip: "")), packageSize: "", handlingInfo: "", deliveryDate: "", customDropOffPlace: "")
-		DeliveryControllView(order: order, showShippingView: Binding.constant(false))
+		DeliveryControllView(order: Binding.constant(order), showShippingView: Binding.constant(false))
 	}
 }

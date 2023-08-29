@@ -146,7 +146,7 @@ struct FirstStepView: View {
 							.cornerRadius(24)
 					}
 					.sheet(isPresented: $isShowingDeliveryControll) {
-						DeliveryControllView(order: order, showShippingView: $showShippingView)
+						DeliveryControllView(order: $order, showShippingView: $showShippingView)
 
 					}
 
@@ -177,15 +177,13 @@ struct FirstStepView: View {
 		let combinedNames = markedInfos.map { $0.name }.joined(separator: "&")
 		return combinedNames
 	}
-
 	func getCurrentDateTime() -> String {
 		let now = Date()
 		let formatter = DateFormatter()
-		formatter.dateFormat = "dd-MM-yyyy:HH-mm-ss"
+		formatter.dateFormat = "dd-MM-yyyy:HH-mm-ss.SSS"
 		print(formatter.string(from: now))
 		return formatter.string(from: now)
 	}
-
 	func defaultDeliveryDate() -> String {
 
 		let formatter = DateFormatter()

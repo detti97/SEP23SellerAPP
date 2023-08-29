@@ -45,7 +45,7 @@ struct Order: Decodable, Encodable{
 					 deliveryDate: "",
 					 customDropOffPlace: "")
 	}
-
+/*
 	func sendOrder(newOrder: Order, completion: @escaping (String) -> Void) {
 		var toSendOrder = newOrder
 		var orderID = ""
@@ -69,7 +69,7 @@ struct Order: Decodable, Encodable{
 		}
 	}
 
-
+*/
 
 		func getSavedToken() -> String? {
 			return UserDefaults.standard.string(forKey: "AuthToken")
