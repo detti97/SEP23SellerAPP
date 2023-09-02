@@ -260,10 +260,7 @@ struct DeliveryControllView: View {
 		}
 	}
 
-	func getSavedToken() -> String? {
-		return UserDefaults.standard.string(forKey: "AuthToken")
-	}
-
+	
 	func sendOrder(newOrder: Order){
 
 		NetworkManager.sendPostRequest(to: APIEndpoints.order, with: newOrder, responseType: ServerAnswer.self){ result in

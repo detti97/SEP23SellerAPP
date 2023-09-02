@@ -10,7 +10,7 @@ import Foundation
 
 struct Order: Decodable, Encodable{
 
-	var orderID: String?
+	var orderID: Int?
 	var timestamp: String
 	var employeeName: String
 	var recipient: Recipient

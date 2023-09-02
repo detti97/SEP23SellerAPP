@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum RequestResult<T> {
 	case success(T)
@@ -22,11 +23,16 @@ enum APIEndpoints {
 	static let setPassword = "http://131.173.65.77:8080/auth/updatePassword"
 }
 
+
 class NetworkManager {
 
 
-	private static func sendPostRequestInternal<T: Encodable, U: Decodable>(to endpoint: String, with data: T, responseType: U.Type, completion: @escaping (RequestResult<U>) -> Void) {
-
+	private static func sendPostRequestInternal<T: Encodable, U: Decodable>(
+		to endpoint: String,
+		with data: T,
+		responseType: U.Type,
+		completion: @escaping (RequestResult<U>) -> Void
+	) {
 		guard let url = URL(string: endpoint) else {
 			completion(.failure(NSError(domain: "Invalid URL", code: -1, userInfo: nil)))
 			return
@@ -41,8 +47,7 @@ class NetworkManager {
 		var request = URLRequest(url: url)
 		request.httpMethod = "POST"
 
-		if endpoint != APIEndpoints.login{
-
+		if endpoint != APIEndpoints.login {
 			guard let token = getSavedToken() else {
 				completion(.failure(NSError(domain: "No Token", code: -1, userInfo: nil)))
 				return
@@ -53,36 +58,32 @@ class NetworkManager {
 		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 		request.httpBody = requestData
 
-		let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+		let sessionConfig = URLSessionConfiguration.default
+		sessionConfig.timeoutIntervalForResource = 3
+		let session = URLSession(configuration: sessionConfig)
+
+		let task = session.dataTask(with: request) { (data, response, error) in
 			if let error = error {
 				completion(.failure(error))
 				return
 			}
 
 			if let httpResponse = response as? HTTPURLResponse {
-
 				if endpoint == APIEndpoints.setAddress || endpoint == APIEndpoints.setPassword {
-
 					let responseCode = httpResponse.statusCode
-
-					if responseCode == 200{
-
-						print("server response: \(responseCode)")
+					if responseCode == 200 {
+						print("Server response: \(responseCode)")
 						completion(.successNoAnswer(true))
-
-					}else {
-						print("server response: \(responseCode)")
+					} else {
+						print("Server response: \(responseCode)")
 						completion(.successNoAnswer(false))
-
 					}
-
 				} else {
 					guard let responseData = data else {
 						completion(.failure(NSError(domain: "No data received", code: -1, userInfo: nil)))
 						return
 					}
 					print("Response data:", String(data: responseData, encoding: .utf8) ?? "")
-
 					do {
 						let decodedResponse = try JSONDecoder().decode(U.self, from: responseData)
 						completion(.success(decodedResponse))
@@ -96,50 +97,54 @@ class NetworkManager {
 		}
 
 		task.resume()
-
 	}
 
+
 	static func sendGetRequest<T: Decodable>(to endpoint: String, responseType: T.Type, completion: @escaping (RequestResult<T>) -> Void) {
+		guard let token = getSavedToken() else {
+			completion(.failure(NSError(domain: "No Token", code: -1, userInfo: nil)))
+			return
+		}
 
-			guard let token = getSavedToken() else {
-				completion(.failure(NSError(domain: "No Token", code: -1, userInfo: nil)))
+		guard let url = URL(string: endpoint) else {
+			completion(.failure(NSError(domain: "Invalid URL", code: -1, userInfo: nil)))
+			return
+		}
+
+		var request = URLRequest(url: url)
+		request.httpMethod = "GET"
+		request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+		let sessionConfig = URLSessionConfiguration.default
+		sessionConfig.timeoutIntervalForResource = 2
+		let session = URLSession(configuration: sessionConfig)
+
+		let task = session.dataTask(with: request) { (data, response, error) in
+			if let error = error {
+				completion(.failure(error))
 				return
 			}
 
-			guard let url = URL(string: endpoint) else {
-				completion(.failure(NSError(domain: "Invalid URL", code: -1, userInfo: nil)))
-				return
-			}
-
-			var request = URLRequest(url: url)
-			request.httpMethod = "GET"
-			request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-
-			let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-				if let error = error {
-					completion(.failure(error))
+			if response is HTTPURLResponse {
+				guard let responseData = data else {
+					completion(.failure(NSError(domain: "No data received", code: -1, userInfo: nil)))
 					return
 				}
-
-				if response is HTTPURLResponse {
-					guard let responseData = data else {
-						completion(.failure(NSError(domain: "No data received", code: -1, userInfo: nil)))
-						return
-					}
-					print("Response JSON:", String(data: responseData, encoding: .utf8) ?? "")
-					do {
-						let decodedResponse = try JSONDecoder().decode(T.self, from: responseData)
-						completion(.success(decodedResponse))
-					} catch {
-						completion(.failure(error))
-					}
-				} else {
-					completion(.failure(NSError(domain: "Invalid response", code: -1, userInfo: nil)))
+				print("Response JSON:", String(data: responseData, encoding: .utf8) ?? "")
+				do {
+					let decodedResponse = try JSONDecoder().decode(T.self, from: responseData)
+					completion(.success(decodedResponse))
+				} catch {
+					completion(.failure(error))
 				}
+			} else {
+				completion(.failure(NSError(domain: "Invalid response", code: -1, userInfo: nil)))
 			}
-
-			task.resume()
 		}
+
+		task.resume()
+	}
+
 
 	static func getSavedToken() -> String? {
 		return UserDefaults.standard.string(forKey: "AuthToken")
@@ -160,5 +165,7 @@ class NetworkManager {
 	static func sendGetRequestWithArrayResponse<U: Decodable>(to endpoint: String, responseType: [U].Type, completion: @escaping (RequestResult<[U]>) -> Void) {
 		sendGetRequest(to: endpoint, responseType: responseType, completion: completion)
 	}
+
+
 }
 

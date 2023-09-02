@@ -15,6 +15,39 @@ struct FieldTapped{
 
 }
 
+extension String {
+	var containsEmoji: Bool {
+		return unicodeScalars.contains { $0.isEmoji }
+	}
+
+	var removingEmoji: String {
+		return String(unicodeScalars.filter { !$0.isEmoji })
+	}
+}
+
+extension UnicodeScalar {
+
+	var isEmoji: Bool {
+		return (0x1F600...0x1F64F).contains(value) || // Emoticons
+			(0x1F300...0x1F5FF).contains(value) ||   // Verschiedene Symbole und Piktogramme
+			(0x1F680...0x1F6FF).contains(value) ||   // Transport und Landkarten Symbole
+			(0x1F700...0x1F77F).contains(value) ||   // Alchemie Symbole
+			(0x1F780...0x1F7FF).contains(value) ||   // Geometrische Formen erweitert
+			(0x1F800...0x1F8FF).contains(value) ||   // Verschiedene Symbole erweitert
+			(0x1F900...0x1F9FF).contains(value) ||   // Supplementär Mathematische Operatoren
+			(0x1FA00...0x1FA6F).contains(value) ||   // Unterstützung für Zodiac und Mitzodiak Zeichen
+			(0x1FA70...0x1FAFF).contains(value) ||   // Verschiedene Symbole erweitert - Astronomie und Astrologie
+			(0x1FAB0...0x1FABF).contains(value) ||   // Verschiedene Symbole erweitert - Gesteinszeichnungen
+			(0x1FAC0...0x1FAFF).contains(value) ||   // Verschiedene Symbole erweitert - Astrologische Symbole
+			(0x1FAD0...0x1FAFF).contains(value) ||   // Verschiedene Symbole erweitert - Ornamente
+			(0x1FAE0...0x1FAFF).contains(value) ||   // Verschiedene Symbole erweitert - Fleisch, Knochen
+			(0x1FAF0...0x1FAFF).contains(value) ||   // Verschiedene Symbole erweitert - Umwelt
+			(0x1FDB0...0x1FDBF).contains(value) ||   // Zusätzliche Emoticons
+			(0x1F004...0x1F0CF).contains(value) ||   // Zusätzliche Emoticons und Symbole
+			(0x1F170...0x1F251).contains(value)      // Zusätzliche Symbole
+	}
+}
+
 
 struct addressFormView: View {
 
@@ -42,6 +75,7 @@ struct addressFormView: View {
 
 
 
+
 	var body: some View {
 
 		VStack{
@@ -63,6 +97,13 @@ struct addressFormView: View {
 
 						fields[0].textEntert = true
 					}
+					.onChange(of: recipient.firstName) { newValue in
+									// Überprüfe die Eingabe auf Emojis
+									if newValue.containsEmoji {
+										// Emoji gefunden, entferne es aus der Eingabe
+										recipient.firstName = newValue.removingEmoji
+									}
+								}
 					.overlay(RoundedRectangle(cornerRadius: 24)
 						.stroke(fields[0].turnRed ? Color.red : Color.gray, lineWidth: 3)
 					)
@@ -153,6 +194,12 @@ struct addressFormView: View {
 					.onSubmit {
 						focusField = .zip
 					}
+					.onChange(of: recipient.address.houseNumber) { newValue in
+									if newValue.count > 5 {
+										recipient.address.houseNumber = String(newValue.prefix(5))
+									}
+								}
+					.keyboardType(.decimalPad)
 				Picker("Postleitzahl", selection: $recipient.address.zip) {
 					ForEach(zipCodes, id: \.self) { plz in
 						Text(plz)
@@ -246,6 +293,8 @@ struct addressFormView: View {
 			}
 		}
 	}
+
+
 }
 
 struct AddressFormView_Previews: PreviewProvider {

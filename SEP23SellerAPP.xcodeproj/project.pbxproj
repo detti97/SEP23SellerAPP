@@ -27,6 +27,8 @@
 		60545B472A977A9100539157 /* CustomTextFieldStyleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60545B462A977A9100539157 /* CustomTextFieldStyleView.swift */; };
 		60545B492A977CC400539157 /* AddressEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60545B482A977CC400539157 /* AddressEditView.swift */; };
 		60545B4B2A99828B00539157 /* Recipient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60545B4A2A99828B00539157 /* Recipient.swift */; };
+		605BBEC82AA350DD008BC455 /* CodeScannerSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605BBEC72AA350DD008BC455 /* CodeScannerSheetView.swift */; };
+		605BBECC2AA3717C008BC455 /* ConnectionErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605BBECB2AA3717C008BC455 /* ConnectionErrorView.swift */; };
 		6084D5562A5F45D2005AC588 /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D5552A5F45D2005AC588 /* Setting.swift */; };
 		6084D55E2A85194F005AC588 /* OrderData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D55D2A85194F005AC588 /* OrderData.swift */; };
 		6084D5602A852BFE005AC588 /* OrderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6084D55F2A852BFE005AC588 /* OrderDetailView.swift */; };
@@ -71,6 +73,8 @@
 		60545B462A977A9100539157 /* CustomTextFieldStyleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldStyleView.swift; sourceTree = "<group>"; };
 		60545B482A977CC400539157 /* AddressEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressEditView.swift; sourceTree = "<group>"; };
 		60545B4A2A99828B00539157 /* Recipient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipient.swift; sourceTree = "<group>"; };
+		605BBEC72AA350DD008BC455 /* CodeScannerSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeScannerSheetView.swift; sourceTree = "<group>"; };
+		605BBECB2AA3717C008BC455 /* ConnectionErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionErrorView.swift; sourceTree = "<group>"; };
 		6084D5552A5F45D2005AC588 /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
 		6084D55D2A85194F005AC588 /* OrderData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderData.swift; sourceTree = "<group>"; };
 		6084D55F2A852BFE005AC588 /* OrderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDetailView.swift; sourceTree = "<group>"; };
@@ -183,9 +187,11 @@
 				604287C429E21733009798B5 /* CheckoutViews */,
 				604287BB29E0B242009798B5 /* AddressControllView.swift */,
 				604287B929E0A189009798B5 /* QRCodeScannerView.swift */,
+				605BBEC72AA350DD008BC455 /* CodeScannerSheetView.swift */,
 				6084D5652A8551A3005AC588 /* AddressPanelView.swift */,
 				603CC74E2A4B0DE000C3D3E3 /* LogINView.swift */,
 				526962BA2A4CBA1400835E8B /* SettingView.swift */,
+				605BBECB2AA3717C008BC455 /* ConnectionErrorView.swift */,
 				601644E12A950CDA005A608D /* SettingsManager.swift */,
 				6084D5942A8FB704005AC588 /* StoreDetailPreviewView.swift */,
 				6084D5632A85368D005AC588 /* Statistic2View.swift */,
@@ -324,6 +330,7 @@
 				604287C629E21769009798B5 /* FirstStepView.swift in Sources */,
 				6084D5602A852BFE005AC588 /* OrderDetailView.swift in Sources */,
 				6084D56C2A893CDD005AC588 /* API.swift in Sources */,
+				605BBEC82AA350DD008BC455 /* CodeScannerSheetView.swift in Sources */,
 				60545B492A977CC400539157 /* AddressEditView.swift in Sources */,
 				604287BC29E0B242009798B5 /* AddressControllView.swift in Sources */,
 				6084D56A2A8913E0005AC588 /* LoginData.swift in Sources */,
@@ -332,6 +339,7 @@
 				601644E22A950CDA005A608D /* SettingsManager.swift in Sources */,
 				604287C829E21B3C009798B5 /* HandlingInfo.swift in Sources */,
 				526962BB2A4CBA1400835E8B /* SettingView.swift in Sources */,
+				605BBECC2AA3717C008BC455 /* ConnectionErrorView.swift in Sources */,
 				604287A729E08062009798B5 /* SEP23SellerAPPApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

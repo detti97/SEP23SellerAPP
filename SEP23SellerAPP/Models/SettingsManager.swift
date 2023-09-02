@@ -12,22 +12,28 @@ import SwiftUI
 class SettingsManager: ObservableObject {
 
 	@Published var settings: Setting
+	@Published var getSettingsFail = false
 
 	init(settings: Setting = Setting(storeName: "", owner: "", address: Address(street: "", houseNumber: "", zip: ""),
 									 telephone: "", email: "", logo: "", backgroundImage: "")) {
 			self.settings = settings
+			self.getSettingsFail = getSettingsFail
 		}
 
 	func loadData() {
+
 		getSettings { setting in
 			DispatchQueue.main.async {
 				if let setting = setting {
 					self.settings = setting
+
 				} else {
-					print("Fehler")
+
 				}
+
 			}
 		}
+
 	}
 
 		func setSettings(newSettings: SetSetting){
@@ -80,13 +86,15 @@ class SettingsManager: ObservableObject {
 
 
 		func getSettings(completion: @escaping (Setting?) -> Void) {
-			NetworkManager.sendGetRequest(to: APIEndpoints.settings, responseType: Setting.self) { result in
+			NetworkManager.sendGetRequest(to: APIEndpoints.settings, responseType: Setting.self) { [self] result in
 				switch result {
 				case .success(let response):
 					print("Setting: \(response)")
 					completion(response)
 				case .failure(let error):
 					print("Error: \(error)")
+					//self.getSettingsFail = true
+					setFailBool(fail: true)
 					completion(nil)
 				case .successNoAnswer(_):
 					print("Success")
@@ -132,6 +140,15 @@ class SettingsManager: ObservableObject {
 				}
 			}
 		}
+
+	func setFailBool(fail: Bool){
+		self.getSettingsFail = fail
+		print("setFailBool \(fail)")
+	}
+
+	func getFailBool() -> Bool{
+		return getSettingsFail
+	}
 
 
 

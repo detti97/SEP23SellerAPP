@@ -19,6 +19,7 @@ struct SettingView: View {
 	@State private var showEditOwner = false
 	@State private var showPreview = false
 	@State private var showEditPassword = false
+	@State private var tryAgainBool = false
 	@State private var address = Address(street: "", houseNumber: "", zip: "")
 	@State private var backgroundPickerItem: PhotosPickerItem?
 
@@ -30,199 +31,213 @@ struct SettingView: View {
 
 		NavigationView{
 
-			VStack{
+			if settingsManager.getSettingsFail{
+
+				ConnectionErrorView(tryAgainButtonBool: $tryAgainBool)
+					.onChange(of: tryAgainBool) { newValue in
+						if newValue{
+							tryAgainBool = false
+							settingsManager.setFailBool(fail: false)
+							settingsManager.loadData()
+
+						}
+					}
+
+			}else {
 
 				VStack{
 
-					ZStack{
+					VStack{
 
+						ZStack{
 
-						if let url = URL(string: settingsManager.settings.backgroundImage) {
-							AsyncImage(url: url) { phase in
-								switch phase {
-								case .success(let image):
-									image.resizable()
-										.scaledToFill()
-										.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-										.opacity(0.7)
-								default:
-									Color.clear
-								}
-							}
-							.edgesIgnoringSafeArea(.all)
-							.frame(height: 180)
-						}
-
-
-
-						VStack(alignment: .center){
-
-							HStack{
-
-								VStack{
-
-									AsyncImage(url: URL(string: settingsManager.settings.logo)) { image in
+							if let url = URL(string: settingsManager.settings.backgroundImage) {
+								AsyncImage(url: url) { phase in
+									switch phase {
+									case .success(let image):
 										image.resizable()
-									} placeholder: {
-										ProgressView()
+											.scaledToFill()
+											.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+											.opacity(0.7)
+									default:
+										Color.clear
 									}
-									.frame(width: 100, height: 100)
-									.clipShape(Circle())
-									.overlay {
-										Circle().stroke(Color.white, lineWidth: 4)
-									}
-									.shadow(radius: 6)
-									.accessibility(identifier: "storeLogo")
 								}
-								.onTapGesture {
+								.edgesIgnoringSafeArea(.all)
+								.frame(height: 180)
+							}
 
 
-								}
+
+							VStack(alignment: .center){
+
 								HStack{
 
 									VStack{
-										Image(systemName: "person")
-											.font(.headline)
-										Image(systemName: "house")
-											.font(.headline)
-										Image(systemName: "phone")
-											.font(.headline)
-										Image(systemName: "envelope")
-											.font(.headline)
+
+										AsyncImage(url: URL(string: settingsManager.settings.logo)) { image in
+											image.resizable()
+										} placeholder: {
+											ProgressView()
+										}
+										.frame(width: 100, height: 100)
+										.clipShape(Circle())
+										.overlay {
+											Circle().stroke(Color.white, lineWidth: 4)
+										}
+										.shadow(radius: 6)
+										.accessibility(identifier: "storeLogo")
+									}
+									.onTapGesture {
+
 
 									}
+									HStack{
 
-									VStack{
-										Text(settingsManager.settings.owner)
-										Text("\(settingsManager.settings.address.street) \(settingsManager.settings.address.houseNumber)")
-										Text(settingsManager.settings.telephone)
-										Text(settingsManager.settings.email)
+										VStack{
+											Image(systemName: "person")
+												.font(.headline)
+											Image(systemName: "house")
+												.font(.headline)
+											Image(systemName: "phone")
+												.font(.headline)
+											Image(systemName: "envelope")
+												.font(.headline)
+
+										}
+
+										VStack{
+											Text(settingsManager.settings.owner)
+											Text("\(settingsManager.settings.address.street) \(settingsManager.settings.address.houseNumber)")
+											Text(settingsManager.settings.telephone)
+											Text(settingsManager.settings.email)
+										}
+
 									}
+									.padding()
+									.background()
+									.cornerRadius(10)
+									.shadow(radius: 6)
 
 								}
-								.padding()
-								.background()
-								.cornerRadius(10)
-								.shadow(radius: 6)
 
 							}
 
 						}
 
-
 					}
 
-				}
+					Form {
+						Section(header: Text("Geschäftsinformationen")) {
 
-				Form {
-					Section(header: Text("Geschäftsinformationen")) {
+							Button(action: {
+								showEditPhoneNumber = true
+							}) {
+								Text("Telefonnummer bearbeiten")
+							}
+							.sheet(isPresented: $showEditPhoneNumber) {
+								EditPhoneNumberView(phoneNumber: $settingsManager.settings.telephone)
+									.environmentObject(settingsManager)
+							}
 
-						Button(action: {
-							showEditPhoneNumber = true
-						}) {
-							Text("Telefonnummer bearbeiten")
+							Button(action: {
+								showEditEmail = true
+							}) {
+								Text("E-Mail ändern")
+							}
+							.sheet(isPresented: $showEditEmail) {
+								EditEmailView(email: $settingsManager.settings.email)
+									.environmentObject(settingsManager)
+							}
+							Button(action: {
+								showEditOwner = true
+							}) {
+								Text("Inhaber ändern")
+							}
+							.sheet(isPresented: $showEditOwner) {
+								EditOwnerView(owner: $settingsManager.settings.owner)
+									.environmentObject(settingsManager)
+							}
+							Button(action: {
+								showEditAddress = true
+							}) {
+								Text("Adresse bearbeiten")
+							}
+							.sheet(isPresented: $showEditAddress) {
+								EditAddressView(address: $settingsManager.settings.address)
+									.environmentObject(settingsManager)
+							}
+							Button(action: {
+								showEditPassword = true
+							}) {
+								Text("Passwort ändern")
+							}
+							.sheet(isPresented: $showEditPassword) {
+								EditPasswordView()
+									.environmentObject(settingsManager)
+							}
 						}
-						.sheet(isPresented: $showEditPhoneNumber) {
-							EditPhoneNumberView(phoneNumber: $settingsManager.settings.telephone)
-								.environmentObject(settingsManager)
-						}
-
-						Button(action: {
-							showEditEmail = true
-						}) {
-							Text("E-Mail ändern")
-						}
-						.sheet(isPresented: $showEditEmail) {
-							EditEmailView(email: $settingsManager.settings.email)
-								.environmentObject(settingsManager)
-						}
-						Button(action: {
-							showEditOwner = true
-						}) {
-							Text("Inhaber ändern")
-						}
-						.sheet(isPresented: $showEditOwner) {
-							EditOwnerView(owner: $settingsManager.settings.owner)
-								.environmentObject(settingsManager)
-						}
-						Button(action: {
-							showEditAddress = true
-						}) {
-							Text("Adresse bearbeiten")
-						}
-						.sheet(isPresented: $showEditAddress) {
-							EditAddressView(address: $settingsManager.settings.address)
-								.environmentObject(settingsManager)
-						}
-						Button(action: {
-							showEditPassword = true
-						}) {
-							Text("Passwort ändern")
-						}
-						.sheet(isPresented: $showEditPassword) {
-							EditPasswordView()
-								.environmentObject(settingsManager)
-						}
-					}
-					Section(header: Text("Bilder ändern")) {
-						VStack {
-							PhotosPicker("Hintergrund ändern", selection: $backgroundPickerItem, matching: .images)
-						}
-						.onChange(of: backgroundPickerItem) { _ in
-							Task {
-								if let data = try? await backgroundPickerItem?.loadTransferable(type: Data.self) {
-									if let uiImage = UIImage(data: data) {
-										settingsManager.setImage(uiImage, parameter: SetSetting.Parameters.backgroundImage)
-										return
+						Section(header: Text("Bilder ändern")) {
+							VStack {
+								PhotosPicker("Hintergrund ändern", selection: $backgroundPickerItem, matching: .images)
+							}
+							.onChange(of: backgroundPickerItem) { _ in
+								Task {
+									if let data = try? await backgroundPickerItem?.loadTransferable(type: Data.self) {
+										if let uiImage = UIImage(data: data) {
+											settingsManager.setImage(uiImage, parameter: SetSetting.Parameters.backgroundImage)
+											return
+										}
 									}
-								}
 
-								print("Failed")
+									print("Failed")
+								}
+							}
+
+							VStack {
+								PhotosPicker("Logo ändern", selection: $logoPickerItem, matching: .images)
+							}
+							.onChange(of: logoPickerItem) { _ in
+								Task {
+									if let data = try? await logoPickerItem?.loadTransferable(type: Data.self) {
+										if let uiImage = UIImage(data: data) {
+											settingsManager.setImage(uiImage, parameter: SetSetting.Parameters.logo)
+											return
+										}
+									}
+
+									print("Failed")
+								}
 							}
 						}
 
-						VStack {
-							PhotosPicker("Logo ändern", selection: $logoPickerItem, matching: .images)
-						}
-						.onChange(of: logoPickerItem) { _ in
-							Task {
-								if let data = try? await logoPickerItem?.loadTransferable(type: Data.self) {
-									if let uiImage = UIImage(data: data) {
-										settingsManager.setImage(uiImage, parameter: SetSetting.Parameters.logo)
-										return
-									}
-								}
 
-								print("Failed")
+						Section {
+							Button(action: {
+								signOut()
+							}) {
+								Text("Abmelden")
+									.foregroundColor(.red)
+							}
+							Button(action: {
+								showPreview = true
+							}) {
+								Text("Vorschau anzeigen")
+									.foregroundColor(.green)
+							}
+							.sheet(isPresented: $showPreview) {
+								StoreDetailPreviewView(showPreview: $showPreview, store: settingsManager.settings)
 							}
 						}
-					}
+						.navigationBarTitle("Einstellungen")
+						.navigationBarTitleDisplayMode(.inline)
+						.onAppear{
+							if(getSavedToken() == nil){ //Only for preview, to prevent crash
+								print("no token")
+							}else{
+								settingsManager.loadData()
+							}
 
-
-					Section {
-						Button(action: {
-							signOut()
-						}) {
-							Text("Abmelden")
-								.foregroundColor(.red)
-						}
-						Button(action: {
-							showPreview = true
-						}) {
-							Text("Vorschau anzeigen")
-								.foregroundColor(.green)
-						}
-						.sheet(isPresented: $showPreview) {
-							StoreDetailPreviewView(showPreview: $showPreview, store: settingsManager.settings)
-						}
-					}
-					.navigationBarTitle("Einstellungen")
-					.navigationBarTitleDisplayMode(.inline)
-					.onAppear{
-						if(getSavedToken() == nil){
-							print("no token")
-						}else{
-							settingsManager.loadData()
 						}
 					}
 				}
@@ -255,6 +270,7 @@ struct SettingView: View {
 				.navigationBarTitle("Email bearbeiten")
 				.navigationBarItems(leading: cancelButton, trailing: saveButton)
 			}
+			.disabled(email.isEmpty == true)
 		}
 
 		private var saveButton: some View {
@@ -299,6 +315,7 @@ struct SettingView: View {
 			}) {
 				Text("Speichern")
 			}
+			.disabled(owner.isEmpty == true)
 		}
 
 		private var cancelButton: some View {
@@ -343,6 +360,7 @@ struct SettingView: View {
 			}) {
 				Text("Speichern")
 			}
+			
 		}
 
 		private var cancelButton: some View {
@@ -368,6 +386,7 @@ struct SettingView: View {
 				.navigationBarTitle("Telefonnummer bearbeiten")
 				.navigationBarItems(leading: cancelButton, trailing: saveButton)
 			}
+			.disabled(phoneNumber.isEmpty == true)
 		}
 
 		private var saveButton: some View {
@@ -414,6 +433,8 @@ struct SettingView: View {
 			}) {
 				Text("Speichern")
 			}
+			.disabled(oldPassword.isEmpty == true)
+			.disabled(newPassword.isEmpty == true)
 		}
 
 		private var cancelButton: some View {

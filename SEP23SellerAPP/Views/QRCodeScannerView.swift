@@ -12,6 +12,8 @@ struct QRCodeScannerView: View {
 	@Binding var showShippingView: Bool
 	@Binding var order: Order
 	@State var addressEntered = false
+	@State var scanFail = false
+	@State var showScanFailAlert = false
 
     
     var body: some View {
@@ -45,8 +47,8 @@ struct QRCodeScannerView: View {
                 }
                 .foregroundColor(.white)
 				.fontWeight(.heavy)
-                .sheet(isPresented: $isShowingScanner) {
-                    CodeScannerView(codeTypes: [.qr], showViewfinder: true, simulatedData: "Steve&Jobs&Bernd-Rosemeyer-Straße&40&49808", completion: handleScan)
+				.sheet(isPresented: $isShowingScanner, onDismiss: {scanFail = true}) {
+                    CodeScannerSheetView(isShowingScanner: $isShowingScanner, showShippingView: $showShippingView, order: $order)
                 }
 
 				Button{
@@ -71,6 +73,7 @@ struct QRCodeScannerView: View {
 								.font(.headline)
 						}
 					}
+
 				}
 				.foregroundColor(.white)
 				.fontWeight(.heavy)
@@ -85,6 +88,7 @@ struct QRCodeScannerView: View {
 
             }
 			.navigationTitle("Neue Bestellung aufgeben")
+
         }
 
     }
@@ -94,10 +98,15 @@ struct QRCodeScannerView: View {
         switch result{
         case .success(let result):
             let details = result.string.components(separatedBy: "&")
-            guard details.count <= 6 else { return }
+			guard details.count == 6 || details.count == 5 else {
+
+				scanFail = true
+				return
+
+			}
             
-            let decodedString = Recipient(firstName: details[1],
-										  lastName: details[0],
+            let decodedString = Recipient(firstName: details[0],
+										  lastName: details[1],
 										  address: Address(street: details[2],
 										  houseNumber: details[3],
 										  zip: details[4]))
@@ -109,8 +118,9 @@ struct QRCodeScannerView: View {
             
         case .failure(let error):
             print("Scanning failed: \(error.localizedDescription)")
+			scanFail = true
+			return
         }
-        
     }
 }
 
