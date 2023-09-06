@@ -30,7 +30,6 @@ class SettingsManager: ObservableObject {
 				} else {
 
 				}
-
 			}
 		}
 
@@ -93,7 +92,6 @@ class SettingsManager: ObservableObject {
 					completion(response)
 				case .failure(let error):
 					print("Error: \(error)")
-					//self.getSettingsFail = true
 					setFailBool(fail: true)
 					completion(nil)
 				case .successNoAnswer(_):

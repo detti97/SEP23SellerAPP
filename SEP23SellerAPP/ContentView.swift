@@ -28,11 +28,11 @@ struct ContentView: View {
 
 				if !showShippingView {
 					TabView{
-						QRCodeScannerView(showShippingView: $showShippingView , order: $order).tabItem{
+						NewOrderMenuView(showShippingView: $showShippingView , order: $order).tabItem{
 							Label("Neue Bestellung", systemImage: "airplane.departure")
 						}
 
-						StatistcView().tabItem{
+						OrderHistoryListView().tabItem{
 							Label("Aufgegebe Bestellungen", systemImage: "shippingbox.and.arrow.backward.fill")
 						}
 

@@ -5,7 +5,7 @@
 import SwiftUI
 import CodeScanner
 
-struct QRCodeScannerView: View {
+struct NewOrderMenuView: View {
 
     @State private var isShowingScanner = false
 	@State private var isShowingAddressPanel = false
@@ -92,36 +92,7 @@ struct QRCodeScannerView: View {
         }
 
     }
-    
-    func handleScan(result: Result<ScanResult, ScanError>) {
-        isShowingScanner = false
-        switch result{
-        case .success(let result):
-            let details = result.string.components(separatedBy: "&")
-			guard details.count == 6 || details.count == 5 else {
 
-				scanFail = true
-				return
-
-			}
-            
-            let decodedString = Recipient(firstName: details[0],
-										  lastName: details[1],
-										  address: Address(street: details[2],
-										  houseNumber: details[3],
-										  zip: details[4]))
-			
-			self.order.recipient = decodedString
-			print(decodedString)
-			print(self.order)
-			showShippingView = true
-            
-        case .failure(let error):
-            print("Scanning failed: \(error.localizedDescription)")
-			scanFail = true
-			return
-        }
-    }
 }
 
 struct QRCodeScannerView_Previews: PreviewProvider {
@@ -131,6 +102,6 @@ struct QRCodeScannerView_Previews: PreviewProvider {
 		let order = Binding.constant(Order(timestamp: "", employeeName: "", recipient: Recipient(firstName: "", lastName: "", address: Address(street: "", houseNumber: "", zip: "")), packageSize: "", handlingInfo: "", deliveryDate: "", customDropOffPlace: ""))
 		
 
-		QRCodeScannerView(showShippingView: showShippingView, order: order)
+		NewOrderMenuView(showShippingView: showShippingView, order: order)
     }
 }

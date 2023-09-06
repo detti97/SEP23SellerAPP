@@ -38,80 +38,8 @@ struct DeliveryControllView: View {
 
 			ScrollView {
 				Spacer(minLength: 70)
-				VStack(alignment: .leading, spacing: 20) {
 
-					HStack{
-						Image(systemName: "shippingbox")
-						Text("Lieferungsübersicht")
-					}
-					.foregroundColor(.purple)
-					.font(.system(size: 26))
-					.fontWeight(.heavy)
-
-					HStack{
-
-						VStack (alignment: .leading, spacing: 10){
-
-							Text("Mitarbeiter: ")
-							Text("Paket Größe: ")
-							Text("Wichtige Hinweise: ")
-							Text("Lieferdatum: ")
-
-
-
-						}
-						.fontWeight(.heavy)
-
-						VStack(alignment: .trailing, spacing: 10){
-
-							Text(order.employeeName)
-							Text(order.packageSize)
-							Text(order.handlingInfo)
-							Text(order.deliveryDate)
-
-						}
-
-					}
-
-					Spacer()
-
-					HStack{
-						Image(systemName: "house")
-						Text("Lieferadresse")
-					}
-					.foregroundColor(.purple)
-					.font(.system(size: 26))
-					.fontWeight(.heavy)
-
-					HStack{
-
-						VStack (alignment: .leading, spacing: 10){
-
-							Text("Empfänger: ")
-							Text("Straße: ")
-							Text("Stadt: ")
-
-						}
-						.fontWeight(.heavy)
-
-						VStack(alignment: .trailing, spacing: 10){
-
-							Text(order.recipient.firstName + " " + order.recipient.lastName )
-							Text(order.recipient.address.street + " " + order.recipient.address.houseNumber )
-							Text(order.recipient.address.zip + " Lingen")
-
-						}
-
-					}
-				}
-				.padding()
-				.background(
-					RoundedRectangle(cornerRadius: 10) // Radius für die abgerundeten Ecken
-						.fill(Color.white) // Hintergrundfarbe des Rechtecks
-						.shadow(radius: 5) // Schatten für das Rechteck
-				)
-
-				Spacer(minLength: 40)
+				OrderView(order: order)
 
 				Button(action: {
 					isActiveDeliveryControll = false
@@ -292,7 +220,7 @@ struct DeliveryControllView: View {
 
 struct DeliveryControllView_Previews: PreviewProvider {
 	static var previews: some View {
-		let order = Order(timestamp: "", employeeName: "", recipient: Recipient(firstName: "", lastName: "", address: Address(street: "", houseNumber: "", zip: "")), packageSize: "", handlingInfo: "", deliveryDate: "", customDropOffPlace: "")
-		DeliveryControllView(order: Binding.constant(order), showShippingView: Binding.constant(false))
+
+		DeliveryControllView(order: Binding.constant(Order.defaultOrder()), showShippingView: Binding.constant(false))
 	}
 }

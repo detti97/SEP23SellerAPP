@@ -151,8 +151,6 @@ struct LogINView: View {
 
 	func sendLoginData(loginData: LoginData){
 
-		let loginData = LoginData(username: username, password: password)
-
 		NetworkManager.sendPostRequest(to: APIEndpoints.login, with: loginData, responseType: ResponseToken.self){ result in
 			switch result {
 			case .success(let response):

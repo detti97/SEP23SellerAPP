@@ -360,6 +360,7 @@ struct SettingView: View {
 			}) {
 				Text("Speichern")
 			}
+			.disabled(address.street.isEmpty == true || address.houseNumber.isEmpty == true)
 			
 		}
 
@@ -386,7 +387,7 @@ struct SettingView: View {
 				.navigationBarTitle("Telefonnummer bearbeiten")
 				.navigationBarItems(leading: cancelButton, trailing: saveButton)
 			}
-			.disabled(phoneNumber.isEmpty == true)
+
 		}
 
 		private var saveButton: some View {
@@ -396,6 +397,7 @@ struct SettingView: View {
 			}) {
 				Text("Speichern")
 			}
+			.disabled(phoneNumber.isEmpty == true)
 		}
 
 		private var cancelButton: some View {

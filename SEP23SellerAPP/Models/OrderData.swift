@@ -30,14 +30,24 @@ class DataManager: ObservableObject {
 				case .success(let response):
 					self.allOrders = response
 				case .failure(let error):
+					self.errorLoading = true
 					print("Error: \(error)")
 				case .successNoAnswer(_):
+					self.errorLoading = true
 					print("Success")
 				}
 			}
 		}
 	}
 
+	func setErrorLoading(fail: Bool){
+		self.errorLoading = fail
+		print("setFailBool \(fail)")
+	}
+
+	func getErrorLoading() -> Bool{
+		return errorLoading
+	}
 
 	private func getSavedToken() -> String? {
 		return UserDefaults.standard.string(forKey: "AuthToken")

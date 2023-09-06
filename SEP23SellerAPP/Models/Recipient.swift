@@ -15,4 +15,11 @@ struct Recipient: Decodable, Encodable {
 
 }
 
+struct Address: Decodable, Encodable{
 
+	var street: String
+	var houseNumber: String
+	var zip: String
+	var city: String?
+
+}

@@ -17,7 +17,7 @@ struct FirstStepView: View {
 	@State private var isShowingDeliveryControll = false
 	@State private var isActiveAddressPanel = false
 
-	@State private var handInfo = [ HandlingInfo(name: "Zerbrechlich", isMarked: false), HandlingInfo(name: "Glas", isMarked: false), HandlingInfo(name: "Flüßigkeiten", isMarked: false), HandlingInfo(name: "Schwer", isMarked: false)]
+	@State var handInfo = [ HandlingInfo(name: "Zerbrechlich", isMarked: false), HandlingInfo(name: "Glas", isMarked: false), HandlingInfo(name: "Flüßigkeiten", isMarked: false), HandlingInfo(name: "Schwer", isMarked: false)]
 	private let packageSizes = ["S", "M", "L", "XL" ]
 
 	private var dateFormatter: DateFormatter {
@@ -167,7 +167,6 @@ struct FirstStepView: View {
 
 		let selectedDateString = dateFormatter.string(from: selectedDate)
 		print("Gewähltes Datum: \(selectedDateString)")
-
 		return selectedDateString
 
 	}
@@ -177,6 +176,7 @@ struct FirstStepView: View {
 		let combinedNames = markedInfos.map { $0.name }.joined(separator: "&")
 		return combinedNames
 	}
+
 	func getCurrentDateTime() -> String {
 		let now = Date()
 		let formatter = DateFormatter()
@@ -184,6 +184,7 @@ struct FirstStepView: View {
 		print(formatter.string(from: now))
 		return formatter.string(from: now)
 	}
+	
 	func defaultDeliveryDate() -> String {
 
 		let formatter = DateFormatter()

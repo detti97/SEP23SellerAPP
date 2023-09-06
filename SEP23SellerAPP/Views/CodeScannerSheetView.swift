@@ -32,9 +32,6 @@ struct CodeScannerSheetView: View {
 					.background(Color.red)
 					.cornerRadius(24)
 			}
-
-			
-
 			.alert(isPresented: $scanFail) {
 				Alert(
 					title: Text("Fehler beim Scannen"),
