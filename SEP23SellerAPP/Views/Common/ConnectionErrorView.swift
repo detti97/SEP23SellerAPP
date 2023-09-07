@@ -10,6 +10,7 @@ import SwiftUI
 struct ConnectionErrorView: View {
 
 	@Binding var tryAgainButtonBool: Bool
+	@State private var isLoading = false
 
 
 	var body: some View {
@@ -31,16 +32,33 @@ struct ConnectionErrorView: View {
 				.frame(height: 20)
 
 			Button(action: {
-
-				tryAgainButtonBool = true
+				isLoading = true
+				//tryAgainButtonBool = true
 
 			}) {
-				Text("Erneut Versuchen")
-					.padding()
-					.foregroundColor(.white)
-					.fontWeight(.heavy)
-					.background(Color.blue)
-					.cornerRadius(8)
+				if isLoading{
+
+					ProgressView("Laden...")
+								   .onAppear {
+									   DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+										   tryAgainButtonBool = true
+										   isLoading = false
+									   }
+								   }
+								   .padding()
+								   .foregroundColor(.white)
+								   .fontWeight(.heavy)
+								   .background(Color.blue)
+								   .cornerRadius(8)
+
+				} else{
+					Text("Erneut Versuchen")
+						.padding()
+						.foregroundColor(.white)
+						.fontWeight(.heavy)
+						.background(Color.blue)
+						.cornerRadius(8)
+				}
 			}
 			.padding()
 			.frame(maxWidth: .infinity, alignment: .center)

@@ -14,8 +14,8 @@ class SettingsManager: ObservableObject {
 	@Published var settings: Setting
 	@Published var getSettingsFail = false
 
-	init(settings: Setting = Setting(storeName: "", owner: "", address: Address(street: "", houseNumber: "", zip: ""),
-									 telephone: "", email: "", logo: "", backgroundImage: "")) {
+	init(settings: Setting = Setting(id: "1", storeName: "", owner: "", address: Address(street: "", houseNumber: "", zip: ""),
+									 telephone: "", email: "", logo: "", backgroundImage: "", coordinates: Coordinates(latitude: 1.0, longitude: 1.0))) {
 			self.settings = settings
 			self.getSettingsFail = getSettingsFail
 		}

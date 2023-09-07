@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import CoreLocation
 
 struct Setting: Decodable {
 
+	var id: String?
 	var storeName: String
 	var owner: String
 	var address: Address
@@ -16,9 +18,16 @@ struct Setting: Decodable {
 	var email: String
 	var logo: String
 	var backgroundImage: String
+	var coordinates: Coordinates?
 
-	init(storeName: String, owner: String, address: Address, telephone: String, email: String, logo: String, backgroundImage: String) {
+	var locationCoordinate: CLLocationCoordinate2D {
+			CLLocationCoordinate2D(
+				latitude: coordinates!.latitude, longitude: coordinates!.longitude)
+		}
 
+
+	init(id: String, storeName: String, owner: String, address: Address, telephone: String, email: String, logo: String, backgroundImage: String, coordinates: Coordinates) {
+			self.id = id
 			self.storeName = storeName
 			self.owner = owner
 			self.address = address
@@ -26,6 +35,7 @@ struct Setting: Decodable {
 			self.email = email
 			self.logo = logo
 			self.backgroundImage = backgroundImage
+			self.coordinates = coordinates
 		}
 
 }
@@ -45,4 +55,10 @@ struct SetSetting: Codable{
 	var parameter: String
 	var value: String
 
+}
+
+struct Coordinates: Hashable, Codable {
+
+	var latitude: Double
+	var longitude: Double
 }
