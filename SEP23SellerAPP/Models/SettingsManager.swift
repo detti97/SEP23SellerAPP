@@ -11,10 +11,10 @@ import SwiftUI
 
 class SettingsManager: ObservableObject {
 
-	@Published var settings: Setting
+	@Published var settings: StoreDetails
 	@Published var getSettingsFail = false
 
-	init(settings: Setting = Setting(id: "1", storeName: "", owner: "", address: Address(street: "", houseNumber: "", zip: ""),
+	init(settings: StoreDetails = StoreDetails(id: "1", storeName: "", owner: "", address: Address(street: "", houseNumber: "", zip: ""),
 									 telephone: "", email: "", logo: "", backgroundImage: "", coordinates: Coordinates(latitude: 1.0, longitude: 1.0))) {
 			self.settings = settings
 			self.getSettingsFail = getSettingsFail
@@ -64,7 +64,7 @@ class SettingsManager: ObservableObject {
 				return
 			}
 
-			NetworkManager.sendPostRequest(to: APIEndpoints.settings, with: SetSetting(parameter: parameter, value: imageData.base64EncodedString()), responseType: Setting.self) { result in
+			NetworkManager.sendPostRequest(to: APIEndpoints.settings, with: SetSetting(parameter: parameter, value: imageData.base64EncodedString()), responseType: StoreDetails.self) { result in
 				switch result {
 				case .success(let response):
 					print("Response: \(response)")
@@ -84,11 +84,11 @@ class SettingsManager: ObservableObject {
 		}
 
 
-		func getSettings(completion: @escaping (Setting?) -> Void) {
-			NetworkManager.sendGetRequest(to: APIEndpoints.settings, responseType: Setting.self) { [self] result in
+		func getSettings(completion: @escaping (StoreDetails?) -> Void) {
+			NetworkManager.sendGetRequest(to: APIEndpoints.settings, responseType: StoreDetails.self) { [self] result in
 				switch result {
 				case .success(let response):
-					print("Setting: \(response)")
+					print("StoreDetails: \(response)")
 					completion(response)
 				case .failure(let error):
 					print("Error: \(error)")
@@ -102,7 +102,7 @@ class SettingsManager: ObservableObject {
 
 		func setAddress(address: Address){
 
-			NetworkManager.sendPostRequest(to: APIEndpoints.setAddress, with: SetAddress(address: address), responseType: Setting.self) { result in
+			NetworkManager.sendPostRequest(to: APIEndpoints.setAddress, with: SetAddress(address: address), responseType: StoreDetails.self) { result in
 				switch result {
 				case .success(let response):
 					print("Response :\(response)")
@@ -122,7 +122,7 @@ class SettingsManager: ObservableObject {
 
 		func setPassword(oldPassword: String, newPassword: String){
 
-			NetworkManager.sendPostRequest(to: APIEndpoints.setPassword, with: SetPassword(token: getSavedToken()!, oldPassword: oldPassword, newPassword: newPassword), responseType: Setting.self) { result in
+			NetworkManager.sendPostRequest(to: APIEndpoints.setPassword, with: SetPassword(token: getSavedToken()!, oldPassword: oldPassword, newPassword: newPassword), responseType: StoreDetails.self) { result in
 				switch result {
 				case .success(let response):
 					print("Response: \(response)")

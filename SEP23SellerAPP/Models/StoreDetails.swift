@@ -1,5 +1,5 @@
 //
-//  Setting.swift
+//  StoreDetails.swift
 //  SEP23SellerAPP
 //
 //  Created by Jan Dettler on 12.07.23.
@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-struct Setting: Decodable {
+struct StoreDetails: Decodable {
 
 	var id: String?
 	var storeName: String
