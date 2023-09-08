@@ -17,7 +17,7 @@ struct ServerAnswer: Codable {
 struct DeliveryControllView: View {
 
 	@Binding var order: Order
-	@State private var orderID = "_"
+	@Binding var orderID: String
 
 	@State private var isActiveDeliveryControll = true
 	@State private var isActiveSendOrder = false
@@ -61,21 +61,7 @@ struct DeliveryControllView: View {
 					Button(action: {
 						presentationMode.wrappedValue.dismiss()
 					}) {
-
-
-							Text("Daten bearbeiten")
-								.padding()
-								.foregroundColor(.white)
-								.fontWeight(.heavy)
-								.background(Color.red)
-								.cornerRadius(8)
-
-					}
-
-					Button(action: {
-						isActiveAddresPanel = true
-					}) {
-						Text("Adresse ändern")
+						Text("Daten bearbeiten")
 							.padding()
 							.foregroundColor(.white)
 							.fontWeight(.heavy)
@@ -83,9 +69,6 @@ struct DeliveryControllView: View {
 							.cornerRadius(8)
 					}
 				}
-				.padding()
-
-
 			}
 			.navigationTitle("New Order for " + order.recipient.firstName + " " + order.recipient.lastName)
 			.navigationBarTitleDisplayMode(.inline)
@@ -148,6 +131,7 @@ struct DeliveryControllView: View {
 							.progressViewStyle(CircularProgressViewStyle(tint: .purple))
 					}} else {
 
+
 						Text("Lieferung Beauftragt")
 							.font(.largeTitle)
 							.fontWeight(.heavy)
@@ -182,6 +166,7 @@ struct DeliveryControllView: View {
 								.cornerRadius(18)
 								.padding()
 						}
+
 					}
 			}
 
@@ -221,6 +206,6 @@ struct DeliveryControllView: View {
 struct DeliveryControllView_Previews: PreviewProvider {
 	static var previews: some View {
 
-		DeliveryControllView(order: Binding.constant(Order.defaultOrder()), showShippingView: Binding.constant(false))
+		DeliveryControllView(order: Binding.constant(Order.defaultOrder()), orderID: Binding.constant("_"), showShippingView: Binding.constant(false))
 	}
 }

@@ -232,11 +232,7 @@ struct SettingView: View {
 						.navigationBarTitle("Einstellungen")
 						.navigationBarTitleDisplayMode(.inline)
 						.onAppear{
-							if(getSavedToken() == nil){ //Only for preview, to prevent crash
-								print("no token")
-							}else{
 								settingsManager.loadData()
-							}
 
 						}
 					}
@@ -251,11 +247,6 @@ struct SettingView: View {
 		UserDefaults.standard.removeObject(forKey: "AuthToken")
 		signInSuccess = false
 	}
-
-	func getSavedToken() -> String? {
-		return UserDefaults.standard.string(forKey: "AuthToken")
-	}
-
 
 	struct EditEmailView: View {
 		@Binding var email: String

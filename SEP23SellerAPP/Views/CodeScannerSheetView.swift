@@ -25,12 +25,7 @@ struct CodeScannerSheetView: View {
 				order = Order.defaultOrder()
 				isShowingScanner = false
 			}) {
-				Text("Abbrechen")
-					.padding()
-					.foregroundColor(.white)
-					.fontWeight(.heavy)
-					.background(Color.red)
-					.cornerRadius(24)
+				ButtonView(buttonText: "Abbrechen", buttonColor: .red)
 			}
 			.alert(isPresented: $scanFail) {
 				Alert(
