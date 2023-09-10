@@ -20,7 +20,7 @@ struct OrderView: View {
 				Image(systemName: "shippingbox")
 				Text("Lieferungsübersicht")
 			}
-			.foregroundColor(.purple)
+			.foregroundColor(.accentColor)
 			.font(.system(size: 26))
 			.fontWeight(.heavy)
 
@@ -59,7 +59,7 @@ struct OrderView: View {
 				Image(systemName: "house")
 				Text("Lieferadresse")
 			}
-			.foregroundColor(.purple)
+			.foregroundColor(.accentColor)
 			.font(.system(size: 26))
 			.fontWeight(.heavy)
 
