@@ -36,6 +36,7 @@ struct CodeScannerSheetView: View {
 					}))
 			}
 		}
+		.interactiveDismissDisabled()
 
     }
 

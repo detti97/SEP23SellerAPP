@@ -8,6 +8,8 @@
 import Foundation
 import CoreLocation
 
+///
+
 struct StoreDetails: Decodable {
 
 	var id: String?

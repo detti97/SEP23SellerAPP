@@ -195,7 +195,7 @@ class APITests: XCTestCase {
 
 			let login = LoginData(username: "porsche", password: "Tesla")
 
-			let loginView = LogINView(signInSuccess: Binding.constant(false))
+			let loginView = LogInView(signInSuccess: Binding.constant(false))
 
 			print(loginView.signInSuccess)
 

@@ -23,8 +23,9 @@ struct NewOrderMenuView: View {
             VStack{
 
                 Button{
-                    print("hello there")
-                    isShowingScanner = true
+					isShowingScanner = true
+                    print("Scanner start")
+					print(isShowingScanner)
                 }label: {
                     
                     ZStack{
@@ -47,13 +48,19 @@ struct NewOrderMenuView: View {
                 }
                 .foregroundColor(.white)
 				.fontWeight(.heavy)
-				.sheet(isPresented: $isShowingScanner, onDismiss: {scanFail = true}) {
+				.sheet(isPresented: $isShowingScanner, onDismiss: {
+					scanFail = true
+					isShowingScanner = false
+				}) {
                     CodeScannerSheetView(isShowingScanner: $isShowingScanner, showShippingView: $showShippingView, order: $order)
                 }
 
 				Button{
-
 					isShowingAddressPanel = true
+					addressEntered = false
+
+					print("Address panel")
+					print(isShowingAddressPanel)
 
 				}label: {
 
@@ -77,7 +84,9 @@ struct NewOrderMenuView: View {
 				}
 				.foregroundColor(.white)
 				.fontWeight(.heavy)
-				.sheet(isPresented: $isShowingAddressPanel) {
+				.sheet(isPresented: $isShowingAddressPanel, onDismiss: {
+					isShowingAddressPanel = false
+				}) {
 					AddressEditView(recipient: $order.recipient, addressChanged: $addressEntered)
 				}
 				.onChange(of: addressEntered) { newValue in
@@ -85,14 +94,12 @@ struct NewOrderMenuView: View {
 						showShippingView = true
 					}
 				}
-
             }
 			.navigationTitle("Neue Bestellung aufgeben")
+			.navigationBarTitleDisplayMode(.inline)
 
         }
-
     }
-
 }
 
 struct QRCodeScannerView_Previews: PreviewProvider {

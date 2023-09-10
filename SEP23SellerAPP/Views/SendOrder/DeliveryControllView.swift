@@ -169,6 +169,7 @@ struct DeliveryControllView: View {
 
 					}
 			}
+			.interactiveDismissDisabled()
 
 		}
 	}

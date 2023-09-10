@@ -56,7 +56,7 @@ struct ContentView: View {
 					FirstStepView(showShippingView: $showShippingView, order: $order)
 				}
             }else{
-                LogINView(signInSuccess: $signInSuccess)
+                LogInView(signInSuccess: $signInSuccess)
             }
         }
 		

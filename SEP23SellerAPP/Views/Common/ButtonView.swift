@@ -25,6 +25,6 @@ struct ButtonView: View {
 
 struct ButtonView_Previews: PreviewProvider {
     static var previews: some View {
-		ButtonView(buttonText: "Abbrechen", buttonColor: .yellow)
+		ButtonView(buttonText: "Abbrechen", buttonColor: .purple)
     }
 }

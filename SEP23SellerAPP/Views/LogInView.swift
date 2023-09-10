@@ -1,5 +1,5 @@
 //
-//  LogINView.swift
+//  LogInView.swift
 //  SEP23SellerAPP
 //
 //  Created by Jan Dettler on 27.06.23.
@@ -7,7 +7,7 @@
 import SwiftUI
 
 
-struct LogINView: View {
+struct LogInView: View {
 
 	
 	@State private var username = ""
@@ -173,7 +173,7 @@ struct LogINView: View {
 
 struct LogINView_Previews: PreviewProvider {
 	static var previews: some View {
-		LogINView(signInSuccess: .constant(false))
+		LogInView(signInSuccess: .constant(false))
 	}
 }
 
