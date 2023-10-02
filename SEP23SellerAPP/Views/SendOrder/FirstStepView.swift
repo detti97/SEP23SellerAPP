@@ -16,6 +16,7 @@ struct FirstStepView: View {
 	@State private var currentTime = Date()
 	@State private var isShowingDeliveryControll = false
 	@State private var isActiveAddressPanel = false
+	@State private var textFieldTapped = false
 
 	@State private var orderID = "_"
 
@@ -49,6 +50,18 @@ struct FirstStepView: View {
 
 							VStack(alignment: .leading){
 								Text(order.recipient.firstName + " " + order.recipient.lastName)
+									.onAppear {
+												NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (notification) in
+													self.textFieldTapped = true
+												}
+
+												NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { (notification) in
+													self.textFieldTapped = false
+												}
+											}
+											.onDisappear {
+												NotificationCenter.default.removeObserver(self)
+											}
 								Text(order.recipient.address.street + " " + order.recipient.address.houseNumber)
 
 							}
@@ -99,49 +112,62 @@ struct FirstStepView: View {
 					Section(header: Text("Ablageort")){
 
 						TextField("Abweichender Ablageort", text: $order.customDropOffPlace)
+							.onTapGesture {
+								textFieldTapped = true
+							}
 						TextField("Mitarbeiter (Optional)", text: $order.employeeName)
 					}
+
 				}
+
+
 				VStack{
 
+					if !textFieldTapped{
 
-					Button {
+						VStack{
 
-						isActiveAddressPanel = true
+							Button {
 
-					} label: {
-						ButtonView(buttonText: "Anschrift ändern", buttonColor: .green)
-					}
-					.sheet(isPresented: $isActiveAddressPanel){
-						AddressEditView(recipient: $order.recipient, addressChanged: Binding.constant(false))
-					}
+								isActiveAddressPanel = true
 
-
-					HStack(spacing: 60){
-
-						Button {
-
-							order = Order.defaultOrder()
-							showShippingView = false
-
-						} label: {
-							ButtonView(buttonText: "Abbrechen", buttonColor: .red)
-						}
-
-						Button(action: {
-							order.handlingInfo = handInfoToString()
-							isShowingDeliveryControll = true
-
-						}) {
-							ButtonView(buttonText: "Bestätigen", buttonColor: .blue)
-						}
-						.sheet(isPresented: $isShowingDeliveryControll, onDismiss: {
-							if orderID != "_"{
-								showShippingView = false
+							} label: {
+								ButtonView(buttonText: "Anschrift ändern", buttonColor: .green)
 							}
-						}) {
-							DeliveryControllView(order: $order, orderID: $orderID, showShippingView: $showShippingView)
+							.sheet(isPresented: $isActiveAddressPanel){
+								AddressEditView(recipient: $order.recipient, addressChanged: Binding.constant(false))
+							}
+
+
+							HStack(spacing: 60){
+
+								Button {
+
+									order = Order.defaultOrder()
+									showShippingView = false
+
+								} label: {
+									ButtonView(buttonText: "Abbrechen", buttonColor: .red)
+								}
+
+								Button(action: {
+									order.handlingInfo = handInfoToString()
+									isShowingDeliveryControll = true
+
+								}) {
+									ButtonView(buttonText: "Bestätigen", buttonColor: .blue)
+								}
+								.sheet(isPresented: $isShowingDeliveryControll, onDismiss: {
+									if orderID != "_"{
+										showShippingView = false
+									}
+								}) {
+									DeliveryControllView(order: $order, orderID: $orderID, showShippingView: $showShippingView)
+								}
+							}
+
 						}
+
 					}
 
 				}
