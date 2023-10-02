@@ -120,24 +120,34 @@ class SettingsManager: ObservableObject {
 		}
 	}
 
-	func setPassword(oldPassword: String, newPassword: String){
+	func setPassword(oldPassword: String, newPassword: String, completion: @escaping (Bool) -> Void) {
 
 		NetworkManager.sendPostRequest(to: APIEndpoints.setPassword, with: SetPassword(token: getSavedToken()!, oldPassword: oldPassword, newPassword: newPassword), responseType: StoreDetails.self) { result in
+
+			var success = false
+
 			switch result {
 			case .success(let response):
 				print("Response: \(response)")
+				success = true
 
 			case .failure(let error):
 				print("Error: \(error)")
+				success = false
 
 			case .successNoAnswer(true):
 				print("Success")
+				success = true
 
 			case .successNoAnswer(false):
 				print("Fail - Server")
+				success = false
 			}
+
+			completion(success)
 		}
 	}
+
 
 	func setFailBool(fail: Bool){
 		self.getSettingsFail = fail

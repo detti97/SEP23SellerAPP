@@ -11,38 +11,54 @@ struct AddressEditView: View {
 
 	@Binding var recipient: Recipient
 	@Binding var addressChanged: Bool
+	@Environment(\.presentationMode) private var presentationMode
 
 	var body: some View {
 
-
-		VStack{
-
-
-			Text("Bearbeiten Sie hier \n die Anschrift")
-				.font(.largeTitle)
-				.fontWeight(.heavy)
-				.padding()
-				.multilineTextAlignment(.center)
-
-			Spacer()
-				.frame(height: 5)
-
-
+		NavigationView{
 
 			VStack{
-				addressFormView(recipient: $recipient ,success: $addressChanged)
 
-				if addressChanged{
-					
+
+				Text("Bearbeiten Sie hier \n die Anschrift")
+					.font(.largeTitle)
+					.fontWeight(.heavy)
+					.padding()
+					.multilineTextAlignment(.center)
+
+				Spacer()
+					.frame(height: 5)
+
+
+
+				VStack{
+					addressFormView(recipient: $recipient ,success: $addressChanged)
+
+					if addressChanged{
+
+					}
+
 				}
+				.padding(38)
+
 
 			}
-			.padding(38)
+			.navigationBarTitle("Adresse Eingeben")
+			.navigationBarTitleDisplayMode(.inline)
+			.navigationBarItems(leading: cancelButton)
 
 		}
 
-
     }
+
+	private var cancelButton: some View {
+		Button(action: {
+			// Schließe die Ansicht und kehre zum Einstellungsmenü zurück
+			presentationMode.wrappedValue.dismiss()
+		}) {
+			Text("Zurück")
+		}
+	}
 }
 
 struct AddressEditView_Previews: PreviewProvider {

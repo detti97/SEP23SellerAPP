@@ -95,9 +95,7 @@ struct NewOrderMenuView: View {
 					}
 				}
             }
-			.navigationTitle("Neue Bestellung aufgeben")
-			.navigationBarTitleDisplayMode(.inline)
-
+			.navigationTitle("Neue Bestellung")
         }
     }
 }

@@ -407,27 +407,62 @@ struct SettingView: View {
 		@EnvironmentObject private var settingsManager: SettingsManager
 		@State var oldPassword = ""
 		@State var newPassword = ""
+		@State var newPasswordConfirm = ""
+		@State var alertData: AlertData?
 
 		var body: some View {
 			NavigationView {
 				Form {
-					TextField("Altes Passwort", text: $oldPassword)
-					TextField("Neues Passwort", text: $newPassword)
+					SecureField("Altes Passwort", text: $oldPassword)
+					SecureField("Neues Passwort", text: $newPassword)
+					SecureField("Neues Bestätigen", text: $newPasswordConfirm)
 				}
 				.navigationBarTitle("Passwort ändern")
 				.navigationBarItems(leading: cancelButton, trailing: saveButton)
+				.alert(item: $alertData) { alertData in
+					Alert(
+						title: Text(alertData.title),
+						message: Text(alertData.message),
+						dismissButton: .destructive(Text(alertData.dismissButtonTitle), action: {
+							alertData.action?()
+						})
+					)
+				}
 			}
 		}
 
-		private var saveButton: some View {
+		private  func clearFields() {
+			oldPassword = ""
+			newPassword = ""
+			newPasswordConfirm = ""
+		}
+
+		var saveButton: some View {
 			Button(action: {
-				settingsManager.setPassword(oldPassword: oldPassword, newPassword: newPassword)
-				presentationMode.wrappedValue.dismiss()
+
+				if newPassword != newPasswordConfirm {
+					alertData = AlertData(title: "Fehler", message: "Passwörter stimmen nicht überein!", dismissButtonTitle: "Okay", action: {
+						clearFields()
+					})
+				} else {
+					settingsManager.setPassword(oldPassword: oldPassword, newPassword: newPassword) { success in
+						if success {
+							print("Passwort erfolgreich geändert.")
+							alertData = AlertData(title: "Erfolg", message: "Passwort wurde geändert", dismissButtonTitle: "Fertig", action: {
+								presentationMode.wrappedValue.dismiss()
+							})
+						} else {
+							print("Passwortänderung fehlgeschlagen.")
+							alertData = AlertData(title: "Fehler", message: "Altes Passwort falsch!", dismissButtonTitle: "Okay", action: {
+								clearFields()
+							})
+						}
+					}
+				}
 			}) {
 				Text("Speichern")
 			}
-			.disabled(oldPassword.isEmpty == true)
-			.disabled(newPassword.isEmpty == true)
+			.disabled(oldPassword.isEmpty || newPassword.isEmpty || newPasswordConfirm.isEmpty)
 		}
 
 		private var cancelButton: some View {
@@ -440,6 +475,16 @@ struct SettingView: View {
 		}
 
 	}
+
+	struct AlertData: Identifiable {
+		var id = UUID()
+		var title: String
+		var message: String
+		var dismissButtonTitle: String
+		var action: (() -> Void)?
+	}
+
+
 
 	struct SettingView_Previews: PreviewProvider {
 		static var previews: some View {
